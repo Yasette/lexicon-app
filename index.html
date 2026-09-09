@@ -506,6 +506,22 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   border:1px solid var(--rule2);margin-top:12px}
 .qdone b{display:block;font-family:var(--display);font-size:26px;font-weight:640;color:var(--accent)}
 .qdone span{display:block;margin-top:4px;font-size:13px;color:var(--ink2)}
+
+
+/* Search sits inside the words card, so it drops its own box and reads as
+   the card's first line rather than a second container. */
+.panel .search{background:none;border:0;padding:0;font-size:15.5px;
+  font-family:var(--serif);color:var(--ink)}
+.panel .search:focus{outline:none}
+.panel .search::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;
+  width:14px;height:14px;background:var(--rule2);
+  -webkit-mask:radial-gradient(circle,#000 44%,transparent 46%);cursor:pointer}
+.panel .search::placeholder{font-family:var(--ui);font-size:14px;color:var(--mute)}
+
+/* Five filters do not fit one row; a 3-column grid wraps them evenly
+   instead of letting the last one stretch across on its own. */
+#w-filter{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+#w-filter button{min-width:0}
 </style>
 
 <div class="stage">
@@ -739,14 +755,21 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
       <p id="w-count"></p>
     </div>
     <div class="body">
-      <input class="search" id="w-search" type="search" placeholder="Search word, meaning, Türkçe…"
-             autocomplete="off" spellcheck="false">
-      <div class="seg" id="w-filter">
-        <button data-v="all" aria-pressed="true">All</button>
-        <button data-v="due" aria-pressed="false">Due</button>
-        <button data-v="tricky" aria-pressed="false">Tricky</button>
-        <button data-v="missed" aria-pressed="false">Missed</button>
-        <button data-v="mastered" aria-pressed="false">Mastered</button>
+      <div class="panel stack-fields">
+        <div class="fld">
+          <input class="search" id="w-search" type="search"
+                 placeholder="Search word, meaning, Türkçe…"
+                 autocomplete="off" spellcheck="false">
+        </div>
+        <div class="fld"><p class="lab">Show</p>
+          <div class="seg" id="w-filter">
+            <button data-v="all" aria-pressed="true">All</button>
+            <button data-v="due" aria-pressed="false">Due</button>
+            <button data-v="tricky" aria-pressed="false">Tricky</button>
+            <button data-v="missed" aria-pressed="false">Missed</button>
+            <button data-v="mastered" aria-pressed="false">Mastered</button>
+          </div>
+        </div>
       </div>
       <div id="w-list" style="display:flex;flex-direction:column;gap:8px"></div>
       <p class="note" id="w-more"></p>
