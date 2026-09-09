@@ -477,12 +477,35 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .mile.on b{color:var(--accent)}
 
 /* word of the day */
-.wotd{border-radius:12px;padding:13px 14px;background:var(--card);border:1px solid var(--rule);
-  box-shadow:var(--shadow-sm);text-align:left;margin:14px 0 0}
-.wotd .t{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--mute)}
-.wotd .w{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);margin-top:5px}
-.wotd .m{font-size:12.5px;line-height:1.45;color:var(--ink2);margin-top:3px}
+.wotd{position:relative;display:block;width:100%;border-radius:12px;padding:16px 14px 14px;
+  background:var(--card);border:1px solid var(--rule);box-shadow:var(--shadow-sm);
+  text-align:center;margin:18px 0 0}
+/* the caption sits on the rule itself, with the paper showing through behind it */
+.wotd .cap{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);
+  padding:0 9px;background:var(--paper);font-size:9px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.wotd .w{display:block;font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink)}
+.wotd .m{display:block;font-size:12.5px;line-height:1.45;color:var(--ink2);margin-top:4px}
+
+
+/* ------------------- study: one card, not six ---------------------- */
+.stack-fields .fld{padding:14px 0;border-top:1px solid var(--rule)}
+.stack-fields .fld:first-child{padding-top:0;border-top:0}
+.stack-fields .fld:last-child{padding-bottom:0}
+
+/* ------------------ practice: SAT-style progress dots -------------- */
+.dots-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:2px 0 4px}
+.qdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule2);
+  background:var(--paper);display:grid;place-items:center;font-size:9px;font-weight:700;
+  color:var(--mute);transition:background .14s ease,border-color .14s ease}
+.qdot.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.qdot.wrongdot{background:var(--paper2);border-color:var(--accent);color:var(--accent)}
+.qdot.now{box-shadow:0 0 0 2px var(--accentsoft);border-color:var(--accent)}
+.qdot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.qdone{text-align:center;padding:18px 12px;border-radius:12px;background:var(--accentsoft);
+  border:1px solid var(--rule2);margin-top:12px}
+.qdone b{display:block;font-family:var(--display);font-size:26px;font-weight:640;color:var(--accent)}
+.qdone span{display:block;margin-top:4px;font-size:13px;color:var(--ink2)}
 </style>
 
 <div class="stage">
@@ -525,6 +548,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
     </div>
 
     <div class="actions">
+      <button class="solo" data-go="map">Your progress →</button>
       <button class="hero" id="hero" data-start="due">
         <b id="hero-t">Review what’s due this week</b>
         <span id="hero-s"></span>
@@ -533,14 +557,13 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
         <button data-start="tricky">Tricky pile<small id="d-tricky">0 words</small></button>
         <button data-start="quick">Quick quiz<small>20 mixed</small></button>
       </div>
-      <button class="solo" data-go="map">Your progress →</button>
     </div>
 
     <p class="testday" id="testday"></p>
     <p class="pace" id="pace" hidden></p>
 
     <button class="wotd" id="wotd" hidden data-go="words">
-      <span class="t">Word of the day</span>
+      <span class="cap">Word of the day</span>
       <span class="w" id="wotd-w"></span>
       <span class="m" id="wotd-m"></span>
     </button>
@@ -553,45 +576,39 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
       <p>Build a session your way, or take what’s due.</p>
     </div>
     <div class="body">
-      <div class="panel"><p class="lab">How</p>
-        <div class="seg" id="f-mode">
-          <button data-v="flash" aria-pressed="true">Flashcards</button>
-          <button data-v="test" aria-pressed="false">Test</button>
-        </div></div>
-      <div class="panel"><p class="lab">Which way round</p>
-        <div class="seg" id="f-dir">
-          <button data-v="en" aria-pressed="true">Word → meaning</button>
-          <button data-v="tr" aria-pressed="false">Meaning → word</button>
-          <button data-v="mix" aria-pressed="false">Mixed</button>
-        </div></div>
-      <div class="panel"><p class="lab">How many</p>
-        <div class="seg" id="f-len">
-          <button data-v="10" aria-pressed="true">10</button>
-          <button data-v="20" aria-pressed="false">20</button>
-          <button data-v="30" aria-pressed="false">30</button>
-          <button data-v="50" aria-pressed="false">50</button>
-        </div></div>
-      <div class="panel"><p class="lab">Draw from</p>
-        <div class="seg" id="f-pool">
-          <button data-v="due" aria-pressed="true">Due</button>
-          <button data-v="tricky" aria-pressed="false">Tricky</button>
-          <button data-v="missed" aria-pressed="false">Missed</button>
-          <button data-v="all" aria-pressed="false">Everything</button>
-        </div></div>
-      <div class="panel"><p class="lab">Difficulty</p>
-        <div class="seg" id="f-band">
-          <button data-v="-1" aria-pressed="true">All</button>
-          <button data-v="0" aria-pressed="false">Easy</button>
-          <button data-v="1" aria-pressed="false">Medium</button>
-          <button data-v="2" aria-pressed="false">Hard</button>
-        </div></div>
-      <div class="panel">
-        <div class="toggle">
-          <label for="f-tr"><span>Include Turkish meaning</span>
-            <small>Off, cards show the English meaning and synonyms only</small></label>
-          <button class="sw-t" id="f-tr" role="switch" aria-pressed="true"
-                  aria-label="Include Turkish meaning"></button>
-        </div>
+      <div class="panel stack-fields">
+        <div class="fld"><p class="lab">How</p>
+          <div class="seg" id="f-mode">
+            <button data-v="flash" aria-pressed="true">Flashcards</button>
+            <button data-v="test" aria-pressed="false">Test</button>
+          </div></div>
+        <div class="fld"><p class="lab">Which way round</p>
+          <div class="seg" id="f-dir">
+            <button data-v="en" aria-pressed="true">Word → meaning</button>
+            <button data-v="tr" aria-pressed="false">Meaning → word</button>
+            <button data-v="mix" aria-pressed="false">Mixed</button>
+          </div></div>
+        <div class="fld"><p class="lab">How many</p>
+          <div class="seg" id="f-len">
+            <button data-v="10" aria-pressed="true">10</button>
+            <button data-v="20" aria-pressed="false">20</button>
+            <button data-v="30" aria-pressed="false">30</button>
+            <button data-v="50" aria-pressed="false">50</button>
+          </div></div>
+        <div class="fld"><p class="lab">Draw from</p>
+          <div class="seg" id="f-pool">
+            <button data-v="due" aria-pressed="true">Due</button>
+            <button data-v="tricky" aria-pressed="false">Tricky</button>
+            <button data-v="missed" aria-pressed="false">Missed</button>
+            <button data-v="all" aria-pressed="false">Everything</button>
+          </div></div>
+        <div class="fld"><p class="lab">Difficulty</p>
+          <div class="seg" id="f-band">
+            <button data-v="-1" aria-pressed="true">All</button>
+            <button data-v="0" aria-pressed="false">Easy</button>
+            <button data-v="1" aria-pressed="false">Medium</button>
+            <button data-v="2" aria-pressed="false">Hard</button>
+          </div></div>
       </div>
       <button class="go" id="start">Start</button>
       <p class="note" id="pool-note"></p>
@@ -681,11 +698,24 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
       <p>Real SAT format — words in context, transitions, boundaries.</p>
     </div>
     <div class="body">
-      <div class="seg" id="q-filter">
-        <button data-v="all" aria-pressed="true">All</button>
-        <button data-v="wic" aria-pressed="false">Words in context</button>
-        <button data-v="wr" aria-pressed="false">Rules</button>
+      <div class="panel stack-fields">
+        <div class="fld"><p class="lab">Section</p>
+          <div class="seg" id="q-filter">
+            <button data-v="all" aria-pressed="true">All</button>
+            <button data-v="wic" aria-pressed="false">Words in context</button>
+            <button data-v="wr" aria-pressed="false">Rules</button>
+          </div></div>
+        <div class="fld"><p class="lab">How many questions</p>
+          <div class="seg" id="q-count">
+            <button data-v="5" aria-pressed="false">5</button>
+            <button data-v="10" aria-pressed="false">10</button>
+            <button data-v="20" aria-pressed="false">20</button>
+            <button data-v="0" aria-pressed="true">All</button>
+          </div></div>
       </div>
+
+      <div class="dots-row" id="q-dots"></div>
+
       <div class="panel">
         <div class="qmeta"><span class="qtag" id="q-tag"></span><span class="qnum" id="q-num"></span></div>
         <p class="qstem" id="q-stem"></p>
@@ -695,6 +725,9 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
           <button id="q-prev">← Previous</button>
           <button id="q-next">Next →</button>
         </div>
+      </div>
+      <div class="qdone" id="q-done" hidden>
+        <b id="q-score">—</b><span id="q-scoresub"></span>
       </div>
     </div>
   </div>
@@ -774,6 +807,16 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
           <button data-v="150">150</button><button data-v="250">250</button>
         </div>
         <p class="hint">Counted Monday to Sunday, from words you actually review.</p>
+      </div>
+
+      <div class="panel">
+        <p class="lab">Meanings</p>
+        <div class="toggle">
+          <label for="f-tr"><span>Include Turkish meanings</span>
+            <small>Off, cards and lists show the English meaning and synonyms only</small></label>
+          <button class="sw-t" id="f-tr" role="switch" aria-pressed="true"
+                  aria-label="Include Turkish meanings"></button>
+        </div>
       </div>
 
       <div class="panel">
@@ -1068,9 +1111,13 @@ wireSeg('f-mode', 'mode', null, poolNote); wireSeg('f-dir', 'dir', null, poolNot
 wireSeg('f-len', 'len', Number, poolNote); wireSeg('f-band', 'band', Number, poolNote);
 wireSeg('f-pool', 'pool', null, poolNote);
 
+/* Turkish is a global setting, so everything that renders a meaning has to
+   pick up the change straight away — not just the next session. */
 $('f-tr').addEventListener('click', function () {
   PROF.tr = !PROF.tr; save(LS.prof, PROF);
   this.setAttribute('aria-pressed', String(PROF.tr));
+  renderWords();
+  if (S && !$('v-session').hidden) step();
 });
 
 function poolIds() {
@@ -1418,49 +1465,95 @@ $('guide-list').addEventListener('click', function (ev) {
   show('sheet');
 });
 
-/* ------------------------------ practice -------------------------- */
-var QF = 'all', QI = 0, QANS = -1;
+/* ------------------------------ practice --------------------------
+   A set rather than an endless list: pick a section and a length, then
+   work through it with the row of dots the real test gives you. */
+var QF = 'all', QN = 0, QI = 0;
+var QSET = [], QANS = [];
 var SECNAME = { wic: 'Words in context', wr: 'Rules & expression' };
-function qList() {
+
+function qPool() {
   return QUESTIONS.filter(function (q) { return QF === 'all' || q.sec === QF; });
+}
+function buildSet() {
+  var pool = qPool().slice();
+  QSET = (QN > 0 && QN < pool.length) ? shuffle(pool).slice(0, QN) : pool;
+  QANS = QSET.map(function () { return -1; });
+  QI = 0;
 }
 $('q-filter').addEventListener('click', function (ev) {
   var b = ev.target.closest('button'); if (!b) return;
   [].forEach.call(this.querySelectorAll('button'), function (o) {
     o.setAttribute('aria-pressed', String(o === b));
   });
-  QF = b.dataset.v; QI = 0; QANS = -1; renderQuestion();
+  QF = b.dataset.v; buildSet(); renderQuestion();
 });
+$('q-count').addEventListener('click', function (ev) {
+  var b = ev.target.closest('button'); if (!b) return;
+  [].forEach.call(this.querySelectorAll('button'), function (o) {
+    o.setAttribute('aria-pressed', String(o === b));
+  });
+  QN = Number(b.dataset.v); buildSet(); renderQuestion();
+});
+
+function renderDots() {
+  $('q-dots').innerHTML = QSET.map(function (q, i) {
+    var cls = 'qdot';
+    if (QANS[i] >= 0) cls += (QANS[i] === q.a ? ' done' : ' wrongdot');
+    if (i === QI) cls += ' now';
+    return '<button class="' + cls + '" data-i="' + i + '" aria-label="Question ' + (i + 1)
+      + '">' + (i + 1) + '</button>';
+  }).join('');
+}
+$('q-dots').addEventListener('click', function (ev) {
+  var b = ev.target.closest('.qdot'); if (!b) return;
+  QI = Number(b.dataset.i); renderQuestion();
+});
+
 function renderQuestion() {
-  var list = qList();
-  if (!list.length) return;
-  if (QI >= list.length) QI = 0;
-  var q = list[QI];
+  if (!QSET.length) buildSet();
+  if (!QSET.length) return;
+  if (QI >= QSET.length) QI = QSET.length - 1;
+  var q = QSET[QI], picked = QANS[QI];
   $('q-tag').textContent = SECNAME[q.sec] || q.sec;
-  $('q-num').textContent = (QI + 1) + ' / ' + list.length;
+  $('q-num').textContent = (QI + 1) + ' / ' + QSET.length;
   $('q-stem').textContent = q.p;
   $('q-choices').innerHTML = q.o.map(function (o, i) {
     var cls = 'ch';
-    if (QANS >= 0) {
+    if (picked >= 0) {
       if (i === q.a) cls += ' right';
-      else if (i === QANS) cls += ' wrong';
+      else if (i === picked) cls += ' wrong';
     }
-    return '<button class="' + cls + '" data-i="' + i + '"' + (QANS >= 0 ? ' disabled' : '')
+    return '<button class="' + cls + '" data-i="' + i + '"' + (picked >= 0 ? ' disabled' : '')
       + '><i>' + 'ABCD'[i] + '</i>' + String(o).replace(/</g, '&lt;') + '</button>';
   }).join('');
   var ex = $('q-ex');
-  ex.hidden = QANS < 0 || !q.ex;
+  ex.hidden = picked < 0 || !q.ex;
   ex.textContent = q.ex || '';
   $('q-prev').disabled = QI === 0;
-  $('q-next').disabled = QI >= list.length - 1;
+  $('q-next').disabled = QI >= QSET.length - 1;
+  renderDots();
+
+  var answered = QANS.filter(function (a) { return a >= 0; }).length;
+  var done = $('q-done');
+  if (answered === QSET.length) {
+    var right = QANS.filter(function (a, i) { return a === QSET[i].a; }).length;
+    done.hidden = false;
+    $('q-score').textContent = right + ' / ' + QSET.length;
+    $('q-scoresub').textContent = right === QSET.length ? 'Every one. '
+      : Math.round(right / QSET.length * 100) + '% — the dots show which to look at again.';
+  } else {
+    done.hidden = true;
+  }
 }
 $('q-choices').addEventListener('click', function (ev) {
-  var b = ev.target.closest('.ch'); if (!b || QANS >= 0) return;
-  QANS = Number(b.dataset.i); renderQuestion();
+  var b = ev.target.closest('.ch'); if (!b || QANS[QI] >= 0) return;
+  QANS[QI] = Number(b.dataset.i);
+  renderQuestion();
 });
-$('q-prev').addEventListener('click', function () { if (QI > 0) { QI--; QANS = -1; renderQuestion(); } });
+$('q-prev').addEventListener('click', function () { if (QI > 0) { QI--; renderQuestion(); } });
 $('q-next').addEventListener('click', function () {
-  if (QI < qList().length - 1) { QI++; QANS = -1; renderQuestion(); }
+  if (QI < QSET.length - 1) { QI++; renderQuestion(); }
 });
 
 /* ------------------------------ settings -------------------------- */
