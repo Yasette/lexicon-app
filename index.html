@@ -455,6 +455,34 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .syn i.rel{background:var(--paper2);color:var(--ink2)}
 .synlab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
   color:var(--mute);margin:0}
+
+/* ---------------------------- gear button -------------------------- */
+.corner{display:grid;place-items:center;width:36px;height:36px;padding:0}
+.corner svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* pace to test day */
+.pace{margin:9px 0 0;font-size:11.5px;line-height:1.5;color:var(--mute)}
+.pace b{font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+
+/* ---------------------------- milestones --------------------------- */
+.miles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+.mile{padding:11px 6px 10px;border-radius:11px;background:var(--card);
+  border:1px solid var(--rule);text-align:center;opacity:.5}
+.mile.on{opacity:1;border-color:var(--accent);background:var(--accentsoft)}
+.mile .ic{font-size:16px;line-height:1}
+.mile b{display:block;margin-top:5px;font-size:10.5px;font-weight:700;color:var(--ink)}
+.mile small{display:block;margin-top:2px;font-size:9px;font-weight:600;color:var(--mute);
+  letter-spacing:.04em}
+.mile.on b{color:var(--accent)}
+
+/* word of the day */
+.wotd{border-radius:12px;padding:13px 14px;background:var(--card);border:1px solid var(--rule);
+  box-shadow:var(--shadow-sm);text-align:left;margin:14px 0 0}
+.wotd .t{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--mute)}
+.wotd .w{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);margin-top:5px}
+.wotd .m{font-size:12.5px;line-height:1.45;color:var(--ink2);margin-top:3px}
 </style>
 
 <div class="stage">
@@ -463,7 +491,9 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
   <!-- ============================ HOME ============================ -->
   <div class="view" id="v-home">
-    <button class="corner" data-go="settings">Settings</button>
+    <button class="corner" data-go="settings" aria-label="Settings" title="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
 
     <div class="mast">
       <p class="eyebrow">SAT Reading &amp; Writing</p>
@@ -503,10 +533,17 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
         <button data-start="tricky">Tricky pile<small id="d-tricky">0 words</small></button>
         <button data-start="quick">Quick quiz<small>20 mixed</small></button>
       </div>
-      <button class="solo" data-go="map">Your days →</button>
+      <button class="solo" data-go="map">Your progress →</button>
     </div>
 
     <p class="testday" id="testday"></p>
+    <p class="pace" id="pace" hidden></p>
+
+    <button class="wotd" id="wotd" hidden data-go="words">
+      <span class="t">Word of the day</span>
+      <span class="w" id="wotd-w"></span>
+      <span class="m" id="wotd-m"></span>
+    </button>
   </div>
 
   <!-- ============================ STUDY =========================== -->
@@ -538,6 +575,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
         <div class="seg" id="f-pool">
           <button data-v="due" aria-pressed="true">Due</button>
           <button data-v="tricky" aria-pressed="false">Tricky</button>
+          <button data-v="missed" aria-pressed="false">Missed</button>
           <button data-v="all" aria-pressed="false">Everything</button>
         </div></div>
       <div class="panel"><p class="lab">Difficulty</p>
@@ -595,7 +633,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   <div class="view" id="v-map" hidden>
     <div class="head">
       <button class="back" data-go="home">← Home</button>
-      <h2>Your days</h2>
+      <h2>Your progress</h2>
       <p>Tap a day to see what you did. The note beside it is yours to scribble in.</p>
     </div>
     <div class="body">
@@ -604,6 +642,9 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
           <span>Finish a session and today lights up. You can still leave notes on any
           day — they are yours whether you studied or not.</span></div>
       </div>
+      <p class="lab">Milestones</p>
+      <div class="miles" id="miles"></div>
+      <p class="lab" style="margin-top:6px">Your days</p>
       <div class="trail" id="trail"></div>
       <div class="mapkey">
         <span><i style="background:var(--accent)"></i>Strong</span>
@@ -626,7 +667,8 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
         <div class="miss"><b id="dd-wrong">0</b><span>missed</span></div>
         <div><b id="dd-acc">0%</b><span>accuracy</span></div>
       </div>
-      <button class="go" id="dd-practice" hidden>Practice the missed words</button>
+      <button class="go" id="dd-quiz" hidden>Quiz this day’s words</button>
+      <button class="go ghost" id="dd-practice" hidden>Practice the missed words</button>
       <p class="lab" id="dd-lab" hidden>Words you missed</p>
       <div id="dd-list"></div>
     </div>
@@ -670,6 +712,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
         <button data-v="all" aria-pressed="true">All</button>
         <button data-v="due" aria-pressed="false">Due</button>
         <button data-v="tricky" aria-pressed="false">Tricky</button>
+        <button data-v="missed" aria-pressed="false">Missed</button>
         <button data-v="mastered" aria-pressed="false">Mastered</button>
       </div>
       <div id="w-list" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -791,6 +834,9 @@ if (typeof PROF.tr !== 'boolean') PROF.tr = true;
 function isDue(e) { return !e || !e.last ? true : (Date.now() - e.last) / DAY_MS >= BOX_DAYS[Math.min(e.b || 0, 5)]; }
 function isTricky(e) { return !!e && e.x > 0 && (e.cs || 0) < 2; }
 function isMastered(e) { return !!e && (e.b || 0) >= 4; }
+/* Missed is wider than tricky: every word you have ever got wrong, even the
+   ones you have since recovered. Useful for a sweep before the test. */
+function everMissed(e) { return !!e && (e.x || 0) > 0; }
 
 function grade(i, ok) {
   var e = SRS[i] || { b: 0, r: 0, x: 0, cs: 0, last: 0 };
@@ -846,19 +892,34 @@ function daysToTest() {
   var today = new Date(); today.setHours(0, 0, 0, 0);
   return Math.round((t - today) / DAY_MS);
 }
-function recordDay(right, wrong, names) {
+function recordDay(right, wrong, names, seenNames) {
   var k = dayKey(new Date());
-  var e = LOG[k] || { right: 0, wrong: 0, missed: [] };
+  var e = LOG[k] || { right: 0, wrong: 0, missed: [], seen: [] };
+  if (!e.seen) e.seen = [];
   e.right += right; e.wrong += wrong;
   names.forEach(function (w) { if (e.missed.indexOf(w) < 0) e.missed.push(w); });
+  (seenNames || []).forEach(function (w) {
+    if (e.seen.indexOf(w) < 0 && e.seen.length < 300) e.seen.push(w);
+  });
   LOG[k] = e; save(LS.log, LOG);
 }
-function streak() {
-  var n = 0, d = new Date();
+/* One skipped day is forgiven, the way Duolingo's freeze works — a single
+   bad day should not wipe a fortnight of work. Returns the run length and
+   whether the freeze has been spent. */
+function streakInfo() {
+  var d = new Date(), n = 0, used = false;
   if (!LOG[dayKey(d)]) d.setDate(d.getDate() - 1);
-  while (LOG[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
-  return n;
+  for (;;) {
+    if (LOG[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); continue; }
+    if (!used && n > 0) {                 /* spend the freeze on this gap */
+      var probe = new Date(d); probe.setDate(probe.getDate() - 1);
+      if (LOG[dayKey(probe)]) { used = true; d = probe; continue; }
+    }
+    break;
+  }
+  return { n: n, frozen: used };
 }
+function streak() { return streakInfo().n; }
 function logDays() { return Object.keys(LOG).length; }
 
 /* ------------------------------- theme ---------------------------- */
@@ -929,9 +990,10 @@ function renderHome() {
   $('s-words').firstElementChild.textContent = c.total.toLocaleString('en-US');
   $('d-tricky').textContent = c.tricky + (c.tricky === 1 ? ' word' : ' words');
 
-  var s = streak();
-  $('streakline').innerHTML = s
-    ? '<b>' + s + '</b> day' + (s === 1 ? '' : 's') + ' in a row'
+  var si = streakInfo();
+  $('streakline').innerHTML = si.n
+    ? '<b>' + si.n + '</b> day' + (si.n === 1 ? '' : 's') + ' in a row'
+      + (si.frozen ? ' <span style="opacity:.75">· one day forgiven</span>' : '')
     : 'start today’s streak';
 
   $('onboard').hidden = !!PROF.goalSet;
@@ -953,6 +1015,32 @@ function renderHome() {
   } else {
     $('hero-t').textContent = 'Review what’s due this week';
     $('hero-s').textContent = Math.min(c.due, PROF.goalSet ? left : c.due) + ' words waiting';
+  }
+
+  /* Pace: what it actually takes to see everything before the test. This is
+     the number a student wants and no app ever shows them. */
+  var dt0 = daysToTest();
+  var unseen = idsWhere(function (e) { return !e || !e.last; }).length;
+  if (dt0 !== null && dt0 > 0 && unseen > 0) {
+    $('pace').hidden = false;
+    $('pace').innerHTML = '<b>' + Math.ceil(unseen / dt0) + '</b> new words a day to meet '
+      + 'all ' + unseen.toLocaleString('en-US') + ' you have not seen yet, before then.';
+  } else {
+    $('pace').hidden = true;
+  }
+
+  /* Word of the day — same word all day, different each day, drawn from
+     what is actually due rather than at random. */
+  var pool = idsWhere(function (e) { return isDue(e); });
+  if (pool.length) {
+    var seed = 0, key = dayKey(new Date());
+    for (var ci = 0; ci < key.length; ci++) seed = (seed * 31 + key.charCodeAt(ci)) % 100000;
+    var wd = WORDS[pool[seed % pool.length]];
+    $('wotd').hidden = false;
+    $('wotd-w').textContent = wd[W_WORD];
+    $('wotd-m').textContent = wd[W_EN] || wd[W_TR];
+  } else {
+    $('wotd').hidden = true;
   }
 
   var dt = daysToTest();
@@ -988,6 +1076,7 @@ $('f-tr').addEventListener('click', function () {
 function poolIds() {
   var base = F.pool === 'due' ? idsWhere(function (e) { return isDue(e); })
     : F.pool === 'tricky' ? idsWhere(function (e) { return isTricky(e); })
+    : F.pool === 'missed' ? idsWhere(function (e) { return everMissed(e); })
     : idsWhere(function () { return true; });
   if (F.band >= 0) base = base.filter(function (i) { return WORDS[i][W_DIF] === F.band; });
   return base;
@@ -1125,7 +1214,12 @@ function finish() {
   $('r-sub').textContent = pct >= 85 ? 'Sharp today.'
     : pct >= 60 ? 'Solid — a few to revisit.' : 'Worth another pass.';
   $('r-right').textContent = S.right; $('r-wrong').textContent = S.wrong; $('r-total').textContent = tot;
-  recordDay(S.right, S.wrong, S.missed.map(function (i) { return WORDS[i][W_WORD]; }));
+  recordDay(S.right, S.wrong,
+    S.missed.map(function (i) { return WORDS[i][W_WORD]; }),
+    S.deck.map(function (i) { return WORDS[i][W_WORD]; }));
+  if (pct === 100 && tot >= 10) { PROF.perfect = true; save(LS.prof, PROF); }
+  var si2 = streakInfo();
+  if (si2.n > (PROF.bestStreak || 0)) { PROF.bestStreak = si2.n; save(LS.prof, PROF); }
   var missed = S.missed.slice();
   $('r-list').innerHTML = missed.length ? wordList(missed) : '';
   var again = $('r-again');
@@ -1150,7 +1244,26 @@ var MONTH = ['January','February','March','April','May','June','July',
              'August','September','October','November','December'];
 var DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
+function renderMiles() {
+  var c = counts();
+  var seen = idsWhere(function (e) { return !!e && !!e.last; }).length;
+  var best = Math.max(PROF.bestStreak || 0, streak());
+  var list = [
+    { ic: '◔', b: 'First session', s: 'done once',      on: logDays() >= 1 },
+    { ic: '★', b: 'Perfect round', s: '100% of 10+',    on: !!PROF.perfect },
+    { ic: '▲', b: '7-day streak',  s: best + ' best',   on: best >= 7 },
+    { ic: '◆', b: '100 mastered',  s: c.mastered + ' now', on: c.mastered >= 100 },
+    { ic: '❖', b: '500 seen',      s: seen + ' seen',   on: seen >= 500 },
+    { ic: '✦', b: 'Whole list',    s: seen + '/' + c.total, on: seen >= c.total }
+  ];
+  $('miles').innerHTML = list.map(function (m) {
+    return '<div class="mile' + (m.on ? ' on' : '') + '"><div class="ic">' + m.ic + '</div>'
+      + '<b>' + m.b + '</b><small>' + m.s + '</small></div>';
+  }).join('');
+}
+
 function drawTrail() {
+  renderMiles();
   var wrap = $('trail');
   wrap.innerHTML = '';
   $('map-empty').hidden = logDays() > 0;
@@ -1206,8 +1319,19 @@ function openDay(key, d) {
   $('dd-list').innerHTML = missed.length ? wordList(missed) : '';
   var btn = $('dd-practice');
   btn.hidden = missed.length === 0;
-  btn.textContent = 'Practice these ' + missed.length;
+  btn.textContent = 'Practice the ' + missed.length + ' you missed';
   btn.onclick = function () { startIds(shuffle(missed.slice()), F.mode); };
+
+  /* Everything that day, not only the misses — days before this feature
+     shipped only recorded misses, so fall back to those. */
+  var seen = [];
+  if (e && e.seen && e.seen.length) {
+    e.seen.forEach(function (n) { var i = indexOfWord(n); if (i >= 0) seen.push(i); });
+  } else { seen = missed.slice(); }
+  var qz = $('dd-quiz');
+  qz.hidden = seen.length === 0;
+  qz.textContent = 'Quiz these ' + seen.length + ' words';
+  qz.onclick = function () { startIds(shuffle(seen.slice()), 'test'); };
   show('day');
 }
 
@@ -1227,6 +1351,7 @@ function wordMatches(i) {
   var e = SRS[i];
   if (WF === 'due' && !isDue(e)) return false;
   if (WF === 'tricky' && !isTricky(e)) return false;
+  if (WF === 'missed' && !everMissed(e)) return false;
   if (WF === 'mastered' && !isMastered(e)) return false;
   if (!WQ) return true;
   var w = WORDS[i];
