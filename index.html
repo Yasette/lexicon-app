@@ -522,6 +522,26 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
    instead of letting the last one stretch across on its own. */
 #w-filter{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 #w-filter button{min-width:0}
+
+
+/* ---------------- the word list is one sheet, not 60 cards ---------
+   Each word was its own bordered box, which made a list of sixty read
+   as sixty objects. One container, rules between rows. */
+#w-list{border-radius:13px;overflow:hidden;background:var(--card);
+  border:1px solid var(--rule);box-shadow:var(--shadow-sm)}
+#w-list:empty{display:none}
+#w-list .wrow{border:0;border-radius:0;box-shadow:none;background:none;
+  padding:12px 14px;border-bottom:1px solid var(--rule)}
+#w-list .wrow:hover{background:var(--raise);transform:none}
+#w-list > :last-child{border-bottom:0}
+#w-list .wdetail{margin:0;border:0;border-radius:0;background:var(--paper2);
+  border-bottom:1px solid var(--rule);padding:13px 16px}
+
+/* ------------- the numbers really do sit in the circles -------------
+   Buttons carry a default padding and line-height; without clearing
+   both, grid centring is centring a box that is already offset. */
+.qdot{padding:0;line-height:1;box-sizing:border-box;-webkit-appearance:none;appearance:none;
+  font-family:var(--ui);font-variant-numeric:tabular-nums}
 </style>
 
 <div class="stage">
@@ -771,7 +791,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
           </div>
         </div>
       </div>
-      <div id="w-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="w-list"></div>
       <p class="note" id="w-more"></p>
     </div>
   </div>
