@@ -542,6 +542,11 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
    both, grid centring is centring a box that is already offset. */
 .qdot{padding:0;line-height:1;box-sizing:border-box;-webkit-appearance:none;appearance:none;
   font-family:var(--ui);font-variant-numeric:tabular-nums}
+
+
+/* "Saved" — quiet confirmation that an auto-saving field really took. */
+.saved{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--sage);margin-left:8px}
 </style>
 
 <div class="stage">
@@ -825,7 +830,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
     </div>
     <div class="body">
       <div class="panel">
-        <p class="lab">Profile</p>
+        <p class="lab">Profile <em class="saved" id="name-saved" hidden></em></p>
         <div class="field">
           <label for="p-name">What should the app call you?</label>
           <input id="p-name" type="text" placeholder="Optional"
@@ -836,11 +841,12 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
           <label for="p-test">Test day</label>
           <input id="p-test" type="date">
           <p class="hint" id="p-test-hint">The countdown on the home screen comes from this.</p>
+          <em class="saved" id="test-saved" hidden></em>
         </div>
       </div>
 
       <div class="panel">
-        <p class="lab">Weekly goal</p>
+        <p class="lab">Weekly goal <em class="saved" id="goal-saved" hidden></em></p>
         <div class="field">
           <label for="p-goal">Words per week</label>
           <input id="p-goal" type="number" min="10" max="1000" step="10">
@@ -1601,9 +1607,10 @@ $('q-next').addEventListener('click', function () {
 
 /* ------------------------------ settings -------------------------- */
 function renderSettings() {
-  $('p-name').value = PROF.name || '';
-  $('p-test').value = PROF.testDate || '';
-  $('p-goal').value = PROF.goal || 100;
+  var live = document.activeElement;
+  if (live !== $('p-name')) $('p-name').value = PROF.name || '';
+  if (live !== $('p-test')) $('p-test').value = PROF.testDate || '';
+  if (live !== $('p-goal')) $('p-goal').value = PROF.goal || 100;
   [].forEach.call($('goal-presets').querySelectorAll('button'), function (b) {
     b.setAttribute('aria-pressed', String(Number(b.dataset.v) === (PROF.goal || 100)));
   });
@@ -1620,15 +1627,45 @@ function renderSettings() {
       + (notes ? ' · ' + notes + ' note' + (notes === 1 ? '' : 's') : '')
     : 'No sessions recorded yet.';
 }
-$('p-name').addEventListener('input', function () { PROF.name = this.value; save(LS.prof, PROF); });
-$('p-test').addEventListener('change', function () {
-  PROF.testDate = this.value; save(LS.prof, PROF); renderSettings();
+$('p-name').addEventListener('input', function () {
+  PROF.name = this.value; save(LS.prof, PROF); flashSaved('name-saved');
 });
-function setGoal(n) {
-  PROF.goal = Math.max(10, Math.min(1000, n || 100));
-  PROF.goalSet = true; save(LS.prof, PROF); renderSettings();
+$('p-test').addEventListener('change', function () {
+  PROF.testDate = this.value; save(LS.prof, PROF);
+  renderSettings(); flashSaved('test-saved'); renderHome();
+});
+/* Settings save as you go, so the only thing missing was proof. Every
+   write flashes "Saved" beside the field it belongs to. */
+var savedTimer = null;
+function flashSaved(id) {
+  var el = $(id); if (!el) return;
+  el.hidden = false; el.textContent = 'Saved';
+  clearTimeout(savedTimer);
+  savedTimer = setTimeout(function () { el.hidden = true; }, 1400);
 }
-$('p-goal').addEventListener('change', function () { setGoal(Number(this.value)); });
+
+function setGoal(n, fromField) {
+  PROF.goal = Math.max(10, Math.min(1000, n || 100));
+  PROF.goalSet = true;
+  save(LS.prof, PROF);
+  /* Rewriting the input while someone is still typing fights them, so
+     only the presets push a value back into the field. */
+  if (!fromField) $('p-goal').value = PROF.goal;
+  [].forEach.call($('goal-presets').querySelectorAll('button'), function (b) {
+    b.setAttribute('aria-pressed', String(Number(b.dataset.v) === PROF.goal));
+  });
+  flashSaved('goal-saved');
+  renderHome();                 /* the "choose a goal" card lives on home */
+}
+/* `change` alone only fires on blur — type a number, tap the tab bar, and
+   the value was lost. `input` commits every keystroke. */
+$('p-goal').addEventListener('input', function () {
+  var n = Number(this.value);
+  if (this.value !== '' && n >= 10) setGoal(n, true);
+});
+$('p-goal').addEventListener('change', function () {
+  setGoal(Number(this.value));   /* normalises the field on blur */
+});
 $('goal-presets').addEventListener('click', function (ev) {
   var b = ev.target.closest('button'); if (b) setGoal(Number(b.dataset.v));
 });
