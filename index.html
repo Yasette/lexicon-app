@@ -6,19 +6,16 @@
 /* ==================================================================
    Lexicon — paper themes.
 
-   The palette and the masthead face come straight from the original
-   Lexicon: warm paper, oxblood, Fraunces for the wordmark. Everything
-   else — the layout, Manrope for the interface, Source Serif for the
-   words themselves — is the newer app, which is the part that stays.
-
-   Six palettes built from the same twelve tokens, so switching theme is
-   a swap of values and never a special case anywhere below.
+   Palette and masthead face come from the original Lexicon: warm paper,
+   oxblood, Fraunces at 640. Six palettes are built from the same twelve
+   tokens, so a theme swap is never a special case below.
    ================================================================== */
 :root,
 [data-theme="ember"]{
   --paper:#F5EEDC; --paper2:#EDE1C5; --card:#FBF6E9; --raise:#FFFDF4;
   --ink:#1B1610;   --ink2:#463B2D;   --mute:#8A7B65;
   --accent:#8C2E14; --accent2:#A84322; --accentsoft:#F0DCCF;
+  --gold:#A67C2E;  --sage:#47573A;
   --rule:#D8C9A5;  --rule2:#C4B28A;
   --tintA:rgba(140,46,20,.045); --tintB:rgba(166,124,46,.06);
 }
@@ -26,6 +23,7 @@
   --paper:#EDF0F7; --paper2:#E1E6F2; --card:#F8FAFD; --raise:#FFFFFF;
   --ink:#131826;   --ink2:#2E3854;   --mute:#6B7794;
   --accent:#2A3F8F; --accent2:#3B54B4; --accentsoft:#DCE3F7;
+  --gold:#3E6E93;  --sage:#3D6B5E;
   --rule:#C6D0E6;  --rule2:#AFBCD9;
   --tintA:rgba(42,63,143,.05); --tintB:rgba(59,84,180,.055);
 }
@@ -33,6 +31,7 @@
   --paper:#F3EEF6; --paper2:#E9E0EF; --card:#FBF8FD; --raise:#FFFFFF;
   --ink:#1E1424;   --ink2:#402F4A;   --mute:#83718F;
   --accent:#6B2E86; --accent2:#8543A3; --accentsoft:#EDDDF4;
+  --gold:#9A5C8A;  --sage:#4F6B5B;
   --rule:#DCCBE5;  --rule2:#C9B4D5;
   --tintA:rgba(107,46,134,.05); --tintB:rgba(133,67,163,.055);
 }
@@ -40,6 +39,7 @@
   --paper:#F9F1DC; --paper2:#F1E5C4; --card:#FFFBEE; --raise:#FFFFFF;
   --ink:#211A0B;   --ink2:#4A3C1C;   --mute:#8C7A50;
   --accent:#A67C2E; --accent2:#C4942F; --accentsoft:#F6E7C2;
+  --gold:#8A6420;  --sage:#5A6A33;
   --rule:#E0CE9F;  --rule2:#CDB77F;
   --tintA:rgba(166,124,46,.07); --tintB:rgba(196,148,47,.06);
 }
@@ -47,6 +47,7 @@
   --paper:#F9EDF0; --paper2:#F2DFE4; --card:#FEF8FA; --raise:#FFFFFF;
   --ink:#24141A;   --ink2:#4C2F38;   --mute:#92707C;
   --accent:#A83352; --accent2:#C24468; --accentsoft:#F7DDE4;
+  --gold:#A9683F;  --sage:#5C6B54;
   --rule:#E6C9D1;  --rule2:#D6AFBB;
   --tintA:rgba(168,51,82,.05); --tintB:rgba(194,68,104,.055);
 }
@@ -54,6 +55,7 @@
   --paper:#EEF2E9; --paper2:#E2E8DA; --card:#F8FBF4; --raise:#FFFFFF;
   --ink:#161D12;   --ink2:#35422C;   --mute:#74805F;
   --accent:#47573A; --accent2:#5C7049; --accentsoft:#DEE3D2;
+  --gold:#84702F;  --sage:#3F6152;
   --rule:#CBD5BC;  --rule2:#B4C2A2;
   --tintA:rgba(71,87,58,.06); --tintB:rgba(92,112,73,.06);
 }
@@ -89,44 +91,100 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .view::-webkit-scrollbar{width:0}
 
 /* ============================== HOME ============================== */
-#v-home{align-items:center;justify-content:center;padding:0 26px;text-align:center}
-.corner{position:absolute;top:20px;right:18px;font-size:12px;font-weight:600;
-  letter-spacing:.05em;color:var(--mute);padding:7px 11px;border-radius:9px}
+#v-home{padding:0 22px 22px;text-align:center}
+.corner{position:absolute;top:18px;right:16px;font-size:12px;font-weight:600;
+  letter-spacing:.04em;color:var(--mute);padding:7px 10px;border-radius:9px;z-index:2}
 .corner:hover{color:var(--accent);background:var(--accentsoft)}
 .corner:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-.mast h1{margin:0;font-family:var(--display);font-weight:640;font-size:40px;
+.mast{padding:34px 0 0}
+.mast .eyebrow{margin:0;font-size:9.5px;font-weight:700;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--mute)}
+.mast h1{margin:9px 0 0;font-family:var(--display);font-weight:640;font-size:38px;
   letter-spacing:.01em;line-height:1;color:var(--ink);
   font-variation-settings:'opsz' 144,'SOFT' 60}
-.mast p{margin:11px 0 0;font-size:10.5px;font-weight:600;letter-spacing:.20em;
-  text-transform:uppercase;color:var(--mute)}
-.rules{width:118px;margin:17px auto 0;display:flex;flex-direction:column;gap:3px}
+.rules{width:110px;margin:14px auto 0;display:flex;flex-direction:column;gap:3px}
 .rules i{display:block;height:1px;background:var(--rule2)}
 .rules i:last-child{background:var(--rule)}
+.streakline{margin:14px 0 0;font-size:12.5px;font-style:italic;font-family:var(--serif);
+  color:var(--mute)}
+.streakline b{font-style:normal;font-family:var(--ui);font-weight:700;color:var(--accent)}
 
-.menu{margin-top:42px;width:100%;max-width:270px;display:flex;flex-direction:column;gap:10px}
-.btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;
-  padding:14px 18px;border-radius:13px;background:var(--raise);
-  border:1px solid var(--rule);box-shadow:var(--shadow-sm);color:var(--ink);
-  transition:background .15s ease,border-color .15s ease,transform .15s ease}
-.btn:hover{background:var(--card);border-color:var(--rule2);transform:translateY(-1px)}
-.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.btn b{font-size:15.5px;font-weight:600;letter-spacing:.01em}
-.btn span{font-size:11.5px;font-weight:500;color:var(--mute)}
-.btn span:empty{display:none}
-.btn.lead{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.lead:hover{background:var(--accent2);border-color:var(--accent2)}
-.btn.lead span{color:rgba(255,255,255,.80)}
+/* stat row, straight off the original home screen */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:20px 0 0}
+.stats button{padding:12px 4px;border-radius:12px;background:var(--card);
+  border:1px solid var(--rule);box-shadow:var(--shadow-sm);
+  transition:background .14s ease,transform .14s ease}
+.stats button:hover{background:var(--raise);transform:translateY(-1px)}
+.stats button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stats b{display:block;font-family:var(--display);font-size:21px;font-weight:640;
+  line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.stats .due b{color:var(--accent)}
+.stats .tricky b{color:var(--gold)}
+.stats .mastered b{color:var(--sage)}
+.stats span{display:block;margin-top:5px;font-size:8.5px;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--mute)}
+
+.goalbox{margin:14px 0 0;padding:13px 14px;border-radius:12px;background:var(--card);
+  border:1px solid var(--rule);box-shadow:var(--shadow-sm);text-align:left}
+.goalbox .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.goalbox .t{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--mute)}
+.goalbox .n{font-size:12.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.goalbox .bar{margin-top:9px;height:6px;border-radius:3px;background:var(--paper2);overflow:hidden}
+.goalbox .bar i{display:block;height:100%;background:var(--accent);
+  transition:width .35s ease;border-radius:3px}
+.goalbox .met{color:var(--sage)}
+
+.actions{display:flex;flex-direction:column;gap:9px;margin:14px 0 0}
+.hero{width:100%;padding:15px;border-radius:13px;background:var(--accent);color:#fff;
+  box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:2px}
+.hero:hover{background:var(--accent2)}
+.hero:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.hero b{font-size:15.5px;font-weight:700}
+.hero span{font-size:11.5px;color:rgba(255,255,255,.82)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.duo button,.solo{padding:13px 10px;border-radius:12px;background:var(--raise);
+  border:1px solid var(--rule);box-shadow:var(--shadow-sm);font-size:13.5px;font-weight:600}
+.duo button:hover,.solo:hover{background:var(--card);border-color:var(--rule2)}
+.duo button:focus-visible,.solo:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.duo button small{display:block;margin-top:2px;font-size:11px;font-weight:600;color:var(--mute)}
+.solo{width:100%}
+
+.onboard{margin:14px 0 0;padding:14px;border-radius:12px;background:var(--accentsoft);
+  border:1px solid var(--rule2);text-align:left}
+.onboard b{display:block;font-family:var(--display);font-size:16px;font-weight:600;
+  color:var(--ink);margin-bottom:4px}
+.onboard p{margin:0 0 11px;font-size:12.5px;line-height:1.5;color:var(--ink2)}
+.onboard button{padding:9px 14px;border-radius:9px;background:var(--accent);color:#fff;
+  font-size:12.5px;font-weight:700}
+
+.testday{margin:16px 0 4px;font-size:12px;color:var(--mute)}
+.testday b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.testday button{font-size:12px;font-weight:600;color:var(--accent);text-decoration:underline}
+
+/* ============================= FOOTER ============================= */
+.nav{flex:none;display:grid;grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--rule);background:var(--card);
+  padding-bottom:env(safe-area-inset-bottom)}
+.nav button{padding:9px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--mute);transition:color .14s ease}
+.nav button:hover{color:var(--ink)}
+.nav button:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+.nav button[aria-current="true"]{color:var(--accent)}
+.nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
 
 /* ============================= CHROME ============================= */
-.head{padding:48px 22px 0;flex:none}
-.back{display:inline-flex;align-items:center;gap:7px;margin:0 0 18px;font-size:11px;
+.head{padding:34px 22px 0;flex:none}
+.back{display:inline-flex;align-items:center;gap:7px;margin:0 0 16px;font-size:11px;
   font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
 .back:hover{color:var(--accent)}
 .back:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .head h2{margin:0;font-family:var(--display);font-weight:600;font-size:26px;color:var(--ink)}
 .head p{margin:8px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink2);max-width:34ch}
-.body{padding:20px 22px 30px;display:flex;flex-direction:column;gap:13px}
+.body{padding:18px 22px 28px;display:flex;flex-direction:column;gap:13px}
 
 .panel{border-radius:14px;padding:16px;background:var(--card);
   border:1px solid var(--rule);box-shadow:var(--shadow-sm)}
@@ -134,7 +192,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   color:var(--mute);margin:0 0 10px}
 
 .seg{display:flex;gap:7px;flex-wrap:wrap}
-.seg button{flex:1 1 auto;min-width:62px;padding:10px 8px;border-radius:9px;
+.seg button{flex:1 1 auto;min-width:60px;padding:10px 8px;border-radius:9px;
   background:var(--paper);border:1px solid var(--rule);font-size:13px;font-weight:600;
   color:var(--ink2);transition:background .14s ease,color .14s ease,border-color .14s ease}
 .seg button:hover{background:var(--accentsoft);border-color:var(--rule2)}
@@ -146,19 +204,25 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .go:hover{background:var(--accent2)}
 .go:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .go[disabled]{opacity:.45;cursor:default}
+.ghost{background:var(--raise);color:var(--accent);border:1px solid var(--rule)}
+.ghost:hover{background:var(--card)}
 .note{font-size:11.5px;line-height:1.5;color:var(--mute);text-align:center;padding:0 6px}
 
+input[type=date],input[type=number]{width:100%;padding:11px 12px;border-radius:10px;
+  background:var(--paper);border:1px solid var(--rule);color:var(--ink);
+  font-family:var(--ui);font-size:14px}
+input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
 /* ============================ SESSION ============================= */
-.hud{display:flex;align-items:center;gap:12px;padding:46px 22px 0;flex:none}
+.hud{display:flex;align-items:center;gap:12px;padding:34px 22px 0;flex:none}
 .hud .track{flex:1;height:4px;border-radius:2px;background:var(--rule);overflow:hidden}
 .hud .track i{display:block;height:100%;background:var(--accent);transition:width .25s ease}
 .hud .n{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--mute);
   font-variant-numeric:tabular-nums}
-
 .stack{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:22px}
 .card{border-radius:16px;padding:28px 20px;background:var(--card);
   border:1px solid var(--rule);box-shadow:var(--shadow);text-align:center;
-  min-height:246px;display:flex;flex-direction:column;align-items:center;
+  min-height:240px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:12px}
 .card .prompt{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;color:var(--ink)}
 .card .prompt.tr{font-family:var(--ui);font-size:22px;font-weight:600;color:var(--accent)}
@@ -167,15 +231,12 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .card .tr2{margin:0;font-size:14px;line-height:1.5;color:var(--accent)}
 .card .ex{margin:0;font-family:var(--serif);font-style:italic;font-size:13px;
   line-height:1.6;color:var(--mute)}
-
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .pair button{padding:14px;border-radius:12px;background:var(--raise);
   border:1px solid var(--rule);box-shadow:var(--shadow-sm);font-size:13.5px;font-weight:700}
 .pair .miss{color:var(--accent)}
-.pair .got{color:var(--ink)}
 .pair button:hover{background:var(--card);border-color:var(--rule2)}
 .pair button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
 .choices{display:flex;flex-direction:column;gap:8px}
 .ch{display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:11px;
   background:var(--raise);border:1px solid var(--rule);box-shadow:var(--shadow-sm);
@@ -238,6 +299,30 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .mapkey i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;
   vertical-align:-1px;border:1px solid var(--rule2)}
 
+/* ============================== WORDS ============================= */
+.search{width:100%;padding:12px 13px;border-radius:11px;background:var(--card);
+  border:1px solid var(--rule);font-family:var(--ui);font-size:14px;color:var(--ink)}
+.search::placeholder{color:var(--mute)}
+.wrow{width:100%;text-align:left;padding:12px 14px;border-radius:11px;background:var(--card);
+  border:1px solid var(--rule);box-shadow:var(--shadow-sm);display:flex;
+  align-items:baseline;gap:10px;transition:background .13s ease}
+.wrow:hover{background:var(--raise)}
+.wrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrow .w{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);flex:none}
+.wrow .t{font-size:12.5px;color:var(--mute);line-height:1.4;flex:1;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.wrow .pip{width:7px;height:7px;border-radius:50%;flex:none;background:var(--rule2)}
+.wrow .pip.tricky{background:var(--gold)}
+.wrow .pip.mastered{background:var(--sage)}
+.wdetail{padding:13px 15px;border-radius:11px;background:var(--raise);
+  border:1px solid var(--rule2);margin-top:-6px}
+.wdetail p{margin:0 0 7px;font-size:13.5px;line-height:1.55}
+.wdetail p:last-child{margin-bottom:0}
+.wdetail .tr{color:var(--accent);font-weight:600}
+.wdetail .en{font-family:var(--serif);color:var(--ink)}
+.wdetail .ex{font-family:var(--serif);font-style:italic;color:var(--mute);font-size:12.5px}
+.wdetail .nt{font-size:12px;color:var(--ink2);padding-top:7px;border-top:1px solid var(--rule)}
+
 /* ============================= LISTS ============================== */
 .row{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:14px 15px;
   border-radius:12px;background:var(--card);border:1px solid var(--rule);
@@ -264,6 +349,10 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .sw .dots{display:flex;gap:4px}
 .sw .dots i{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.10)}
 .sw em{font-style:normal;font-size:11.5px;font-weight:600;color:var(--ink2)}
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px}
+.hint{margin:7px 0 0;font-size:11.5px;line-height:1.5;color:var(--mute)}
 
 .empty{text-align:center;padding:24px 18px;border-radius:14px;background:var(--card);
   border:1px dashed var(--rule2)}
@@ -281,25 +370,56 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   <!-- ============================ HOME ============================ -->
   <div class="view" id="v-home">
     <button class="corner" data-go="settings">Settings</button>
+
     <div class="mast">
+      <p class="eyebrow">SAT Reading &amp; Writing</p>
       <h1>Lexicon</h1>
       <div class="rules" aria-hidden="true"><i></i><i></i></div>
-      <p>SAT Reading &amp; Writing</p>
+      <p class="streakline" id="streakline">start today’s streak</p>
     </div>
-    <nav class="menu" aria-label="Main">
-      <button class="btn lead" data-go="setup"><b>Study</b><span id="due-line"></span></button>
-      <button class="btn" data-go="practice"><b>Practice</b><span></span></button>
-      <button class="btn" data-go="map"><b>Progress</b><span id="streak-line"></span></button>
-      <button class="btn" data-go="lessons"><b>Lessons</b><span></span></button>
-    </nav>
+
+    <div class="stats">
+      <button class="due" id="s-due" data-start="due"><b>0</b><span>Due</span></button>
+      <button class="tricky" id="s-tricky" data-start="tricky"><b>0</b><span>Tricky</span></button>
+      <button class="mastered" id="s-mastered" data-go="words"><b>0</b><span>Mastered</span></button>
+      <button id="s-words" data-go="words"><b>0</b><span>Words</span></button>
+    </div>
+
+    <div class="onboard" id="onboard" hidden>
+      <b>Set a weekly goal</b>
+      <p>How many words do you want to get through each week? It keeps the pile honest
+         and gives the week a finish line.</p>
+      <button data-go="settings">Choose a goal</button>
+    </div>
+
+    <div class="goalbox" id="goalbox" hidden>
+      <div class="top">
+        <span class="t">This week</span>
+        <span class="n" id="goal-n">0 / 0</span>
+      </div>
+      <div class="bar"><i id="goal-bar" style="width:0%"></i></div>
+    </div>
+
+    <div class="actions">
+      <button class="hero" id="hero" data-start="due">
+        <b id="hero-t">Review what’s due this week</b>
+        <span id="hero-s"></span>
+      </button>
+      <div class="duo">
+        <button data-start="tricky">Tricky pile<small id="d-tricky">0 words</small></button>
+        <button data-start="quick">Quick quiz<small>20 mixed</small></button>
+      </div>
+      <button class="solo" data-go="map">Your days →</button>
+    </div>
+
+    <p class="testday" id="testday"></p>
   </div>
 
-  <!-- ============================ SETUP =========================== -->
-  <div class="view" id="v-setup" hidden>
+  <!-- ============================ STUDY =========================== -->
+  <div class="view" id="v-study" hidden>
     <div class="head">
-      <button class="back" data-go="home">← Back</button>
-      <h2>Build a session</h2>
-      <p>Pick how you want to work. Nothing is fixed — change it any time.</p>
+      <h2>Study</h2>
+      <p>Build a session your way, or take what’s due.</p>
     </div>
     <div class="body">
       <div class="panel"><p class="lab">How</p>
@@ -319,6 +439,12 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
           <button data-v="20" aria-pressed="false">20</button>
           <button data-v="30" aria-pressed="false">30</button>
           <button data-v="50" aria-pressed="false">50</button>
+        </div></div>
+      <div class="panel"><p class="lab">Draw from</p>
+        <div class="seg" id="f-pool">
+          <button data-v="due" aria-pressed="true">Due</button>
+          <button data-v="tricky" aria-pressed="false">Tricky</button>
+          <button data-v="all" aria-pressed="false">Everything</button>
         </div></div>
       <div class="panel"><p class="lab">Difficulty</p>
         <div class="seg" id="f-band">
@@ -366,7 +492,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   <!-- ============================ TRAIL =========================== -->
   <div class="view" id="v-map" hidden>
     <div class="head">
-      <button class="back" data-go="home">← Back</button>
+      <button class="back" data-go="home">← Home</button>
       <h2>Your days</h2>
       <p>Every day you studied, walking back up the trail. Tap one to see what you did.</p>
     </div>
@@ -388,25 +514,24 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   <div class="view" id="v-day" hidden>
     <div class="head">
       <button class="back" data-go="map">← Trail</button>
-      <h2 id="d-title">Day</h2>
-      <p id="d-sub"></p>
+      <h2 id="dd-title">Day</h2>
+      <p id="dd-sub"></p>
     </div>
     <div class="body">
       <div class="stat">
-        <div><b id="d-right">0</b><span>right</span></div>
-        <div class="miss"><b id="d-wrong">0</b><span>missed</span></div>
-        <div><b id="d-acc">0%</b><span>accuracy</span></div>
+        <div><b id="dd-right">0</b><span>right</span></div>
+        <div class="miss"><b id="dd-wrong">0</b><span>missed</span></div>
+        <div><b id="dd-acc">0%</b><span>accuracy</span></div>
       </div>
-      <button class="go" id="d-practice" hidden>Practice the missed words</button>
-      <p class="lab" id="d-lab" hidden>Words you missed</p>
-      <div id="d-list"></div>
+      <button class="go" id="dd-practice" hidden>Practice the missed words</button>
+      <p class="lab" id="dd-lab" hidden>Words you missed</p>
+      <div id="dd-list"></div>
     </div>
   </div>
 
   <!-- ========================== PRACTICE ========================== -->
   <div class="view" id="v-practice" hidden>
     <div class="head">
-      <button class="back" data-go="home">← Back</button>
       <h2>Practice</h2>
       <p>Real SAT format — words in context, transitions, boundaries.</p>
     </div>
@@ -427,11 +552,30 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
     </div>
   </div>
 
-  <!-- ========================== LESSONS =========================== -->
-  <div class="view" id="v-lessons" hidden>
+  <!-- =========================== WORDS ============================ -->
+  <div class="view" id="v-words" hidden>
     <div class="head">
-      <button class="back" data-go="home">← Back</button>
-      <h2>Lessons</h2>
+      <h2>Words</h2>
+      <p id="w-count"></p>
+    </div>
+    <div class="body">
+      <input class="search" id="w-search" type="search" placeholder="Search word, meaning, Türkçe…"
+             autocomplete="off" spellcheck="false">
+      <div class="seg" id="w-filter">
+        <button data-v="all" aria-pressed="true">All</button>
+        <button data-v="due" aria-pressed="false">Due</button>
+        <button data-v="tricky" aria-pressed="false">Tricky</button>
+        <button data-v="mastered" aria-pressed="false">Mastered</button>
+      </div>
+      <div id="w-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <p class="note" id="w-more"></p>
+    </div>
+  </div>
+
+  <!-- =========================== GUIDE ============================ -->
+  <div class="view" id="v-guide" hidden>
+    <div class="head">
+      <h2>Guide</h2>
       <p>The rule, the example, and the trap — one sheet at a time.</p>
     </div>
     <div class="body">
@@ -460,25 +604,60 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   <!-- ========================== SETTINGS ========================== -->
   <div class="view" id="v-settings" hidden>
     <div class="head">
-      <button class="back" data-go="home">← Back</button>
+      <button class="back" data-go="home">← Home</button>
       <h2>Settings</h2>
-      <p>More will land here later. For now, the paper you study on.</p>
     </div>
     <div class="body">
+      <div class="panel">
+        <p class="lab">Profile</p>
+        <div class="field">
+          <label for="p-name">What should the app call you?</label>
+          <input id="p-name" type="text" placeholder="Optional"
+            style="width:100%;padding:11px 12px;border-radius:10px;background:var(--paper);
+                   border:1px solid var(--rule);color:var(--ink);font-family:var(--ui);font-size:14px">
+        </div>
+        <div class="field">
+          <label for="p-test">Test day</label>
+          <input id="p-test" type="date">
+          <p class="hint" id="p-test-hint">The countdown on the home screen comes from this.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="lab">Weekly goal</p>
+        <div class="field">
+          <label for="p-goal">Words per week</label>
+          <input id="p-goal" type="number" min="10" max="1000" step="10">
+        </div>
+        <div class="seg" id="goal-presets">
+          <button data-v="50">50</button><button data-v="100">100</button>
+          <button data-v="150">150</button><button data-v="250">250</button>
+        </div>
+        <p class="hint">Counted Monday to Sunday, from words you actually review.</p>
+      </div>
+
       <div class="panel">
         <p class="lab">Theme</p>
         <div class="swatches" id="themes"></div>
       </div>
+
       <div class="panel">
         <p class="lab">Your data</p>
         <p style="margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--ink2)"
            id="data-line">No sessions recorded yet.</p>
-        <button class="go" id="wipe"
-          style="background:var(--raise);color:var(--accent);border:1px solid var(--rule)">
-          Clear my progress</button>
+        <button class="go ghost" id="wipe">Clear my progress</button>
       </div>
     </div>
   </div>
+
+  <!-- =========================== FOOTER =========================== -->
+  <nav class="nav" id="nav" role="tablist" aria-label="Main">
+    <button data-tab="home" aria-current="true"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg>Home</button>
+    <button data-tab="study"><svg viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Study</button>
+    <button data-tab="practice"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Practice</button>
+    <button data-tab="words"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Words</button>
+    <button data-tab="guide"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.7.6-.7 1.1v.5"/><path d="M12 17h.01"/></svg>Guide</button>
+  </nav>
 
 </div>
 </div>
@@ -486,7 +665,107 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 <script>
 var WORDS = [["Bestowed","to grant, ödül vermek","to give something as an honour or present","It is a solemn duty bestowed upon me by the people.","",1],["Prosperous","zengin, refah içinde","successful, usually by earning a lot of money","I will work to ensure that the nation is prosperous and secure.","",2],["Judicious","wise, mantıklı","having or showing reason and good judgment in making decisions","Corporal punishment, when used judiciously, can be an effective tool for teaching children discipline.","",1],["Concession","admission, taviz/kabul (karşı tarafı haklı bulma)","something that is allowed or given up, often in order to end a disagreement, or the act of allowing or giving this","The quotations serve to provide concessions to the main idea.","",2],["Deterrent","discouragement, caydırıcı","something that deters people from doing something","Corporal punishment should be used as a deterrent for children.","",1],["Comply","obey","Act in accordance","You must comply with the law.","",0],["Dismal","kasvetli, gloomy, iç karartıcı","sad and without hope; gloomy","","",0],["Desolate","abandoned, ıssız terk edilmiş","empty and not attractive, with no people or nothing pleasant in it","","",1],["Antiquated","antika","outdated","","",2],["Bleak","bare, harsh","Bare, exposed","If a place is bleak, it is empty, and not welcoming or attractive","",0],["Mitigate","reduce","to make something less harmful, unpleasant, or bad","Planting trees can help mitigate the effects of urban heat.","",0],["Incentive","motivation","Motivation, inducement","","",1],["Complacency","self satisfaction, gönül rahatlığı","Self-satisfaction, smugness","a feeling of calm satisfaction with your own abilities or situation that prevents you from trying harder","",2],["Exacerbate","worsen","to make something that is already bad even worse","Skipping physical therapy only exacerbated his knee injury.","opposite of mitigate",2],["Aridity","kuraklık, dryness","the state of being very dry and without enough rain for plants","","",1],["Deleterious","harmful","harmful","Excessive screen time can have a deleterious effect on sleep.","",2],["Inadvertently","yanlışlıkla, kasıtsız (advertent = kasıtlı)","in a way that is not intentional; accidentally","He inadvertently deleted the file.","",2],["Unduly","to an unwarranted degree; inordinately.","more than is necessary, acceptable, or reasonable","There's no need to be unduly pessimistic about the situation.","",0],["Extrapolate","infer, çıkarım yapmak","to guess or think about what might happen using information that is already known","Extrapolating from the exit poll, this would amount to about 50,000 new votes.","",2],["Plateau","duraklamak sabitlemek","to reach a particular level and then stay the same","I'd been losing about a pound a week on my diet, but recently I've plateaued and haven't lost an ounce.","",1],["Confine","restrict, sınırlandırmak","to limit an activity, person, or problem in some way","Let's confine our discussion to the matter in question, please!","",0],["Militia","military force, milis","a military force of ordinary citizens","","",1],["Rally","gather, support/ toplanmak, miting destek","a public meeting of a large group of people, especially supporters of a particular opinion","","",0],["Revere","respect deeply","to very much respect and admire someone or something","Nelson Mandela is revered for his brave fight against apartheid.","respect-ed",0],["Adherence","bağlılık","the fact of someone behaving exactly according to rules, beliefs, etc.","","",1],["Apprentice","trainee, çırak","a person learning a trade from a skilled employer","The baker's apprentice learned by observing and practising every morning.","",2],["Advent","gelip çatma, gelme","the arrival of a notable person, thing, or event","the advent of the internet","",0],["Prevalence","yaygınlık","the fact that something is very common or happens often","The prevalence of the disease is higher in some families.","",2],["Precipitate","trigger, cause, tetiklemek","to make something happen suddenly or sooner than expected","An invasion would certainly precipitate a political crisis.","",2],["Proponent","supporter (opponent tersi)","a person who speaks publicly in support of a particular idea or plan of action","He is a vocal proponent of renewable energy.","",1],["Profess","claim, iddia/beyan etmek","to state something, sometimes in a way that is not sincere","She professes not to be interested in money.","",1],["Entail","involve, require","to make something necessary, or to involve something","Taking on this project will entail a lot of long days and late nights for the whole team.","",0],["Refute","disprove, çürütmek","to say or prove that a person, statement, opinion, etc. is wrong or false","To refute a person theory arguemnt claim..","",0],["At odds with","in conflict, çelişen","in disagreement","The two brothers were always at odds.","",0],["Distaste","dislike","a dislike of something that you find unpleasant or unacceptable","His distaste for publicity of any sort is well known.","",1],["Abound","be plentiful","to exist in large numbers","","",0],["Dexterity","skill, el çabukluğu","the ability to perform a difficult action quickly and skilfully with the hands","","",1],["Sermon","religious speech","a talk on a religious or moral subject","","",0],["Convention","custom/meeting","a large formal meeting of people who do a particular job or have a similar interest, or a large meeting for a political party","","",2],["Indebted to","grateful to, minnettar","grateful to someone because of help they have given","Her son said he would be forever indebted to her.","",1],["Consensus","görüş birliği, mutabakat","a generally accepted opinion or decision among a group of people","The general consensus in the office is that he can't do his job","",1],["Adverse","olumsuz, zararlı","having a negative or harmful effect","","vs averse = opposed to",0],["Prose","non-poetry, düzyazı","written language in its ordinary form rather than poetry","","",0],["Engrossing","fascinating, sürükleyici","very interesting and needing all your attention","","",2],["Laudable","övgüye değer","(of actions and behaviour) deserving praise, even if there is little or no success","A laudable goal","",1],["Preponderance","majority, çoğunluk / ağır baska","the largest part or greatest amount","The preponderance of evidence suggests that he's guilty.","",2],["Indigenous","yerli","used to refer to the people who originally lived in a place, rather than people who moved there from somewhere else, or to things that relate to these people (native)","","",2],["Cohesive","cohesion = united, unity","the situation when the members of a group or society are united","","",1],["Coupler","bağlantı elemanı","a person or thing that couples or links together.","","",1],["Frivolous","gereksiz, lüzumsuz","behaving in a silly way and not taking anything seriously","","",1],["Facilitate","kolaylaştırmak!!","to make something possible or easier","The new software was designed to facilitate communication between departments.","",2],["Forerunner","Öncü, ata","something or someone that acts as an early and less advanced model for what will appear in the future, or a warning or sign of what is to follow","","",2],["Zealot","fanatik, aşırı hevesli","a person who has very strong opinions about something, and tries to make other people have them too","","",0],["Scrupulous","titiz, rigorous meticulous","extremely honest","","",2],["Supplant","yerini almak","to replace","Polemicist","",1],["Jubilation","sevinç (joyous)","a feeling of great happiness, especially because of a success","","",2],["Docile","uysal","quiet and easy to influence, persuade, or control","","",0],["Adept","uzman","having a natural ability to do something that needs skill","","",0],["Thwart","engellemek","to stop something from happening or someone from doing something","","",0],["Confound","Karıştırmak","to confuse and very much surprise someone, so that they are unable to explain or deal with a situation","","",1],["Cogitation","düşünce","the act of thinking very carefully about a subject, or the thoughts themselves","Plea","",2],["Whence","nereden","From where","","",0],["Fastened to","bağlı","to (cause something to) become firmly fixed together, or in position, or closed","","",1],["Superfluous","gereksiz","more than is needed or wanted","The final paragraph was superfluous because it merely repeated the introduction.","",2],["Ostensible","görünürde / sözde / iddia edilen (ama gerçekte farklı olabilir) It often implies: it looks true on the surface, but that might be misleading.;…","stated or appearing to be true, but not necessarily so.","The ostensible reason for the meeting was budgeting, but layoffs were the real topic.","",2],["Pervasive","yaygın","present or noticeable in every part of a thing or place","","",1],["Pernicious","pernicious = harmful in a subtle/gradual/insidious way (more precise) detrimental = harmful (general) That matches “internalize unhealthy attitudes”…","having a very harmful effect or influence","","",2],["Amicable","dost canlısı","relating to behaviour between people that is pleasant and friendly, often despite a difficult situation","","",1],["Salubrious","sağlıklı","A salubrious place is pleasant, clean, and healthy to live in","","",2],["Embroil","karışmak, involve","to cause someone to become involved in an argument or a difficult situation","","",1],["Admonish","uyarmak, azarlamak","to tell someone firmly that they have done something wrong","","",1],["Transcendent","beyond ordinary limits; surpassing","greater, better, more important, or going past or above all others","","",2],["Insurmountable","aşılmaz","(especially of a problem or a difficulty) so great that it cannot be dealt with successfully","The wall appeared insurmountable until someone brought a ladder.","",2],["Magnanimous","cömert","very kind and generous towards an enemy or someone you have defeated","The team's manager was magnanimous in victory, and praised the losing team.","",2],["Clandestine","gizli saklı; secret, done in hiding (often illicit) clandestine meeting gizli buluşma","planned or done in secret, especially something not officially allowed","The group held weekly clandestine meetings in a church.","",2],["Obliterated","tamamen yok edilmiş; destroyed completely; erased","to remove all signs of something, either by destroying it or by covering it so that it cannot be seen","","",2],["Obfuscated","bilerek muğlaklaştırılmış; obscure = gizlenmiş; deliberately made unclear or confusing","to make something less clear and harder to understand, especially intentionally","","",2],["Paradigm","pattern","a model of something, or a very clear and typical example of something","","",1],["Acumen","zeka","skill in making correct decisions and judgments in a particular subject, such as business or politics","","",0],["Peril","tehlike","great danger, or something that is very dangerous","The state of our environment is peril","",0],["Aggravate","kötüleştirmek","to make a bad situation worse","","",1],["Debilitate","güçten düşürmek, zayıflatmak","to make someone or something physically weak","","",2],["Ameliorate","iyileştirmek","to make a bad or unpleasant situation better","Extra tutoring helped ameliorate her difficulties with algebra.","",2],["Conundrum","çıkmaz, zor bilmece/problem","a problem that is difficult to deal with","To be a conundrum for smbd","",1],["Quandary","ikilem, kararsızlık","a state of not being able to decide what to do about a situation","a state of not being able to decide what to do about a situation in which you are involved:","",1],["Enigma","gizem, mystery","something mysterious that seems impossible to understand completely","She is something of an enigma.","",0],["Calamity","felaket, a disastrous event causing great damage or distress","a serious accident or bad event causing damage or suffering","","",1],["Affable","nazik","friendly and easy to talk to","","",1],["Inquisitive","meraklı (inquiry’den)","wanting to discover as much as you can about things, sometimes in a way that annoys people","an inquisitive child","",2],["Erudite","çok bilgili, kültürlü","having or containing a lot of knowledge that is known by very few people","","",1],["Intransigent","uzlaşmaz taviz vermez unwilling to compromise","refusing to change your opinions or behaviour; unwilling to compromise","","opposite of conciliatory",2],["Yielding","boyun eğen","able to bend; willing to change or give way when helpful or necessary","A yielding person can change the way they normally behave or deal with situations when it is helpful or necessary.","",1],["Feud","kavga","an argument that has existed for a long time between two people or groups, causing a lot of anger and sometimes violence","","",0],["Onerous","ağır, burdensome, yorucu","difficult to do or needing a lot of effort","","",1],["Ostentatious","gösterişli","too obviously showing your money, possessions, or power, in an attempt to make other people notice and admire you","","",2],["Precarious","tehlikeli, risklibir halde","in a dangerous state because of not being safe or not being held in place firmly","The lorry was lodged in a very precarious way, with its front wheels hanging over the cliff.","Gig workers often live in a precarious financial situation.",2],["Strenuous","yorucu, strength alan","needing or using a lot of physical or mental effort or energy","","",1],["Focal","odak (noktası)","the thing that everyone looks at or is interested in","","point",0],["Endowed","bağışlanmış (trexe wit); bağışlamak","to give a large amount of money to pay for creating a college, hospital, etc. or to provide an income for it","The state of Michigan has endowed three institutes to do research for industry.","",1],["Ratification","onaylama","the process of making an agreement official","If the resolution passes, the year-long ratification process will begin.","",2],["Frenetic","çılgın","involving a lot of excited movement or activity","","",1],["Detract","eksiltmek","to make something seem less valuable or less deserving of admiration than it really is","","",1],["Deftness","ustalık","the quality of being skilful, clever, or quick","The device must be used only with the greatest care and deftness of touch.","",1],["Secession","ayrılık","the act of becoming independent and no longer part of a country or organization","the act of becoming independent and no longer part of a country, area, organization, etc.:","secede = ayrılmak",1],["Sovereign","egemen","a king or queen; having the highest power or being completely independent","a king or queen///","",1],["Divest","çıkarmak","to sell something, especially a business or a part of a business","The company is divesting its less profitable business operations.","",0],["Exempt","muaf","to excuse someone or something from a duty, payment, etc.","","",0],["Vindicate","haklı çıkarmak","to prove that what someone said or did was right or true, after other people thought it was wrong","The investigation vindicated her complaint about the newspaper.","",1],["Seminal","çığır açan","containing important new ideas and having a great influence on later work","","",1],["Incisive","keskin","expressing an idea or opinion in a clear and direct way that shows good understanding of what is important","","",1],["Nitpick","ayrıntılara takılmak","to find faults in details that are not important","You're always nitpicking - it's so annoying!","",1],["Conjure up","çağırmak","to make a picture or idea appear in someone's mind","For some people, the word \"England\" may still conjure up images of pretty gardens and tea parties.","",1],["Anthology","seçme eserler derlemesi (şiir/öykü/yazı)","a collection of artistic works that have a similar form or subject, often those considered to be the best","","collection of",1],["Flagrant","bariz, apaçık; ve kötü","(of a bad action, situation, person, etc.) shocking because of being so obvious","a flagrant misuse of funds/privilege","",1],["Notion","kavram fikir görüş","a belief or idea","","",0],["Elusive","ele geçirilmesi zor","difficult to describe, find, achieve, or remember","after ten games this season, they still can't achieve that elusive win","",1],["Contend","iddia etmek, mücadele etmek//to argue, compete","to compete; to argue or claim that something is true","","",1],["Surmise","tahmin etmek (kanıt olmadan)","to guess something without having much or any proof","","= conjecture",1],["Ineffable","tarif edilemez, anlatılamaz","too great or extreme to be expressed in words","","= sublime",1],["Acclaimed","takdir edilen","attracting public approval and praise","","",1],["Latent","gizli","present but needing particular conditions to become active, obvious, or completely developed","","",0],["Compensation","tazminat; maaş da olabilir","money that is paid to someone in exchange for something that has been lost or damaged or for some problem","We were given five hundred pounds in compensation, which isn't much, but at least it's something.","",2],["Contingent","koşullu contingent on bir şeye bağlı olarak","depending on something else in the future in order to happen","Our success is contingent upon your support","on",2],["Eclipse","gölgede bırakmak, önemini azaltmak (figurative)","to make something less important by outshining it; to obscure","","",1],["Emulate","taklit etmek","to copy something achieved by someone else and try to do it as well as they have","","",1],["Plagued by","tarafından kuşatılmış","to cause worry, pain, or difficulty to someone or something over a period of time","My shoulder's been plaguing me all week.","",1],["Extensive","kapsamlı, yaygın","covering a large area; having a great range","","extendden",1],["Concede","teslim olmak, ödün vermek","to admit, often unwillingly, that something is true","The government has conceded (that) the new tax policy has been a disaster","",1],["Renege","sözden dönmek","to fail to keep a promise or an agreement, etc.","","",0],["Buttress","desteklemek","to make support for an idea or argument stronger by providing a good reason for it","The researcher used statistics to buttress her argument.","",1],["Robustly","sağlam bir şekilde","If you do something robustly, you do it in a determined way","","",1],["Presciently","öngörülü ileriyi gören","in a way that correctly suggests what will happen in the future","","",2],["Diligently","özenle","in a way that is careful and uses a lot of effort","She diligently completed each task she was given.","",2],["Forgery","sahtecilik","an illegal copy of a document, painting, etc. or the crime of making such illegal copies","","",1],["Rebuttal","karşı argüman","a statement that says that something is not true","","",1],["Intimate","ima etmek","to make clear what you think or want without saying it directly","She has intimated that she will resign if she loses the vote.","Sıfat olan intimate = samimi, yakın. Fiil hâli farklı anlam, vurgu son hecede.",1],["Disavow","reddetmek","to say that you know nothing about something, or that you have no responsibility for or connection with something","They were quick to disavow the rumour.","",1],["Vocation","meslek bro","a type of work that you feel you are suited to doing and to which you should give all your time and energy, or the feeling that a type of work suits you in this way","","",1],["Recant","re cant, pişşman yani (önceki sözünü/inancını) geri almak | EN: to say you no longer believe your statement —","to announce in public that your past beliefs or statements were wrong and that you no longer agree with them","The witness recanted his false statement after seeing the video evidence.","",0],["Repudiate","inkar etmek kesin bir dille reddetmek | EN: to refuse to accept; reject —","to refuse to accept something or someone as true, good, or reasonable","He repudiated the allegation/charge/claim that he had tried to deceive them.","",1],["Anathema to","lanetlemek, lanet tamamen zıt ve nefret edilen/“kabul edilemez”","something that is strongly disliked or disapproved of","","",1],["Zealous","gayretli, hevesli; çok hevesli/ateşli","enthusiastic and eager","a zealous supporter of the government's policies, avid, eager","",1],["Ambivalent","kararsız (iki zıt duyguyu aynı anda hisseden)","having two opposing feelings at the same time, or being uncertain about how you feel","I felt very ambivalent about leaving home.","",2],["Malevolent","kötü niyetli, malicious tan mal","causing or wanting to cause harm or evil","","",2],["Byzantine","aşırı karmaşık, dolambaçlı, entrikalı","complicated and difficult to understand","","",1],["Culminate","zirveye ulaşmak; sonuçlanmak","If an event or series of events culminates in something, it ends with it, having developed until it reaches this point","My arguments with the boss got worse and worse, and finally culminated in my resignation.","",1],["Elect","seçmek","to decide on or choose, especially to choose a person for a particular job, by voting","","",0],["Flout","takmamak, alay ederek çiğnemek","to intentionally not obey a rule, law, or custom","","",0],["Disconcerting","rahatsız edici","making someone feel uncertain and uncomfortable or worried","","",2],["Palatable","lezzetli","Palatable food or drink has a pleasant taste","a very palatable wine","",1],["Fiery","kızgın, ateşli","bright red, like fire","","",0],["Emancipation","Özgürleşme","the process of giving people social or political freedom and rights","the emancipation of hundreds of slaves","",2],["Abolitionism","köleliğin kaldırılması","the movement to end slavery","","",2],["Acquaintance","tanışık, lık","a person that you have met but do not know well","","",2],["Exult","sevinç","to express great pleasure or happiness, especially at someone else's defeat or failure","","",0],["Frank","dürüstlük","honest, sincere, and direct","","frankness = honesty",0],["Abolish","ortadan kaldırmak","to end an activity or custom officially","","",1],["Quibble","önemsiz şeylere takılmak; kelime oyunu yapmak","to argue about something that is not important","","",1],["Cease","sonlanmak, durmak","to stop something","","",0],["Appeal","çağrı, talep; temyiz","a request to the public for money, information, or help","They're launching (= starting) an appeal to raise money for famine victims.","",0],["Rescind","iptal edilmek","to make a law, agreement, or decision no longer have any legal power","The law was rescinded.","",1],["In tandem","eş zamanlı olarak","at the same time","","",0],["Reservation","çekince, şüphe (doubt/concern anlamında)","a doubt or feeling of not being able to agree with or accept something completely","","",2],["Encumber","yüklemiş","to weigh someone or something down, or to make it difficult for someone to do something","Vessel’s decks were encumbered with valises and trunks","constrain",1],["Excursionist","gezgin","a person who goes on an excursion (= a short journey usually made for pleasure, often by a group of people)","","",2],["Gallant","cesur","brave; (of a man) polite and kind towards women","The gallant flag was up.","",1],["Mast","gemi direği","a tall upright post on a ship that carries the sails","","",0],["Limp","topal","to walk slowly and with difficulty because of having an injured or painful leg or foot","","",0],["Excursion","gezi:/","a short journey usually made for pleasure, often by a group of people","","",1],["Gainsaying","karşı çıkma","to refuse to accept something as the truth","","",2],["Spectacle","manzara (muhteşem)","an unusual or unexpected event or situation that attracts attention, interest, or disapproval","","",1],["Inauspicious","uğursuz","showing signs that something will not be successful or positive","","",2],["Conscience","vicdan","the part of you that judges how moral your own actions are and makes you feel guilty about bad things that you have done or things you feel responsible for","","not conscious",2],["Depletion","tüketme","a reduction in something","the depletion of the ozone layer","",1],["Omen","alamet kehanet?","something that is considered to be a sign of how a future event will take place","","",0],["Disclose","ifşa etmek göstermke açmak","to make something known publicly, or to show something that was hidden","The company has disclosed profits of over £200 million.","",1],["Indisposed","rahatsız","ill, especially in a way that makes you unable to do something","","",2],["Reverie","hayal","(a state of having) pleasant dream-like thoughts","","",1],["Exploit","faydalanmak; kahramanlık, başarı","to use something to your advantage; (noun) a bold or daring feat","We need to make sure that we exploit our resources as fully as possible.","2nd meaning",1],["Overhaul","revizyon, elden geçirme","to repair an engine, machine, etc. so that every part of it works as it should","","",1],["Warranted","gerekli","If something is warranted, there is a good reason for it and it can be accepted","","",1],["Histrionic","theatrical","very emotional and energetic, but not sincere or without real meaning","a histrionic outburst","",2],["Melodramatic","exaggerated","showing much stronger emotions than are necessary or usual for a situation","","",2],["Innocuous","zararsız","completely harmless (= causing no harm)","Some mushrooms look innocuous but are in fact poisonous.","",1],["Evasive","kaçamak","answering questions in a way that is not direct or clear, especially because you do not want to give an honest answer","","",1],["Peripheral","outlying","Something that is peripheral is not as important as something else","we don't want to get distracted by peripheral issues","",2],["Disparate","farklı; seperate, disparate","different in every way","The two cultures were so utterly disparate that she found it hard to adapt from one to the other.","",1],["Acrimonious","sert, hırçın, öfke dolu","full of anger, arguments, and bad feeling","an acrimonious dispute","",2],["Quagmire","bataklık","an area of soft, wet ground that you sink into if you try to walk on it","","",1],["Dearth","kıtlık","an amount or supply that is not large enough","The dearth of trees on the island implied to some that the inhabitants had cut them down to make clubs and shields.","",0],["Plausibility","olasılık","the quality of seeming likely to be true, or possible to believe","In Chapter 2 she goes on to test the plausibility of these assumptions.","",2],["Cogent","ikna edici","A cogent argument, reason, etc. is clearly expressed and persuades people to believe it","She made a cogent case for postponing the launch.","",0],["Tenuous","zayıf","A tenuous connection, idea, or situation is weak and possibly does not exist","Weak","",1],["Insipid","tatsız","not having a strong taste or character, or having no interest or energy","a pale insipid wine🥂","",1],["Self-effacing","alçak gönüllü","not making yourself noticeable, or not trying to get the attention of other people","","",2],["Pastime","hobi","an activity that is done for enjoyment","","pass-time",1],["Pretext","bahane?","a pretended reason for doing something that is used to hide the real reason","","",1],["Affliction","acı, ızdırap","great suffering, or something that causes suffering","","afflict → conflict: sıkıntı",2],["Minute","ince, çok küçük; detaylı","extremely small; precise and meticulous (adj., mai-NUTE)","a minute examination of the islands","ince",0],["Reluctant","isteksiz","not willing to do something and therefore slow to do it","","",1],["Unkempt","dağınık","untidy; not cared for","","",1],["Eminence","seçkinlik, itibar","the state of being famous, respected, or important","","eminent = famous, respected",1],["Undiscerning","ayırt edemeyen?","Not showing good judgement","","",2],["Candid","açık sözlü","honest and telling the truth, especially about something difficult or painful","To be candid with you, I think you're making a dreadful mistake.","",0],["Pliable","bükülebilir, esnek; kolay yönlendirilen","A pliable substance bends easily without breaking or cracking","","",1],["Vigilant","uyanık, tetikte","keeping careful watch for possible danger or difficulty","","",1],["Propitious","favorable, hayırlı","likely to result in success, or showing signs of success","With the economy in recession, it was not a propitious time to start a company.","",2],["Toll","geçiş ücreti","money that you pay to use a bridge, road, etc","","",0],["Insidious","sinsi","(of something unpleasant or dangerous) gradually and secretly causing harm","","",1],["Compatriot","hemşeri; aynı vatan, ülke de ok","a person who comes from the same country","","",2],["Pretentious","gösteriş meraklısı","trying to appear or sound more important or clever than you are, especially in matters of art and literature","The pretentious cafe called ordinary tap water \"liquid clarity.\"","",2],["Unpretentious","mütevazı, gösterişsiz.","simple and/or sincere; not pretentious","","",2],["Contrive","ustaca planlamak, uydurmak","to arrange or bring about through clever planning","Couldn't you contrive a meeting between them?","",1],["Subsume","kapsamak; to include smt as a larger group","to include something or someone as part of a larger group","Soldiers from many different countries have been subsumed into the United Nations peace-keeping force.","",1],["Waive","feragat etmek, vazgeçmek (gönüllü olarak); renunciation = waive","to not demand something you have a right to; to give up voluntarily","The school waived the application fee.","renunciation; wave bye",0],["Excavate","kazmak","to remove earth that is covering very old objects buried in the ground in order to discover things about the past","","",1],["Citadel","kale","a castle that is part of a city, where people can shelter from danger if the city is attacked","","",1],["Animosity","düşmanlık","strong dislike, opposition, or anger","","",1],["Sporadic","aralıklı","happening sometimes; not regular or continuous","","",1],["Verisimilitude","gerçeklik; konusunda inandırıcılık/gerçekçilik”","the quality of seeming true or of having the appearance of being real","She has included photographs in the book to lend verisimilitude to the story.","",2],["Susceptible to","duyarlı","easily influenced or harmed by something","These plants are particularly susceptible to frost.","",2],["Earnest","samimi, ciddi, ağırbaşlı?; resulting from or showing sincere and intense conviction.","serious and determined, especially too serious and unable to find your own actions funny","","",1],["Equanimity","dinginlik, sakinlik","a calm mental state, especially after a shock or disappointment or in a difficult situation","Three years after the tragedy she has only just begun to regain her equanimity.","",2],["Proclaim","ilan etmek","to announce something publicly or officially, especially something positive","He took command of the government and proclaimed himself emperor.","",1],["Impenetrable","geçilmez, anlaşılmaz; penetrable geçilebilir, nüfuz edilebilir","impossible to see through, go through, or understand","Outside, the fog was thick and impenetrable.","",2],["Novel","yeni, özgün (adj.)","new and original, not like anything seen before","The researchers proposed a novel method for recycling plastic.","New",0],["Precursor","öncü; veya ilk","something that happened or existed before another thing, especially if it either developed into it or had an influence on it","Sulphur dioxide is the main precursor of acid rain.","",1],["Reciprocate","karşılıklı olmak, karşılık vermek (duygu wise)","to share the same feelings as someone else, or to behave in the same way as someone else","","",2],["Prevail","succumb zıttı; üstünlük sağlamak, yenmek (succumb boyun eğmek, tersi)","to get control or influence","I am sure that common sense will prevail in the end.","",1],["Paucity","kıtlık","the fact that there is too little of something","","",1],["Profusion","bolluk","an extremely large amount of something","","",1],["Negate","olumsuzlamak, olmamasını salamak, nötrlemek","to cause something to have no effect","","",0],["Substantiate","kanıtlamak","to show something to be true, or to support a claim with facts","We have evidence to substantiate the allegations against him.","",2],["Prefigure","önceden şekillendirmek","to show or suggest that something will happen in the future","His style of painting prefigured the development of modern art.","",1],["Entrench","siper, sağlama almak","to firmly establish something, especially an idea or a problem, so that it cannot be changed","The government's main task was to prevent inflation from entrenching itself.","",1],["Interject","araya girmek","to say something while another person is speaking","That's absolutely ridiculous!\" Mary interjected.","",1],["Discernible","ayırt edilebilir","able to be seen or understood","There is no discernible reason why this should be the case.","",2],["Ruminate","derin düşünmek","to think deeply about something over time","","think deeply",1],["Concur","aynı fikirde olmak","to agree or have the same opinion","The new report concurs with previous findings.","= affirm",0],["Rudimentary","temel","basic","Their rudimentary shelter kept out the rain but little else.","",2],["Exclusive","özel","limited to only one person or group of people","The club grants exclusive access to its members.","Asla \"az sayıda\" demek değil — tek bir gruba ait demek.",1],["Capacious","kapasiteli (büyük)","having a lot of space inside; roomy","","",1],["Divulge","açığa çıkarmak ooo","to make something secret known","Journalists do not divulge their sources.","",1],["Disheveled","dağınık","very untidy","","",2],["Undulate","dalgalanmak","to have a continuous up and down shape or movement, like waves on the sea","The road undulates for five miles before a steep climb.","",1],["Dissonance","uyumsuzluk","a combination of sounds or musical notes that are not pleasant when heard together","Assonance X dissonance","",2],["Adorn","süslemek","to add something decorative to a person or thing","We adorned the table with flowers and streamers for the party.","",0],["Circumvent","find a way around","to avoid something, especially cleverly or illegally","We used a side road to circumvent the traffic jam.","",2],["Replenish","refill","to fill something up again","Does your glass need replenishing?","refill",1],["Imbibe","içmek","to drink, especially alcohol","Have you been imbibing again?","",0],["Conjecture","guess","a guess about something based on how it seems and not on proof","There's been a lot of conjecture in the media recently about the marriage.","",2],["Restive","huzursuz, sabırsız; zor dizginlenen","uneasy; impatient; hard to control","","",1],["Beckon","signal to approach","to move your hand or head in a way that tells someone to come nearer","","",0],["Hinge","menteşe; (hinge on) dayanmak, bağlı olmak","a joint on which a door turns; (hinge on) to depend entirely on","","",0],["Commiserate","acımak","to express sympathy to someone who is sad or has had bad luck","","",2],["Woe","keder","sadness","","",0],["Proffer","sunmak, teklif etmek","to offer or propose something to someone","","",1],["Counterpart","muadili (karşılıpı, eşi)","a person or thing that corresponds to another; an equivalent","","",2],["Stifling","boğucu","extremely hot","","",1],["Lofty","yüce","very high","","",0],["Posit","ortaya koymak","to suggest something as a basic fact or principle from which a further idea is formed or developed","","",0],["Amalgam","mixture/blend","a mixture of mercury and another metal","","",1],["Quarter","provide housing for","to send someone, especially soldiers, to live in a place","","",1],["Lodge","stay somewhere","usually a small house/cabin, often in the countryside, mountains, or a temporary place to stay","","",0],["Revitalization","canlandırma/ re vita","the process of making something grow, develop, or become successful again","","",2],["Remit","send money","to send money; to cancel or reduce a punishment","","",0],["Forage","yiyecek aramak","to go from place to place searching for things that you can eat or use","","",0],["Denigrate","kötülemek, karalamak","to say that someone or something is not good or important","The rival tried to denigrate her research instead of addressing its evidence.","",1],["Entice","cezbetmek","to persuade someone to do something by offering them something pleasant","The bakery enticed customers with the smell of fresh bread.","",0],["Encroach","yavaşça işgal etmek","to take control or possession of something in a gradual way and often without being noticed","","",1],["Vanquish","yenmek","to defeat an enemy or opponent, especially in war","","",1],["Subjugate","boyun eğdirmek","to defeat people or a country and rule them in a way that allows them no freedom","","",1],["Dubious","şüpheli","thought not to be completely true or not able to be trusted","The claim seemed dubious, so the editor asked for a second source.","",1],["Dub","ad vermek","to give something or someone a particular name, especially describing what you think of it, him, or her","","",0],["Evince","açıkça göstermek, belli etmek","to make something obvious or show something clearly:(more formal than manifest(clearly display), reveal/show)","Her trembling hands evinced her nervousness.","",0],["Prosperity","refah, bolluk","the state of being successful and having a lot of money","","",2],["Serendipity","lucky discovery by chance","the fact of finding interesting or valuable things by chance","","",2],["Feasibility","uygulanabilirlik","the possibility that something can be made, done, or achieved, or is reasonable","","",2],["Imbue","aşılamak; , doldurmak","to fill something or someone with a particular feeling, quality, or idea","","",0],["Primacy","öncelik","the state of being the most important thing","","",1],["Precedence","üstünlük; ve öncelik","the condition of being dealt with before other things or of being considered more important than other things","","",2],["Myriad","çok sayıda","a very large number of something","The reef supports a myriad of species.","Hem sıfat hem isim: \"a myriad of\".",0],["Consign","teslim etmek","to send something to someone","","",1],["Impervious","geçirmez (su geçirmez gibi)","not allowing liquid to go through","","",2],["In lieu of","YERİNE","instead of","","",0],["Acclimatized","uyum sağlamış","to change to suit different conditions of life, weather, etc., or to make someone or something do this","","",2],["Embargo","yasaklama","an order by a government to stop trade with another country","","",1],["Parlour","salon; market/ tek tip yemek satan","a shop that provides a particular type of goods or services","","",1],["Hone","bilemek bıçak","to improve something and make it perfect","","",0],["Flock","sürü halinde; kuş","a group of birds or sheep","","",0],["Overlook","gözden kaçırmak bro","to fail to notice something","","fail to notice",1],["Inhibit","engellemek","impede = hobble prevent, engellemek","","hinder, restrain, prevent",0],["Solidity","sağlamlık","the quality of being firm, strong, or solid","","firmness",1],["Condense","kısaltmak, özetlemek","to reduce something, such as a speech or piece of writing, in length","","shorten",1],["Benevolent","iyilik sever","kind, charitable, and generous; wanting to help others","","someone who is kind, charitable, and generous, motivated by sympathy and a desire to help others",2],["Indulge","şimartmak; şımartmak, kendine izin vermek","to allow yourself or another person to have something enjoyable, especially more than is good for you","","",1],["Sediment","tortu, çöküntü","loose solid material, like clay, that settles at the bottom of a liquid","","loose solid material like clay",1],["Fortify","güçlendirmek","to strengthen","","strengthen",1],["Quail","korkuya düşmek","to lose courage; to feel or show fear","","loose courage",0],["Jigsaw","testere","a saw for cutting curves; a puzzle of interlocking pieces","","",0],["Enact","yasalaştırmak, yürürlülüğe koymka","to make a proposal into law","","proposal into law",0],["Revolt","isyan, revolt kusmuk emesela; sonuçlar; örnek verme, açıklama; Daha doğru anlam; kendini/başkasını bir şeye fazla kaptırmak; şımartmak; yasa…","to rebel; a rebellion or uprising","","isyan",0],["Polemicist","polemikçi; bir görüşü sertçe savunan/saldıran kişi","a person who strongly attacks or defends a particular opinion, person, idea, or set of beliefs","","",2],["Plea","yakarış, rica","an urgent and emotional request","","",0],["Profuse","bol, aşırı miktarda","produced or given in large amounts","She was admitted to hospital with profuse bleeding.","",1],["Defer","ertelemek","to delay something until a later time","The bank agreed to defer his payment until next month.","",0],["Notwithstanding","buna rağmen","despite; in spite of","Notwithstanding the storm, the ferry left on schedule.","",2],["Ferocious","vahşi","frightening and violent","","",1],["Inconclusive","sonuçsuz","not leading to a definite result or decision","","",2],["Disposition","mizaç, karakter","a person's inherent qualities of mind and character","","",2],["Stigma","damga, toplumsal ayıp","a strong feeling of disapproval that most people in a society have about something, especially when this is unfair","","",0],["Contentious","çekişmeli","causing, involving, or likely to cause disagreement and argument","","",2],["Supersede","yerini almak","to replace something, especially something older or less effective","","",1],["Aversion","nefret","a strong dislike","","",1],["Legislation","yasalar","laws, considered collectively","","",2],["Taper off","giderek azalmak","to decrease gradually","","",0],["Advance","ileri sürmek, ortaya koymak","to put forward an idea or claim","","Make a claim",1],["Speculate","kanıta tam dayanmadan tahminde bulunmak","to guess without full evidence","","Make a claim",1],["Hypothesize","hipotez kurmak","to propose a hypothesis","","Make a claim",2],["Bolster","desteklemek, güçlendirmek","to support or strengthen","","Support a claim",1],["Grapple with","zor bir konuyla uğraşmak, boğuşmak","to struggle with a difficult problem","","Think about",1],["Mull over","iyice düşünüp tartmak","to think carefully about","","Think about",0],["Converge","aynı noktada birleşmek","to come together at a point","","Coming together",1],["Integrate","birleştirmek, bütünleştirmek","to combine into a whole","","Coming together",1],["Intersect","kesişmek","to cross or meet at a point","","Coming together",1],["Diverge","ayrılmak, farklı yönlere gitmek","to separate and go in different directions","","Moving apart",1],["Infer","ipuçlarından çıkarım yapmak","to draw a conclusion from clues","From the muddy boots, we inferred that he had been hiking.","Draw a conclusion",0],["Attribute","bir kaynağa atfetmek","to credit an idea or work to a source","","Provide sources",1],["Cite","kaynak göstermek, alıntı yapmak","to quote or refer to a source","","Provide sources",0],["Multitude","çokluk, çok büyük sayı","a very large number","","Large amount",1],["Plethora","bolluk, gereğinden fazla miktar","an overabundance","","Large amount",1],["Heterogeneous","farklı türlerden oluşan, karışık","made up of different kinds","","Different, diverse",2],["Eclectic","farklı kaynaklardan seçilmiş, çeşitli","drawn from varied sources or styles","","Different, diverse",1],["Distinctive","ayırt edici, kendine özgü","characteristic; setting apart","","Noticeable",2],["Salient","en belirgin, öne çıkan","most noticeable or important","The professor asked us to identify the most salient point in the argument.","Noticeable",1],["Inherent","doğasında bulunan","existing as a natural, inseparable part","There is an inherent risk in any experimental treatment.","Inborn",1],["Innate","doğuştan gelen","inborn, natural","","Inborn",0],["Intrinsic","özüne ait, içsel","belonging naturally; essential","She valued learning for its intrinsic pleasure, not just for grades.","Inborn",1],["Cultivate","yetiştirmek; geliştirmek","to grow crops; to develop a skill or quality","","",1],["Succinct","kısa ve öz","briefly and clearly expressed","Her succinct summary captured the whole argument in two sentences.","",1],["Mortifying","küçük düşürücü","very embarrassing or humiliating","","",2],["For all","","despite / spite of","","",0],["Sublety","","incelik","","",1],["Anomaly","aykırılık, kural dışılık","irregularity, a deviation from the usual pattern","The scientists flagged the reading as an anomaly and repeated the test.","",1],["Discerning","anlayışlı","","","",2],["Indefinitable","tanımlanamaz","","","",2],["Prevalent","yaygın","","Obesity has become increasingly prevalent in industrialized nations.","",1],["Relic","kalıntı","","","",0],["Dictate","","give orders, set conditions / rule?","","",1],["Pragmatik","gerçekçi, faydacı, yararcı .objektif bakar","","","",1],["Compromise","ödün, uzlaşma.","endanger, to make something vulnerable","","",2],["Precocious","erken gelişmiş","","","",2],["Restrain","dizginlemek, frenlemek","tutmak","Competition restrains prices by punishing companies that overcharge.","curtail vs restrain: curtail = kesip azaltmak, restrain = baskı altında tutmak.",1],["Inscribe","kazımak, yazmak ENGRAVE","","","",1],["Confounded by","karıştırılmak?","","","",2],["Confound?","","surprize, mix up","","",1],["Malady","rahatsızlık","","","",0],["Govern","yönetmek","","","",0],["Associated with","ile ilişkili","","","",2],["Corollary","doğrudan sonuç","a direct or natural consequence of something","","",1],["Impede, inhibit","","prevent, get in the way of","","",1],["Substantial","önemli/hatırı sayılır","significant large","","",2],["Austerity","sertlik, sade yaşam; ekonomik kemer sıkma","sternness; extreme plainness; strict economy","","2nd meaning",1],["Adversary","rakip, düşman","an opponent or enemy","","",1],["Confer","give, grant, danışmak görüşmek sunmak","","","",0],["Ruffled","fırfırlı; huzursuz, telaşlı","having frills; flustered and annoyed","","2nd meaning",1],["Symbiosis[d]","","interaction beteen organisms that live close. benefit both.","","",2],["Taxonomy","","classification system.","","",1],["Judicial","yargısal, hukuki","relating to courts of law or judges","","",1],["Successor","halef, ardıl","a person or thing that comes after and takes the place of another","","",1],["Displace","yerinden etmek","to force something out of its usual place or habitat","","",1],["Averse","karşı, isteksiz","having a strong dislike of or opposition to something","","vs adverse = harmful",0],["Elude","kaçmak, yakalanamamak","to evade or escape; to fail to be grasped or remembered","","",0],["Prospective","olası, müstakbel","likely to happen or become; potential","a prospective student","",2],["Dormant","uyuyan, etkin olmayan","temporarily inactive; resting","a dormant gene","",1],["Usher","eşlik etmek; (usher in) başlatmak","to show someone where to go; to cause something new to begin (usher in)","","",0],["Valence","birleşme değeri","the capacity of something to interact or combine","","",1],["Stimulate","teşvik etmek","to encourage something to grow, develop, or become active","","",1],["Inert","eylemsiz, hareketsiz","not moving; inactive","","",0],["Eligible","hak sahibi, uygun","having the right to do or obtain something; qualified","","",1],["Untenable","savunulamaz","not able to be defended or maintained","His claim became untenable once the video evidence appeared.","",1],["Eschew","","avoid","","",0],["Efface","silmek; self-effacing = alçakgönüllü","to erase; (self-effacing) modest, keeping out of notice","","",0],["Ephemeral","kısa ömürlü","lasting a very short time","Fame on social media can be ephemeral, vanishing within a matter of days.","",1],["Extol","çok övmek","to praise enthusiastically","","",0],["Provisional","geçici","arranged for the present, possibly to be changed later; temporary","","",2],["Ubiquitous","her yerde bulunan","seeming to be everywhere","Smartphones have become so ubiquitous that a world without them feels hard to imagine.","",2],["Volatile","değişken, uçucu","liable to change rapidly and unpredictably","The stock market has been volatile since the announcement.","",1],["Gauge","ölçmek","to measure or estimate","","",0],["Coincide","çakışmak, denk gelmek","to happen at the same time; to correspond exactly","","",1],["Hinder","engellemek","to make it difficult for something to happen; to obstruct","Heavy rain hindered the rescue team's progress.","= thwart",0],["Rather","aksine, bunun yerine","instead; on the contrary","","transition",0],["Benign","iyi huylu, zararsız","gentle and harmless; (of a tumor) not cancerous","The tumor turned out to be benign, much to everyone's relief.","",0],["Annotate","üstüne not almak","to add notes or comments to a text","","",1],["In fact","aslında; detay verir, vurgular","used to emphasize or add detail to a preceding statement","","transition",0],["Likewise","benzer şekilde","in the same way; used when giving a similar point","","transition",1],["Accrue","çoğalmak, artmak, tahakkuk etmek","to accumulate or increase over time","","",0],["Prelude","başlangıç, giriş","an action or event serving as an introduction to something more important","","",1],["Projectile","mermi, kurşun","an object propelled through the air, especially a weapon","","",2],["Verbatim","kelimesi kelimesine","in exactly the same words; word for word","","",1],["Superficial","yüzeysel","existing or occurring only at the surface; not thorough","The apology felt superficial, more about optics than real regret.","",2],["Veracious","doğru sözlü, gerçekçi","speaking or representing the truth","","",1],["Endear","sevdirmek","to cause to be loved or liked","","",0],["Pity","acımak, merhamet","sympathy and sadness for the suffering of others","","",0],["Semantic","anlamsal","relating to meaning in language","","",1],["Sentiment","duygu, kanı","a feeling or opinion","","",1],["Persistent","kalıcı, ısrarcı","continuing firmly despite difficulty; lasting","","",2],["Assertion","iddia","a confident statement of fact or belief","","",1],["Esteem","saygı, itibar","respect and admiration","","",0],["Egalitarian","eşitlikçi","believing that all people are equal and deserve equal rights","","",2],["Syndicate","sendika, birlik","a group of individuals or organizations combined for a common purpose","","",1],["Frantically","çılgınca","in a wild, hurried, and anxious way","","",2],["Remotely","uzaktan","from a distance; to the slightest degree","","",1],["Amplification","büyütme, güçlendirme","the act of making something larger, greater, or louder","","",2],["Receptive","alıcı, açık","willing to consider or accept new ideas","","",1],["Permit","izin vermek","to allow","","",0],["Rebound","geri sıçramak, inip çıkmak","to bounce back; to recover after a decline","","",1],["Badger","porsuk; sürekli rahatsız etmek, darlamak","an animal; (verb) to pester or nag repeatedly","","2nd meaning",0],["Bent","eğilmiş; eğilim, yatkınlık","curved; (noun) a natural talent or inclination","","2nd meaning",0],["Coin","madeni para; yeni bir kelime ortaya atmak","money; (verb) to invent a new word or phrase","","2nd meaning",0],["Conviction","mahkûmiyet; güçlü inanç","a criminal verdict; a firmly held belief","","2nd meaning",2],["Couch","kanepe; belirli bir dille ifade etmek","a sofa; (verb) to express in a particular style of language","","2nd meaning",0],["Doctor","doktor; kurcalamak, sahte biçimde düzenlemek","a physician; (verb) to tamper with or falsify","","2nd meaning",0],["Economy","ekonomi; tutumluluk","a financial system; careful, efficient use of resources","","2nd meaning",1],["Embroider","nakış işlemek; abartarak süslemek","to sew decoration; to embellish a story with invented detail","","2nd meaning",1],["Harbor","liman; içinde taşımak, barındırmak","a port; (verb) to hold a thought or feeling secretly","","2nd meaning",0],["Hobble","topallamak; engellemek, köstek olmak","to limp; to hold back progress","","2nd meaning",0],["Relay","bayrak yarışı; bilgi iletmek","a race or transmission system; to pass on information","","2nd meaning",0],["(img II","","badger first meaning)","","2nd meaning",0],["Infallible","yanılmaz, şaşmaz","incapable of being wrong; never failing","","looks negative — isn’t",2],["Inimitable","eşsiz, taklit edilemez","so good or unusual that it is impossible to copy; unique","","looks negative — isn’t",2],["Invaluable","paha biçilmez (ÇOK değerli)","extremely useful; too valuable to measure","","looks negative — isn’t",2],["Unassuming","mütevazı, gösterişsiz","not pretentious or arrogant; modest","","looks negative — isn’t",2],["Unqualified","absolute, şartısz","absolute, complete, without reservation","","looks negative — isn’t",2],["Account (for)","açıklamak","explain, to give a reason for something","","2nd meaning",1],["Advantage","avantaj/üstünlük","favorable trait, a quality that gives someone an edge (e.g. height is an advantage in volleyball)","","2nd meaning",1],["Affect (v.)","(bir tavrı) takınmak / yapmacık","to adopt, to put on a behavior deliberately; affected (adj.) = artificial/pretentious","","2nd meaning",0],["Afford","sağlamak","grant, to provide or give (e.g. afford an opportunity)","","2nd meaning",0],["Air","hava/tavır","demeanor, the manner one carries oneself with","","2nd meaning",0],["Arrangement","düzen/durum","situation, a set of circumstances","","2nd meaning",2],["Arrest","durdurmak","put a stop to, to halt a process (not handcuffs)","","2nd meaning",0],["Assume","üstlenmek","take on, to acquire a responsibility or role","","2nd meaning",0],["Attending","eşlik eden","accompanying, going along with something","","2nd meaning",1],["Basic","temel","essential, fundamental","","2nd meaning",0],["Becoming (adj.)","yakışan/uygun","fitting, flattering","","2nd meaning",1],["Boost","artırmak","improve, to promote or raise","","2nd meaning",0],["Broad","geniş görüşlü","worldly, having wide experience/perspective","","2nd meaning",0],["Bulk","büyük kısım/çoğunluk","majority, the greater part of something","","2nd meaning",0],["Calculated","hesaplanmış/planlı","plotted out, deliberately planned","","2nd meaning",2],["Capacity","kapasite/yetenek","ability, the power to do something","","2nd meaning",1],["Chance (v.)","denemek/şansını denemek","attempt, to try or risk","","2nd meaning",0],["Check","kontrol altına almak","control, to restrain the spread of something","","2nd meaning",0],["Clear","açık/net","obvious, unmistakable","","2nd meaning",0],["Common","ortak","shared, held jointly","","2nd meaning",0],["Conditions","koşullar","circumstances, the situation surrounding an event","","2nd meaning",2],["Draw (v.)","çekmek","attract, to pull toward oneself","","2nd meaning",0],["Establish","kanıtlamak","demonstrate, to confirm as true","","2nd meaning",1],["Exchange (n.)","karşılıklı konuşma","conversation, a verbal back-and-forth","","2nd meaning",1],["Fine","keskin/gelişmiş","keen / well-developed, sharp or refined","","2nd meaning",0],["Foil","engellemek/bozmak","put a stop to, to thwart a plan","","2nd meaning",0],["Foundation","temel","basis, the underlying support of an idea","","2nd meaning",2],["Great","büyük","large, big in size","","2nd meaning",0],["Handle","başa çıkmak","survive in, to cope with or manage","","2nd meaning",0],["Hold out","direnmek","resist, to refuse to give in","","2nd meaning",0],["Host","içinde barındırmak","contain, to hold within","","2nd meaning",0],["Impression","izlenim/görünüm","appearance, the way something seems","","2nd meaning",2],["Independent","bağımsız/ayrı","separate, not connected (e.g. independent variable)","","2nd meaning",2],["Magnitude","büyüklük","size/strength, the scale of an effect (e.g. magnitude of a correlation)","","2nd meaning",1],["Peculiar (to)","kendine özgü","unique, distinctive to something in particular","My cat has a peculiar fear of fish.","2nd meaning",1],["Plastic/plasticity","şekillendirilebilir","able to be changed, capable of being molded","","2nd meaning",2],["Poor","zayıf","weak, of low quality (e.g. a poor performance)","","2nd meaning",0],["Prescribed","belirlenmiş/verilen","given, ordered or specified (e.g. a prescribed set of rules)","","2nd meaning",2],["Provoke","ortaya çıkarmak","elicit, to bring about a reaction","","2nd meaning",1],["Put (v.)","ifade etmek/söylemek","state, to say or express","","2nd meaning",0],["Qualify","açıklık getirmek/nitelendirmek","elaborate, to give more detail or nuance about something","","2nd meaning",1],["Raise (v.)","yetiştirmek / yükseltmek","rear / elevate, (1) to bring up an animal/child, (2) to lift up","","2nd meaning",0],["Range","kapsam/aralık","scope, a series or extent of options","","2nd meaning",0],["Raw","ham/işlenmemiş","unfiltered, original and unprocessed","","2nd meaning",0],["Store (n.)","stok/birikim","reserve, a stockpile kept for later","","2nd meaning",0],["Styled","adlandırılmış","called, referred to as","","2nd meaning",0],["Sustain (v.)","dayanmak","withstand, to endure without giving way","","2nd meaning",0],["System","yöntem/sistem","method, a structured way of doing something","","2nd meaning",0],["Temper (v.)","yumuşatmak","moderate, to make less harsh","","2nd meaning",0],["Tied (to)","bağlı","connected to, linked with","","2nd meaning",0],["Track","takip etmek","follow, to trace the path of","","2nd meaning",0],["Train (v.)","odaklanmak","fixate on, to focus intently on something","","2nd meaning",0],["Trace","iz/eser miktar","tiny amount, a very small quantity","","2nd meaning",0],["True","gerçek/hakiki","genuine, authentic","","2nd meaning",0],["Uniform","sabit/değişmeyen","constant, unvarying","","2nd meaning",1],["Upset (v.)","bozmak/altüst etmek","interfere with, to disrupt an expected outcome","","2nd meaning",0],["Urge","savunmak/teşvik etmek","advocate, to be strongly in favor of","","2nd meaning",0],["Values","değerler/ilkeler","principles, core beliefs guiding behavior","","2nd meaning",0],["Wake","ardından gelen dönem/sonrası","aftermath, the period following an event","","2nd meaning",0],["Want","eksiklik/yokluk","lack, to be missing something","","2nd meaning",0],["Weight","önem","importance, merit or significance","","2nd meaning",0],["Yield","ortaya çıkarmak/sonuç vermek","reveal, to produce as a result (e.g. an experiment yields results)","One tiny seed yielded ten large tomatoes.","2nd meaning",0],["Counterclaim","karşı iddia","counterargument, an argument made to rebut a claim discussed earlier in a passage","","",2],["Hypothetical","varsayımsal","theoretical, based on speculation rather than fact","","",2],["Irreconcilable","uzlaştırılamaz","unresolvable, unable to be brought into agreement","","",2],["Context","bağlam","setting, the background information needed to understand something","","",1],["Fundamental","temel","basic, essential","","",2],["Emphasize and elaborate","vurgulamak ve detaylandırmak","stress and develop, to accentuate a point and add detail to it","","",1],["Underscore","vurgulamak/altını çizmek","emphasize, to draw attention to as important","The report's grim statistics underscore the need for reform.","",2],["Undermine","zayıflatmak","weaken, to damage or erode gradually","Constant criticism began to undermine her confidence.","",1],["Detrimental","zararlı","very harmful, damaging","","",2],["Optimistic","iyimser","hopeful, confident about a positive outcome","","",2],["Incongruous","uyumsuz","incompatible, obviously inconsistent with a situation","His formal tuxedo looked incongruous on the crowded beach.","",2],["Enumerate","sıralamak/saymak","to list, to name items one by one","The speaker enumerated five reasons for changing the policy.","",1],["Tentative","kesin olmayan/geçici","undecided, not certain, provisional","","",1],["Analogy","benzetme/analoji","comparison, a comparison between two dissimilar ideas or objects","","",1],["Analogous","benzer/paralel","parallel, characterized by a similarity that allows comparison","","",1],["Approximation","yaklaşık değer/tahmin","estimate, a rough calculation","","",2],["Underlying assumption","örtük varsayım","unstated basic belief, a premise that is assumed but not directly stated","","",2],["Haphazard","gelişigüzel/rastgele","random, without any organized pattern","","",1],["Subordinate","ast/aşağı konumda","inferior in rank, lower in position or authority","","",2],["Station","mevki/konum","position/rank, one's rank or standing in society","","",1],["Sarcastic","alaycı/iğneleyici","mocking, using irony to convey contempt","","",1],["Degrade","alçaltmak/bozulmak","deteriorate, to lower in dignity or quality","","",1],["Entrenched","kökleşmiş","deeply established, firmly set in place","","",2],["Tenacious","azimli/inatçı","persistent, determined and unwilling to give up","","",1],["Antagonism","düşmanlık/karşıtlık","strong opposition, hostility between opposing sides","","",2],["Populist","halkçı","identifies with ordinary people, a person who champions the common people","","",1],["Indifferent","kayıtsız","uninterested, characterized by a lack of interest or concern","He seemed indifferent to the outcome of the vote.","",2],["Diligent","gayretli/özenli","careful, conscientious and hardworking","","",1],["Dismissive","küçümseyen/görmezden gelen","disregarding, showing a lack of interest or respect","","",2],["Arrant","tam/mutlak","complete, total, utter (intensifies the word it modifies)","","",0],["Despondent","umutsuz/kederli","very sad, in low spirits from loss of hope","","",2],["Mar","bozmak/zedelemek","spoil, to damage and make less perfect","","",0],["Solemn","ciddi/vakur","serious, dignified and grave in manner","","",0],["Abrogate","iptal etmek/feshetmek","repeal, to deny or cancel officially","","",1],["Abstain","kaçınmak","refrain, to deliberately not do something","","",1],["Ambidextrous","iki elini de kullanabilen","dual-skilled, able to use both hands equally well","","",2],["Ambulate","yürümek","walk, to move around on foot","","",1],["Somnambulate","uyurgezerlik yapmak","sleepwalk, to walk while asleep","","",2],["Amiable","sevimli/dostane","friendly, pleasant and easy to like","","",1],["Amity","dostluk","friendship, a peaceful relationship","","",0],["Contradict","çelişmek","oppose, to claim the opposite of a statement","","",2],["Contraposition","karşıtlık","opposition, a state of being opposed","","",2],["Dominant","baskın","powerful, most influential or controlling","","",1],["Domineering","zorba/baskıcı","controlling, overbearing and bossy","","",2],["Dominion","egemenlik/hakimiyet","control, an area or scope of authority","","",1],["Durable","dayanıklı","sturdy, able to withstand damage","","",1],["Endurance","dayanıklılık/tahammül","stamina, the capacity to last","","",1],["Obdurate","inatçı","stubborn, unwilling to change one's mind","","",1],["Alter ego","öteki ben","second self, another version of oneself","","",0],["Egomaniacal","kendine hayran","self-obsessed, excessively focused on oneself","","",2],["Egotistical","egoist","self-centered, excessively focused on one's own importance","","",2],["Aesthetic","estetik","artistic, related to appreciation of beauty","The renovation prioritized aesthetic appeal over practical storage space.","",1],["Anesthetic","uyuşturucu (tıbbi)","numbing, something that reduces painful sensation","","",2],["Extralegal","yasa dışı","unlawful-adjacent, outside the bounds of the law","","",2],["Extraneous","gereksiz/alakasız","irrelevant, outside of what is needed","","",2],["Confidant","sırdaş","trusted friend, a person you share secrets with","","",1],["Fidelity","sadakat","loyalty, faithfulness","","",1],["Perfidy","ihanet","betrayal, faithlessness or disloyalty","","",1],["Bibliography","kaynakça","source list, a list of scholarly sources","","",2],["Cosmography","evren tasviri","universe-mapping, a description of the universe","","",2],["Typography","tipografi","print style, the style/arrangement of printed material","","",2],["Gratify","tatmin etmek","satisfy, to give someone satisfaction","","",1],["Gratuitous","gereksiz yere yapılan","unwarranted, done freely, often unnecessarily","","",2],["Ingratiate","gözüne girmek","curry favor, to gain favor by helping someone","","",2],["Digress","konudan sapmak","stray, to go off the main topic","","",1],["Egress","çıkış","exit, a way out","","",0],["Transgress","ihlal etmek","violate, to break a law or rule","","",2],["Heterodox","geleneksel olmayan","unconventional, nonconformist","","",1],["Heteromorphic","farklı biçimli","differently-shaped, having different forms","","",2],["Homologous","benzeşik","corresponding, similar, especially biologically","","",2],["Homophone","sesteş","sound-alike, words with same pronunciation, different meaning","","",1],["Idiom","deyim","expression, a phrase distinct to native speakers","","",0],["Idiosyncrasy","kişiye özgü tuhaflık","quirk, a peculiar personal characteristic","","",2],["Adjudicate","hükmetmek","rule, to make a formal judgment","","",2],["Colloquial","günlük konuşma diline ait","informal, used in casual conversation","","",2],["Eloquent","etkili konuşan","articulate, able to express oneself well","","",1],["Magnate","patron/kodaman","tycoon, a very influential/wealthy person","","",1],["Malcontent","hoşnutsuz kişi","troublemaker, a chronically dissatisfied person","","",2],["Malign","kötülemek/kötü niyetli","vilify, to speak evil of / evil in nature","","",0],["Immutable","değişmez","unchangeable, fixed, permanent","The past is immutable; we can learn from it but cannot rewrite it.","",1],["Permutation","permütasyon/düzenleme","rearrangement, a change in the order of a set","","",2],["Transmute","dönüştürmek","transform, to change in form","","",1],["Relegate","indirgemek/alt sıraya koymak","demote, to downgrade or lower in rank","","",1],["Remunerate","ücretlendirmek","compensate, to pay back for services","","",2],["Sagacious","akıllı/basiretli","shrewd, having wisdom and good judgment","","",1],["Sagacity","basiret","wisdom, good judgment","","",1],["Sanguine","iyimser","optimistic, cheerful and confident, red-faced with hope","","",1],["(sanguinary","kanlı)","bloody or bloodthirsty","","",2],["Insomnia","uykusuzluk","sleeplessness, an inability to sleep","","",1],["Somnolent","uykulu","drowsy, sleepy","","",1],["Reticent","ağzı sıkı/az konuşan","reserved, reluctant to speak","","",1],["Tacit","üstü kapalı/zımni","unspoken, implied without being stated","","",0],["Taciturn","suskun","quiet, habitually uncommunicative","","",1],["Penultimate","sondan bir önceki","second-to-last, the one before the last","","",2],["Ultimatum","ültimatom","final demand, a last, non-negotiable demand","","",1],["Venerable","saygıdeğer","esteemed, worthy of deep respect","","",1],["Venerate","saygı duymak","revere, to regard with deep respect","","",1],["Veneration","hürmet","reverence, deep respect and admiration","","",2],["Vitality","canlılık","life force, energy and liveliness","","",1],["Advocate","savunmak","champion, to voice support for something","She has long been an advocate for affordable housing.","",1],["Invocation","yakarış/çağrı","summoning, the act of calling on divine help","","",2],["Vociferous","yüksek sesle protesto eden","outspoken, loud and insistently expressive","","",2],["Volition","irade","free will, the act of choosing for oneself","","",1],["Voluntary","gönüllü","unforced, freely chosen","","",1],["Abject","son derece kötü/perişan","extreme, describing the worst degree of something negative (poverty, sadness)","","",0],["Abstract","soyut","theoretical, existing as an idea rather than something concrete","","",1],["Acknowledge","kabul etmek/onaylamak","recognize, to show that something/someone has been noticed","","",2],["Adapt","uyum sağlamak","adjust, to change to fit new circumstances","","",0],["Admonition","azarlama/ihtar","reprimand, a scolding for wrongdoing","","",2],["Affluent","zengin","wealthy, very well-off financially","","",1],["Agitate","tahrik etmek/rahatsız etmek","stir up, to disturb or upset","","",1],["Aggrandize","abartmak/büyütmek","exaggerate, to make something seem grander than it is","","",2],["Alternate","sırayla yapmak","take turns, to do something by turns","","",1],["Antipathy","nefret/antipati","hostility, a strong feeling of dislike","","",1],["Apparition","hayalet/görüntü","ghost, something that suddenly and eerily appears","","",2],["Arbitrary","keyfi/rastgele","random, based on chance rather than reason","The deadline felt arbitrary, chosen with no clear reasoning behind it.","",1],["Ascertain","tespit etmek","determine, to find out or confirm something","","",1],["Aspire","özlemini çekmek/hedeflemek","strive, to work toward a lofty goal","","",0],["Autocratic","otokratik/despot","dictatorial, ruling with absolute power","","",2],["Automated","otomatikleştirilmiş","mechanized, made to work automatically","","",1],["Beget","doğurmak/meydana getirmek","produce, to bring something into existence","","",0],["Bequeath","miras bırakmak","hand down, to give something, often as an inheritance","","",1],["Biological","biyolojik","life-related, pertaining to living organisms","","",2],["Calibrate","ayarlamak/kalibre etmek","adjust, to fine-tune something for accuracy","","",1],["Calisthenics","jimnastik/kondisyon hareketleri","bodyweight exercise, exercise using one's own body weight","","",2],["Censure","kınamak/resmi azarlama","reprimand, a formal official criticism","","",1],["Circulation","dolaşım","movement, moving back and forth or around","","",2],["Coerce","zorlamak","force, to make someone act through threat","","",0],["Cognition","biliş/kavrama","understanding, the mental ability to know/comprehend","","",1],["Commercial","ticari","trade-related, having to do with buying/selling","","",2],["Complacent","kendinden memnun/rehavete kapılmış","self-satisfied, unconcerned because overly content","","",2],["Complementary","tamamlayıcı","matching, going well together with something else","","",2],["Complimentary","ücretsiz / övücü","free/flattering, given at no cost, or expressing praise","","",2],["Conflate","birbirine karıştırmak","merge mistakenly, to wrongly treat two things as the same","","",1],["Conjure","çağırmak/canlandırmak","summon, to bring something to mind or into being","","",1],["Consequence","sonuç","result, an outcome, especially of an action","","",2],["Conservator","koruyucu","preserver, a person whose job is to protect/maintain something","","",2],["Dawdle","oyalanmak","linger, to move slowly, wasting time","","",0],["Decipher","çözmek","decode, to figure out something confusing","","",1],["Deficient","eksik/yetersiz","lacking, not having enough of something needed","","",1],["Demur","nazikçe itiraz etmek","object mildly, to politely refuse or hesitate","","",0],["Desolation","ıssızlık/yıkım","devastation, total emptiness and destruction","","",2],["Despoil","yağmalamak","plunder, to take valuables away by force","","",1],["Deter","caydırmak","discourage, to stop someone from acting through fear/doubt","","",0],["Disenfranchise","hak mahrumiyetine uğratmak","strip rights, to take away someone's rights (e.g. to vote)","","",2],["Disparity","eşitsizlik/fark","inequality, a difference between two things","","",1],["Disseminate","yaymak","spread, to distribute widely (often information)","","",2],["Domestic","ev ile ilgili","home-related, pertaining to the household","","",1],["Eddy","girdap","swirl, water/air moving in a circular current","","",0],["Effectual","etkili/sonuç veren","successful, producing the intended result","","",1],["Efficacy","etkinlik","effectiveness, how well something achieves its purpose","","",1],["Efficient","verimli","economical, achieving results with minimal waste","","",1],["Embellish","süslemek/abartmak","decorate, to add detail or exaggerate for effect","","",1],["Emit","yaymak/salmak","give off, to release or send out","","",0],["Empathize","empati kurmak","relate, to understand and share someone's feelings","","",1],["Endearing","sevimli/sevgi uyandıran","charming, creating warm affectionate feelings","","",1],["Endeavor","çabalamak/girişim","attempt, to try hard at something","It was a bold endeavor to sail across the Atlantic solo.","",1],["Endow","bağışlamak/donatmak","bestow, to give, often as a gift or right","","",0],["Enhance","geliştirmek","improve, to make something better or clearer","","",1],["Enterprise","girişim","undertaking, a bold or difficult project","","",2],["Expenditure","harcama","spending, an amount of money or resources spent","","",2],["Explanatory","açıklayıcı","clarifying, serving to explain something","","",2],["Feeble","zayıf/güçsüz","weak, lacking strength","","",0],["Fiscal","mali","financial, relating to money and the economy","","",0],["Florid","kızarmış (yüz)","flushed, red-faced (often from heat or exertion)","","",0],["Former","eski/önceki","previous, the one before, in the past","","",0],["Forum","forum/tartışma platformu","discussion venue, a place for open exchange of ideas","","",0],["Frequent","sık","recurring, happening often","","",1],["Germinate","filizlenmek","sprout, to begin to grow/develop","","",1],["Glut","aşırı bolluk","surplus, an excessive abundance of something","","",0],["Grievance","şikâyet","complaint, a formal cause for complaint","","",1],["Haggle","pazarlık etmek","bargain, to negotiate back and forth over a price","","",0],["Ignominious","utanç verici","shameful, causing public disgrace","","",2],["Illegible","okunaksız","unreadable, impossible to read clearly","","",1],["Incontestable","tartışılmaz","undeniable, unable to be disputed","","",2],["Incorporate","dahil etmek","include, to fully integrate something","","",2],["Incredulous","inanmayan/şüpheci","disbelieving, unwilling or unable to believe","","",2],["Indifference","kayıtsızlık","apathy, lack of interest or concern","","",2],["Indistinguishable","ayırt edilemez","identical-seeming, unable to be told apart","","",2],["Ineffective","etkisiz","unsuccessful, not producing the desired effect","","",2],["Inefficacious","sonuçsuz/etkisiz","not working, failing to have the desired effect","","",2],["Inexorable","önlenemez/kaçınılmaz","unstoppable, impossible to prevent or avoid","","",2],["Ingenious","yaratıcı/zekice","clever, showing exceptional cleverness","Her ingenious solution repaired the broken zipper with a paper clip.","",1],["Innumerable","sayısız","countless, too many to count","","",2],["Institution","kurum","organization, an established organization with a purpose","","",2],["Insurrection","isyan","revolt, an uprising against authority","","",2],["Intend","niyet etmek","mean to, to have as a plan or purpose","","",0],["Intermittent","aralıklı","sporadic, occurring at irregular intervals","","",2],["Intuitive","sezgisel","instinctive, easily understood without explicit reasoning","","",1],["Inversion","tersine çevirme","reversal, a turning upside down or reverse order","","",1],["Irk","sinir etmek/rahatsız etmek","annoy, to mildly irritate","","",0],["Labyrinth","labirent","maze, a complex network of paths","","",1],["Laden","yüklü","loaded, weighed down with something","","",0],["Latter","ikincisi/sonraki","the second one, the one occurring last of two mentioned","","",0],["Liaison","bağlantı/irtibat","link, a person or connection facilitating communication","","",1],["Malice","kötü niyet","ill will, a desire to harm someone","","",0],["Manifest","açığa çıkarmak/belirgin","evident / reveal, obvious, or to make something appear","","",1],["Manipulate","manipüle etmek","control, to influence or handle skillfully (often unfairly)","","",2],["Mantra","mantra/tekrarlanan söz","repeated phrase, a phrase repeated to oneself for focus/comfort","","",0],["Mechanization","makineleşme","automation, replacing manual labor with machines","","",2],["Meddle","karışmak/burnunu sokmak","interfere, to involve oneself in others' affairs unnecessarily","","",0],["Metastasize","yayılmak (kötü anlamda)","spread (like disease), to spread destructively","","",2],["Mire","bataklığa saplanmak","bog down, to get stuck in a difficult situation","","",0],["Mutable","değişebilir","changeable, capable of change","The mutable school schedule changed three times before lunch.","",1],["Mystify","şaşırtmak","confuse, to puzzle or bewilder","","",1],["Notation","not/kayıt","written note, a written record or symbol system","","",1],["Nuance","ince ayrım/nüans","subtlety, a fine, subtle distinction","","",0],["Null","geçersiz/sıfır","void, having no value, meaning zero","","",0],["Obliterate","yok etmek","destroy completely, to wipe out entirely","","",2],["Obstinate","inatçı","stubborn, refusing to change one's position","","",1],["Oscillate","salınmak","swing, to move back and forth regularly","","",1],["Panacea","her derde deva","cure-all, a solution that fixes everything","","",1],["Parasite","asalak","freeloader (fig.), an organism/person that lives off another without giving back","","",1],["Paradox","paradoks","contradiction, a statement that contradicts itself yet may be true","It's a paradox that the more choices we have, the harder it is to choose.","",1],["Parity","eşitlik","equality, the state of being equal","","",0],["Partake","katılmak","participate, to take part in something (often food)","","",1],["Paternal","babacan","fatherly, acting like a father","","",1],["Permeate","sinmek/yayılmak","soak through, to spread throughout every part","","",1],["Pervading","her yeri kaplayan","spreading through, present and noticeable throughout","","",1],["Phenomena","olgular","occurrences, plural of phenomenon; noteworthy events","","",1],["Pittance","az miktar (özellikle para)","meager amount, a very small, inadequate quantity (esp. money)","","",1],["Plasticity","şekillendirilebilirlik","adaptability, the capacity to be shaped or changed","","",2],["Plenipotentiary","tam yetkili temsilci","empowered envoy, a diplomat with full authority to act","","",2],["Posterity","gelecek nesiller","future generations, people who will live in the future","","",1],["Postulate","varsaymak/öne sürmek","propose, to suggest an unproven idea","Scientists postulated the existence of an unseen planet.","",1],["Potent","güçlü/etkili","powerful, strong in effect or concentration","","",0],["Prattle","gevezelik etmek","chatter, to talk on about unimportant things","","",1],["Predecessor","öncül/selef","forerunner, the person/thing that came before","","",2],["Primitive","ilkel","basic/undeveloped, simple and not technologically advanced","","",1],["Pristine","bakir/el değmemiş","untouched, perfectly clean and unspoiled","His white shoes remained pristine even after the muddy walk.","",1],["Province","eyalet/bölge","territory, a geographic administrative area","","",1],["Proxy","vekil","substitute, a person authorized to act for another","","",0],["Reverence","saygı/hürmet","deep respect, profound admiration and respect","The historian handled the ancient manuscript with reverence.","",1],["Scuttle","telaşla koşuşturmak","scurry, to move quickly with small, hurried steps","","",1],["Skeptic","şüpheci","doubter, someone who habitually questions claims","","",1],["Sluggish","ağır/hareketsiz","slow-moving, lacking energy or speed","","",1],["Squalid","pis/bakımsız","filthy, dirty and run-down, often from poverty","","",1],["Sentinel","nöbetçi","guard, someone who keeps watch","","",1],["Subsequent","sonraki","following, coming after something else","","",2],["Sufficient","yeterli","adequate, enough for a purpose","","",2],["Supplemental","ek/tamamlayıcı","additional, added to something else to help","","",2],["Sustenance","geçim/besin","nourishment, food or support that sustains life","","",2],["Swayed","etkilenmiş/ikna edilmiş","influenced, moved slightly, or persuaded","","",0],["Symmetric","simetrik","balanced, identical on both sides","","",1],["Synthetic","sentetik","artificial, made rather than occurring naturally","","",1],["Tactile","dokunsal","touch-related, having to do with the sense of touch","","",1],["Tangible","somut","touchable, able to be perceived by touch; concrete","The new policy produced tangible improvements in air quality within a year.","",1],["Tedious","sıkıcı/yorucu","dull, repetitive and boring, especially if long","","",1],["Tout","övünerek satmaya çalışmak","promote, to aggressively advertise or praise something","","",0],["Transaction","işlem/alışveriş","exchange, a deal involving goods, money, or services","","",2],["Traipsing","amaçsızca dolaşmak","wandering, moving about in a leisurely, aimless way","","",1],["Tributary","kolları (nehir kolu)","feeder stream, a smaller river/stream flowing into a larger one","","",1],["Sullen","somurtkan","sulky, silently ill-tempered and unenthusiastic","","",0],["Unrequited","karşılıksız (aşk)","one-sided, (of love) not returned by the other person","","",2],["Unseemly","yakışıksız","inappropriate, not fitting or proper for the situation","","",1],["Unstinting","esirgemeyen/cömert","generous, given without holding back","","",2],["Unveil","açığa çıkarmak/tanıtmak","reveal, to make something visible/known for the first time","","",0],["Usurp","gasp etmek","seize, to take power or position illegitimately","","",0],["Validate","doğrulamak","confirm, to officially declare something true or valid","","",1],["Vantage","avantajlı konum","viewpoint, a position that offers a good view/perspective","","",1],["Verifiable","doğrulanabilir","provable, able to be checked and confirmed as true","","",2],["Vernacular","yerel/gündelik dil","local speech, the everyday language of a particular group","","",2],["Versatile","çok yönlü","adaptable, useful in many different ways","","",1],["Vestigial","kalıntı","remnant, a small leftover trace of something larger","","",1],["Virtuous","erdemli","morally good, possessing high moral standards","","",1],["Subversive","yıkıcı, düzeni baltalayan","seeking to undermine an established system or institution","","",2],["Dissenting","muhalif, karşı görüşte olan","disagreeing, holding an opposing opinion","","",2],["Germinal","başlangıç aşamasında, tohum halinde","in the earliest stage of development; seminal","","",1],["Forebears","atalar","ancestors","","",1],["Linchpin","kilit unsur, olmazsa olmaz parça","the essential element that holds everything together","","",1],["Compound","katlayarak artırmak, kötüleştirmek","to make something worse by adding to it","","",1],["Inflame","alevlendirmek, kışkırtmak","to make feelings or a situation more intense","","",1],["Assuage","yatıştırmak, hafifletmek","to make an unpleasant feeling less intense","The teacher's reassuring words assuaged my anxiety before the exam.","",1],["Mollify","yatıştırmak, teskin etmek","to calm someone's anger","","",1],["Laud","övmek, methetmek","to praise highly","","",0],["Exalt","yüceltmek, göklere çıkarmak","to praise or honor highly","","",0],["Commend","takdir etmek, övmek","to praise formally","","",1],["Rebuke","azarlamak, paylamak","to criticize sharply","","",0],["Reproach","kınamak, sitem etmek","to express disapproval of","","",1],["Denounce","kınamak, ihbar etmek","to publicly condemn","The mayor publicly denounced the officials involved in corruption.","",1],["Disparage","küçümsemek, aşağılamak","to belittle; to speak of as unimportant","A good teacher does not disparage students who make mistakes.","",1],["Deride","alay etmek, dalga geçmek","to mock or ridicule","","",0],["Dogged","azimli, yılmaz","persistent and determined","","",0],["Resolute","kararlı, azimli","admirably firm and determined","","",1],["Fleeting","geçici, uçup giden","lasting for a very short time","","",1],["Transient","geçici, kısa süreli","lasting only a short time","","",1],["Transitory","geçici, kalıcı olmayan","not permanent","","",2],["Evanescent","çabuk kaybolan, uçucu","quickly fading; soon passing out of sight","","",2],["Rampant","önü alınamayan, azgın","spreading unchecked; flourishing","","",1],["Lucid","açık, anlaşılır, berrak","clear and easy to understand","","",0],["Coherent","tutarlı, bağlantılı","logical and consistent","His argument, though passionate, was not entirely coherent.","",1],["Verbose","laf kalabalığı yapan, ağdalı","using more words than needed","","",1],["Prolix","gereğinden uzun, sıkıcı","tediously lengthy in speech or writing","","",0],["Loquacious","konuşkan, geveze","tending to talk a great deal","","",2],["Garrulous","boşboğaz, çenesi düşük","excessively talkative about trivial matters","","",1],["Covert","gizli, örtülü","not openly shown or done; secret","","",0],["Surreptitious","el altından, gizlice yapılan","done secretly to avoid notice","","",2],["Furtive","sinsi, kaçamak","attempting to avoid notice; secretive","","",1],["Nascent","yeni doğan, filizlenen","just coming into existence","","",1],["Incipient","başlangıç halindeki","beginning to develop","","",1],["Embryonic","gelişmemiş, embriyonik","in an early stage of development","","",1],["Noxious","zehirli, zararlı","harmful, poisonous, or unpleasant","","",1],["Injurious","zarar verici","causing or likely to cause damage","","",1],["Malleable","kolay şekil alan, uysal","easily influenced; able to be shaped","","",1],["Amenable","uysal, yatkın","open and responsive to suggestion","","",1],["Reinforce","güçlendirmek, pekiştirmek","to strengthen or support","","",1],["Corroborate","doğrulamak, teyit etmek","to confirm with evidence","Two independent witnesses corroborated her account of the accident.","",2],["Seditious","kışkırtıcı, isyana teşvik eden","inciting rebellion against authority","","",1],["Demure","ağırbaşlı, çekingen","reserved, modest, and shy","","",0],["Adroit","becerikli, hünerli","clever or skillful in using the hands or mind","","",0],["Dexterous","el becerisi olan, hünerli","showing skill, especially with the hands","","",1],["Deft","usta, çevik","neatly skillful and quick","","",0],["Proficient","yetkin, ehil","competent; skilled","","",2],["Profligate","müsrif, savurgan","recklessly wasteful","","",2],["Prodigal","savurgan, müsrif","spending money or resources freely; wasteful","","",1],["Frugal","tutumlu, idareli","sparing with money or food; economical","","",0],["Parsimonious","cimri, eli sıkı","very unwilling to spend money; stingy","","",2],["Dwindle","azalmak, tükenmek","to gradually diminish","","",1],["Abate","azalmak, dinmek","to become less intense or widespread","","",0],["Wane","azalmak, zayıflamak","to decrease in vigor or extent","","",0],["Subside","yatışmak, çökmek","to become less intense; to sink","","",1],["Discordant","uyumsuz, ahenksiz","disagreeing; harsh in sound","","",2],["Fractious","huysuz, kavgacı","irritable and quarrelsome","","",1],["Enduring","kalıcı, uzun ömürlü","lasting over a long period","Their enduring friendship survived years of separation.","",1],["Perennial","sürekli, yıllarca süren","lasting or existing for a long time; recurrent","","",1],["Abiding","kalıcı, sürekli","lasting a long time; enduring","","",1],["Bestow","bahşetmek, vermek","to give as an honor or gift","The queen bestowed a medal on the scientist.","",0],["Furnish","sağlamak, döşemek","to supply or provide","","",1],["Coalesce","birleşmek, kaynaşmak","to come together to form one whole","Small drops of water coalesced into one large puddle.","",1],["Amalgamate","birleştirmek, kaynaştırmak","to combine or unite to form one organization","The two small clubs amalgamated into one larger organisation.","",2],["Dissipate","dağılmak, yok olmak","to scatter or disappear","","",1],["Disperse","dağıtmak, yaymak","to spread over a wide area","","",1],["Pragmatic","pragmatik, işe yarayana bakan","dealing with things practically rather than idealistically","Rather than debate ideals, the mayor took a pragmatic approach to fixing potholes.","",1],["Ambiguous","belirsiz, iki anlamlı","open to more than one interpretation; unclear","The instructions were ambiguous, and half the class interpreted them differently.","",1],["Meticulous","titiz, ayrıntıcı","showing great attention to detail","The surgeon's meticulous preparation left nothing to chance.","",2],["Nuanced","ince ayrımlı, incelikli","characterized by subtle distinctions","Her essay offered a nuanced reading of the poem, avoiding easy conclusions.","",1],["Empirical","deneysel, gözleme dayalı","based on observation or experiment, not theory","The theory needed empirical evidence, not just logical argument, to be accepted.","",1],["Autonomy","özerklik, bağımsızlık","independence; self-government","Teenagers often push for more autonomy in deciding their own schedules.","",1],["Juxtapose","yan yana koymak, karşılaştırmak","to place close together for contrasting effect","The exhibit juxtaposes old photographs with modern digital art.","",1],["Rhetoric","retorik, söz sanatı","the art of persuasive speaking or writing","Behind the president's soaring rhetoric lay few concrete policy details.","",1],["Scrutinize","dikkatle incelemek","to examine closely and critically","Editors scrutinize every sentence before a piece goes to print.","",2],["Skeptical","şüpheci, kuşkulu","not easily convinced; having doubts","Investors remained skeptical of the company's inflated projections.","",1],["Viable","uygulanabilir, yaşayabilir","capable of working successfully; feasible","Solar power is now a viable alternative to coal in many regions.","",0],["Robust","sağlam, güçlü","strong and healthy; vigorous","The bridge was designed with a robust frame to withstand earthquakes.","",0],["Plausible","akla yatkın, makul","seeming reasonable or probable","The witness's story seemed plausible until the timeline was checked.","",1],["Compelling","ikna edici, sürükleyici","evoking interest or conviction; convincing","The documentary made a compelling case for ocean conservation.","",2],["Profound","derin, engin","very great or intense; deep","Losing her grandmother had a profound effect on her worldview.","",1],["Subtle","ince, sezilmesi güç","so delicate as to be difficult to analyze","There was a subtle shift in his tone once the topic changed.","",0],["Explicit","açık, sarih","stated clearly and in detail","The contract gives explicit instructions for handling late payments.","",1],["Implicit","örtük, üstü kapalı","implied though not plainly expressed","There was an implicit understanding that no one would mention the mistake.","",1],["Reconcile","uzlaştırmak, bağdaştırmak","to restore friendly relations; to make consistent","It took years for the two brothers to reconcile after their falling out.","",1],["Augment","artırmak, büyütmek","to make greater; to increase","The company hired freelancers to augment its small design team.","",1],["Diminish","azaltmak, küçültmek","to make or become less","Nothing could diminish her enthusiasm for the trip.","",1],["Persist","ısrar etmek, sürmek","to continue firmly despite difficulty","Despite repeated failures, she persisted with the experiment.","",1],["Comprehensive","kapsamlı, geniş çaplı","complete; including all elements","The clinic offers a comprehensive checkup covering every major system.","",2],["Counterintuitive","sezgiye aykırı","contrary to what intuition would expect","It seems counterintuitive, but running slower can sometimes make you faster.","",2],["Catalyst","katalizör, tetikleyici","something that speeds up change or a reaction","The protest became a catalyst for broader political reform.","",1],["Facet","yön, boyut","one aspect or side of something","Honesty is just one facet of a trustworthy reputation.","",0],["Dynamic","dinamik, değişken","characterized by constant change or activity","The two lead actors share a dynamic, unpredictable chemistry on screen.","",1],["Static","durağan, sabit","lacking movement or change","Wages remained static even as the cost of living rose.","",0],["Resilient","dayanıklı, çabuk toparlanan","able to recover quickly from difficulty","The local economy proved resilient after the factory closed.","",1],["Unprecedented","eşi görülmemiş, emsalsiz","never done or known before","The storm caused unprecedented flooding across the region.","",2],["Apathy","ilgisizlik, kayıtsızlık","lack of interest, enthusiasm, or concern","Voter apathy was blamed for the record-low turnout.","",0],["Scrutiny","dikkatli inceleme, mercek altı","critical observation or examination","The senator's spending came under intense scrutiny.","",1],["Discern","ayırt etmek, seçmek","to perceive or recognize clearly","It was hard to discern any real difference between the two proposals.","",1],["Elucidate","aydınlatmak, açıklamak","to make clear; to explain","The professor paused to elucidate a particularly dense passage.","",1],["Albeit","her ne kadar, olsa da","although","The plan worked, albeit more slowly than expected.","",0],["Conversely","tersine, aksine","in an opposite way","Sales rose in the north; conversely, they fell sharply in the south.","",2],["Subsequently","sonradan, ardından","afterward; following in time","He failed the first exam and subsequently studied twice as hard.","",2],["Nonetheless","yine de, buna rağmen","in spite of that; nevertheless","The trail was steep; nonetheless, they reached the summit by noon.","",2],["Paramount","en önemli, baş","more important than anything else; supreme","Safety is paramount when handling laboratory chemicals.","",1],["Pivotal","kilit, çok önemli","of crucial importance; central","That conversation was pivotal in changing her career path.","",1],["Integral","ayrılmaz, temel","necessary to make a whole complete; essential","Trust is integral to any long-term partnership.","",1],["Curtail","kısmak, azaltmak, sınırlandırmak","to reduce or limit something, especially by cutting it short","The mayor moved to curtail spending after the budget shortfall.","",1],["Irksome","sinir bozucu, can sıkıcı","annoying, irritating","The constant dripping faucet was an irksome distraction.","",1],["Allegorical","alegorik, simgesel","symbolic, using a story to represent a deeper meaning","The novel's flood is allegorical, standing for the collapse of the old order.","",2],["Nebulous","belirsiz, muğlak","vague, unclear, hard to define","Her plans for the summer remained nebulous.","",1],["Authoritative","otoriter; güvenilir, yetkin","reliable and commanding respect","The report is considered the most authoritative source on the subject.","",2],["Stoking","körüklemek, artırmak","fueling, intensifying a feeling or conflict","The senator's speech was accused of stoking public anger.","",1],["Allaying","yatıştırmak, hafifletmek","easing or reducing a fear or doubt","The doctor's calm explanation went a long way toward allaying her fears.","",1],["Contesting","itiraz etmek, tartışmaya açmak","disputing, formally challenging","The losing candidate is contesting the results in court.","",2],["Deferring","ertelemek; boyun eğmek","postponing; or yielding to someone's judgment","The committee kept deferring the decision to the next meeting.","",1],["Deferral","erteleme","a postponement","He requested a deferral of his student loan payments.","",1],["Coincidental","tesadüfi, rastlantısal","happening by accident or chance","The two discoveries, made an ocean apart, were entirely coincidental.","",2],["Celestial","göksel, semavi","relating to the sky or heavens","Astronomers mapped the celestial bodies visible that night.","",1],["Teleology","erekbilim, amaç odaklı açıklama","explaining something by its purpose or end goal rather than its cause","Her thesis relies on a teleology that treats history as heading toward a fixed goal.","",1],["Discourse","söylem","a system of language and ideas, especially in writing or debate","The novel's discourse on memory borrows heavily from psychoanalytic theory.","",1],["Analeptic","geriye dönüşlü anlatı (analeptik); zıttı: proleptic","involving flashbacks in a narrative (opposite: proleptic, a flash-forward)","The film's analeptic structure keeps interrupting the present with scenes from the narrator's childhood.","",1],["Clone","kopya; kopyalamak","an exact duplicate; to replicate","The startup was widely seen as a clone of an earlier, more successful app.","",0],["Discursive","konudan konuya geçen; tartışmacı, analitik","rambling, wide-ranging and analytical rather than direct","The professor's discursive lecture wandered from linguistics to politics and back.","",2],["Contemplate","düşünmek, üzerinde kafa yormak","to consider or reflect on carefully","She sat by the window, contemplating her next move.","",2],["Renounce","vazgeçmek, terk etmek, reddetmek","to give up or formally reject","The king was forced to renounce his claim to the throne.","",1],["Idyllic","huzurlu, pastoral","peaceful and picturesque","They spent an idyllic week at a cottage by the lake.","",1],["Semiotic","göstergebilimsel","relating to signs and symbols and their meaning","The ad campaign relies on a semiotic system of colors and icons that audiences read instantly.","",1],["Ostracize","dışlamak, toplumdan soyutlamak","to exclude someone from a group","For breaking the code of silence, he was ostracized by his own crew.","",1],["Demarcation","sınır belirleme, ayrım","the marking of a boundary or dividing line","The treaty drew a clear demarcation between the two territories.","",2],["Contingency","olası durum; ihtimal","a possible future event, or a plan for one","We have a contingency plan in case the venue falls through.","",2],["Homogeneous","homojen, türdeş, aynı cinsten","all of the same kind throughout","The bowl looked homogeneous because every candy in it was red.","",2],["Secluded","gözlerden uzak, ıssız, tenha","hidden away, private and remote","The secluded cabin was so remote that even pizza delivery refused to go there.","",1],["Eliciting","ortaya çıkarmak, cevap veya tepki almak","drawing out a response or reaction","The teacher used a strange question to elicit honest answers from the class.","",1],["Exploiting","yararlanmak; olumsuz anlamda sömürmek","making full use of; or unfairly taking advantage of","The scientist exploited a new technique to finish the experiment faster.","",2],["Monetizing","gelir elde etmek, paraya çevirmek","turning something into a source of income","The free app began monetizing its service through advertisements.","",2],["Capitalising on","bir fırsattan yararlanmak","taking advantage of an opportunity","The runner capitalised on her opponent's mistake and took the lead.","",2],["Belies","görünüşün aksini göstermek, gizlemek veya yalanlamak","contradicts the appearance of; disguises the truth","His calm voice belies the panic visible in his eyes.","",0],["Forestall","önünü almak, gerçekleşmeden engellemek","to prevent something by acting in advance","She backed up her files to forestall the loss of her project.","",1],["Overshadow","gölgede bırakmak","to make something else seem less important","The argument overshadowed what should have been a joyful dinner.","",2],["Satirized","hicvetmek, kusurları mizah yoluyla eleştirmek","mocked faults through humor","The cartoon satirized politicians by drawing them as arguing toddlers.","",1],["Eclipsed","gölgede bırakmak, başarısıyla aşmak","surpassed and outshone","Her brilliant second novel eclipsed the success of her first.","",1],["Augmented","artırılmış, genişletilmiş","made greater by adding to it","The presentation was augmented with diagrams and short videos.","",1],["Convened","toplandı; bir grubu bir araya getirdi","gathered or called a group together","The council convened at midnight to discuss the emergency.","",1],["Idiosyncratic","kendine özgü, alışılmadık","peculiar to one person, distinctive and odd","His idiosyncratic habit was wearing one red sock and one blue sock.","",2],["Opportune","uygun zamanlı, elverişli","happening at a favorable time","The teacher's absence created an opportune moment to rehearse our surprise.","",1],["Presumptuous","haddini aşan, fazla cüretkâr","overstepping, too bold for one's position","It was presumptuous of the new employee to demand the manager's office.","",2],["Placated by","… tarafından yatıştırılmış","calmed or soothed by","The angry toddler was quickly placated by a chocolate biscuit.","",1],["Apprised of","hakkında bilgilendirilmiş, haberdar edilmiş","informed about, made aware of","The coach was apprised of the player's injury before the match.","",1],["Wrought","emekle şekillendirilmiş, meydana getirilmiş","shaped or made with effort","The artist wrought a beautiful bird from pieces of scrap metal.","",1],["Ambivalence","çelişkili duygular, kararsızlık","having mixed, conflicting feelings","She felt ambivalence about moving abroad: she was excited but also sad.","",2],["Acclaim","büyük övgü, beğeni","enthusiastic public praise","The young director's first film received international acclaim.","",1],["Foresight","öngörü, ileriyi görebilme","the ability to anticipate what will happen","Her foresight led her to save a copy of the project before the computer crashed.","",1],["Perceptible","fark edilebilir, algılanabilir","able to be noticed or sensed","There was a barely perceptible crack in the glass.","",2],["Permissible","izin verilen, kabul edilebilir","allowed, acceptable","Calculators are not permissible during this part of the examination.","",2],["Palpable","elle tutulur gibi belirgin","so intense it feels almost touchable","The tension in the room was palpable as everyone waited for the result.","",1],["Subvert","altını oymak, otoriteyi veya sistemi sarsmak","to undermine an authority or system from within","The secret group attempted to subvert the government from within.","",1],["Intercede","araya girmek, birisi adına aracılık etmek","to intervene on someone's behalf","My sister interceded with our parents and persuaded them to let me go.","",1],["Preclude","önlemek, olanaksız hâle getirmek","to prevent, to make impossible","Forgetting his passport precluded him from boarding the plane.","",1],["Induce","neden olmak, ortaya çıkarmak","to bring about or cause","The gentle music induced the baby to fall asleep.","",0],["Concur with","aynı fikirde olmak, katılmak","to agree with","I concur with your conclusion that the evidence is insufficient.","",0],["Erratic","düzensiz, tutarsız","irregular, unpredictable","Her erratic sleep schedule made her tired at unpredictable times.","",1],["Precipitating","tetikleyen, bir olayı hızla başlatan","triggering, setting an event off suddenly","The sudden price increase was the precipitating event behind the protest.","",2],["Engendering","doğmasına veya oluşmasına yol açan","giving rise to, bringing into being","The teacher's fairness was essential in engendering trust among the students.","",2],["Accentuate","belirginleştirmek, vurgulamak","to make more noticeable, to emphasize","The black frame accentuated the bright colours of the painting.","",2],["Conjectures","eksik bilgiye dayalı tahminler, varsayımlar","guesses based on incomplete evidence","Without evidence, the detective's ideas remained mere conjectures.","",2],["Salvage","kurtarmak, kullanılabilir kısmını korumak","to rescue the usable part of something","She salvaged the burnt cake by removing the top and adding cream.","",1],["Brooded on","kara kara düşündü, sürekli zihninde evirip çevirdi","dwelled on something anxiously","He brooded on his single wrong answer for the entire evening.","",1],["Discount","önemsememek, dikkate almamak","to dismiss as unimportant","Do not discount her idea merely because she is the youngest person in the room.","",1],["Misconstrue","yanlış yorumlamak, yanlış anlamak","to misinterpret, to understand wrongly","He misconstrued my sarcastic comment as a serious insult.","",2],["Arcane","yalnızca az kişinin bildiği, esrarengiz","understood by only a few, mysterious","Only experts understood the arcane rules of the ancient game.","",0],["Defunct","artık var olmayan veya çalışmayan","no longer existing or functioning","The defunct arcade was filled with silent, broken machines.","",1],["Stymie","ilerlemeyi engellemek, sekteye uğratmak","to block or hinder progress","A password error stymied my attempt to submit the assignment.","",0],["Outstrip","geride bırakmak, daha hızlı büyümek","to surpass, to grow faster than","Demand for tickets quickly outstripped the number of available seats.","",1],["Imperative","zorunlu, hayati önem taşıyan","absolutely necessary, vital","It is imperative that you read the question before choosing an answer.","",2],["Prohibitive","engelleyici derecede yüksek veya pahalı","so high or costly that it prevents something","The prohibitive ticket price prevented many students from attending.","",2],["Constrict","daraltmak, sıkıştırmak","to narrow or squeeze","The tight collar constricted his breathing.","",1],["Candour","açık sözlülük, dürüstlük","frankness, honest openness","With complete candour, she admitted that the mistake was hers.","",1],["Prudence","ihtiyat, sağduyulu tedbir","caution, sensible good judgment","Her prudence saved the project because she had created three backups.","",1],["Inconsequential","önemsiz, sonucu etkilemeyen","unimportant, not affecting the outcome","The spelling error was inconsequential because it appeared only in the rough draft.","",2],["Momentous","büyük veya tarihî öneme sahip","of great or historic importance","The first Moon landing was a momentous event in human history.","",1],["Exhaustive","kapsamlı, mümkün olan her şeyi içeren","thorough, covering every possibility","After an exhaustive search, we finally found the key beneath the sofa.","",2],["Affecting","duygulandırıcı, dokunaklı","emotionally moving, touching","The reunion between the lost child and her family was deeply affecting.","",1],["Supposition","varsayım, doğrulanmamış düşünce","an assumption that is not proven","The belief that he had cheated was only a supposition, not a proven fact.","",2],["Synopsis","kısa özet, genel bakış","a brief summary or outline","I read the synopsis before deciding whether to watch the film.","",1],["Insuperable","aşılamaz, çözülemez görünen","seemingly impossible to overcome","At first the puzzle seemed insuperable, but one small clue unlocked it.","",2],["Ineluctable","kaçınılmaz, kendisinden kaçılamaz","unavoidable, impossible to escape","Growing older is an ineluctable part of life.","",2],["Unequivocal","açık, kesin, kuşkuya yer bırakmayan","clear and definite, leaving no doubt","Her answer was unequivocal: \"No, I will not change the results.\"","",2],["Irreproachable","kusursuz, eleştirilecek yanı olmayan","beyond criticism, faultless","The judge had an irreproachable record of honesty.","",2],["Conspicuous","göze çarpan, kolayca fark edilen","standing out, easily noticed","His neon-yellow hat made him conspicuous in the crowd.","",2],["Assertive","kendinden emin ve açık konuşan","confident and direct without being rude","She was assertive without being rude: \"I need time to finish my sentence.\"","",1],["Disguise","gizlemek, gerçek niteliğini saklamak","to conceal the true nature of something","Dark glasses could not disguise his unmistakable smile.","",1],["Provocative","kışkırtıcı, tepki veya tartışma doğuran","deliberately causing reaction or argument","The newspaper used a provocative headline to start an argument.","",2],["Irrefutable","çürütülemez, inkâr edilemez","impossible to disprove","The clear video provided irrefutable proof of what had happened.","",2],["Promulgate","bir düşünceyi veya kuralı yaymak, resmen ilan etmek","to spread or officially announce an idea or rule","The government promulgated the new regulations through public announcements.","",2],["Consolidate","birleştirmek, sağlamlaştırmak","to combine and make stronger","I consolidated all my scattered notes into one revision sheet.","",2],["Foretell","önceden haber vermek, geleceği bildirmek","to predict, to announce in advance","The dark clouds seemed to foretell a violent storm.","",1],["Predicated on","…e dayandırılmış, …e bağlı","based on, dependent on","Our picnic plan was predicated on the weather remaining dry.","",2],["Decoupled from","…den ayrıştırılmış, bağı koparılmış","separated from, no longer linked to","The new programme decoupled access to education from a family's income.","",1],["Material to","ilgili ve önemli olan","relevant and significant to","The deleted message was material to the investigation.","",1],["Mediated by","bir aracı vasıtasıyla gerçekleşen","carried out through an intermediary","Their entire friendship was mediated by screens and text messages.","",1],["Retroactively","geriye dönük olarak","applying to an earlier time as well","The salary increase was applied retroactively from January.","",2],["Ceremoniously","törenle, resmî veya gösterişli biçimde","formally, with ritual display","The mayor ceremoniously cut the ribbon with enormous golden scissors.","",2],["Jointly","ortaklaşa, birlikte","together, in cooperation","The two scientists jointly published the research paper.","",1],["Reluctantly","isteksizce, gönülsüzce","unwillingly, with hesitation","He reluctantly lent me his carefully organised notes.","",2],["Sustainable","uzun vadede sürdürülebilir","able to be maintained long-term","Cycling is a more sustainable way to travel short distances.","",2],["Unrivaled","rakipsiz, eşsiz","without equal, unmatched","The goalkeeper's reflexes were unrivaled throughout the tournament.","",1],["Tranquil","sakin, huzurlu","calm and peaceful","The lake was perfectly tranquil at dawn.","",1],["Nostalgic","geçmişe özlem duyan, nostaljik","longing fondly for the past","The old television theme song made my mother nostalgic for her childhood.","",1],["Dispassionate","duygulardan etkilenmeyen, tarafsız","impartial, not swayed by emotion","The judge gave a dispassionate assessment based only on the evidence.","",2],["Transpose","yerlerini veya sıralarını değiştirmek","to swap the order or position of","She transposed two digits and wrote 54 instead of 45.","",1],["Stipulate","açıkça şart koşmak veya belirtmek","to specify or require explicitly","The contract stipulates that payment must be made by Friday.","",1],["Engender","yol açmak, doğurmak","to give rise to, to cause","Consistent kindness engenders loyalty and trust.","",1],["Immoderate","aşırı, ölçüsüz","excessive, lacking restraint","His immoderate consumption of coffee kept him awake all night.","",2],["Realized","fark etti; gerçekleştirdi","noticed or understood; or brought into reality","She suddenly realized that her phone was still on the bus.","",1],["Unappreciated","değeri bilinmeyen","not valued as it deserves","The cleaner's essential work often went unappreciated.","",2],["Compressed","sıkıştırılmış, daha küçük hâle getirilmiş","squeezed into a smaller form","The large video was compressed so that it could be emailed.","",2],["Abridge","anlamı koruyarak kısaltmak","to shorten while keeping the meaning","The editor abridged the novel for younger readers.","",1],["Obscure","belirsiz, anlaşılması güç","unclear, hard to understand","The author's obscure reference confused nearly every reader.","",0],["Encapsulate","temel özelliklerini kısaca ifade etmek","to express the essence of briefly","One sentence cannot fully encapsulate an entire person's life.","",2],["Fortitude","metanet, zorluk karşısında cesaret","courage in the face of hardship","She showed remarkable fortitude by completing the race despite the pain.","",1],["Perturbation","tedirginlik, zihinsel rahatsızlık; düzenin bozulması","anxiety or a disturbance of order","The unexpected midnight call caused considerable perturbation in the household.","",2],["Nonchalance","rahat umursamazlık, kayıtsız tavır","relaxed indifference","He entered the difficult exam with surprising nonchalance.","",2],["Indolence","tembellik, çalışmaktan kaçınma","laziness, avoidance of work","Because of his indolence, dirty clothes and unfinished tasks filled the room.","",1],["Abatement","azalma, hafifleme","a lessening or easing off","The abatement of the noise after midnight allowed us to sleep.","",1],["Aggregation","bir araya getirme, toplulaştırma","a gathering together into a whole","The graph was created through the aggregation of data from twenty schools.","",2],["Preceded","öncesinde geldi","came before","A flash of lightning preceded the sound of thunder.","",1],["Summarized","özetledi, temel noktaları kısaca aktardı","stated the main points briefly","She summarized the twenty-page article in one paragraph.","",2],["Overlooked","gözden kaçırdı, fark etmedi","failed to notice","I overlooked the decimal point and obtained a completely different answer.","",2],["Expediency","uygun ve pratik olduğu için seçilme; bazen ilkesiz kısa yol","choosing what is convenient over what is right","For the sake of expediency, the council chose the quickest solution rather than the fairest.","",2],["Fecundity","doğurganlık, verimlilik, bol üretme gücü","fertility, productive abundance","The fecundity of the soil allowed the garden to produce enormous vegetables.","",1],["Ubiquity","her yerde bulunma, yaygınlık","the state of being everywhere","The ubiquity of QR codes became obvious during the pandemic.","",1],["Heterogeneity","çeşitlilik, farklı unsurlardan oluşma","diversity, being made of different elements","The heterogeneity of the classroom enriched every discussion.","",2],["Steward","bir kaynağı veya mülkü yöneten ve koruyan kişi","someone who manages and protects a resource","As a steward of the forest, he was responsible for protecting its wildlife.","",1],["Harbinger","yaklaşmakta olan bir şeyin habercisi","a sign of something approaching","The first dark cloud was a harbinger of the approaching storm.","",1],["Inexplicable","açıklanamaz","impossible to explain","The disappearance of one sock from every pair remains inexplicable.","",2],["Unfounded","temelsiz, kanıta dayanmayan","baseless, not supported by evidence","The rumour was completely unfounded and spread without any evidence.","",1],["Facetious","ciddi bir konuda uygunsuz biçimde şakacı","inappropriately joking about a serious matter","His facetious comment during the emergency meeting annoyed everyone.","",1],["Anomalous","normalden sapan, olağandışı","deviating from the norm, irregular","One anomalous test score was far higher than all the others.","",1],["Novelty","yenilik, yeni veya sıra dışı olma durumu","newness, the quality of being unusual","The novelty of the new phone wore off after a few days.","",1],["Immutability","değişmezlik","the quality of never changing","The immutability of the past is what makes regret so painful.","",2],["Exhaustiveness","kapsamlılık, eksiksizlik","completeness, thoroughness","The exhaustiveness of her bibliography impressed the examiner.","",2],["Pervasiveness","yaygınlık, her yere nüfuz etme","the quality of spreading everywhere","The pervasiveness of smartphones has changed how people communicate.","",2],["Overreach","haddini aşmak, yetki sınırını geçmek","to go beyond one's proper limits or authority","The school overreached by attempting to monitor students' private messages.","",1],["Affinity","doğal yakınlık, güçlü bağ veya benzerlik","a natural liking or strong connection","She has always had an affinity for mathematical puzzles.","",1],["Attrition","aşınma veya ayrılmalar yoluyla yavaş yavaş azalma","gradual reduction through wear or departures","The club gradually lost members through attrition.","",1],["Circumspection","temkin, bir şey yapmadan önce dikkatle düşünme","caution, careful thought before acting","With admirable circumspection, she read the contract twice before signing it.","",2],["Impartiality","tarafsızlık, önyargısızlık","fairness, freedom from bias","A judge must demonstrate impartiality toward both sides.","",2],["Sporadically","ara sıra, düzensiz aralıklarla","occasionally, at irregular intervals","The unreliable Wi-Fi worked only sporadically.","",2],["Foments","körükler, kışkırtır","stirs up, incites","A false rumour foments anger and distrust.","",1],["Emissaries","özel görevle gönderilen temsilciler, elçiler","representatives sent on a special mission","The king sent emissaries to negotiate a peaceful agreement.","",2],["Synthesis","farklı fikirleri anlamlı bir bütün hâline getirme","combining different ideas into a coherent whole","Her essay offered a synthesis of historical evidence and scientific research.","",1],["Inconspicuous","göze çarpmayan, kolay fark edilmeyen","not easily noticed","The brown moth was inconspicuous against the tree bark.","",2],["Extemporaneous","hazırlıksız, doğaçlama","done without preparation, improvised","She gave an impressive extemporaneous speech without using any notes.","",2],["Eschews","bilinçli olarak kaçınır","deliberately avoids","During exam week, she eschews social media and other distractions.","",1],["Acquiesces","itiraz etmeden, fakat gönülsüzce razı olur","reluctantly agrees without protest","After arguing for an hour, he finally acquiesces to the new schedule.","",2],["Impending","yaklaşan, eli kulağında","about to happen, looming — usually something bad","Dark clouds warned of the impending storm.","",1],["Cue","işaret, sinyal; işaret vermek","a signal prompting an action; to prompt","The actor waited for his cue before stepping on stage.","queue = sıra. Sesteş, farklı yazım. Plants use daylight length as a cue to flower.",0],["Cordially","içtenlikle, samimiyetle","in a warm and friendly manner","You are cordially invited to the opening ceremony.","",1],["Exquisite","enfes, zarif, son derece güzel","extremely beautiful and delicate; intense","The necklace was an exquisite piece of craftsmanship.","",1],["Integrity","dürüstlük, ilkelilik; bütünlük, sağlamlık","honesty and strong moral principles; the state of being whole and undamaged","She refused the bribe, showing great integrity.","SAT'te ikinci anlam da çıkar: \"the integrity of the data/ecosystem\" = bütünlük, sağlamlık.",1],["Preliminary","ön, başlangıç niteliğinde","happening before the main part, as preparation","Preliminary results suggest the vaccine is effective, but larger trials are needed.","",2],["Abrasive","kaba, sert, rahatsız edici (kişi); aşındırıcı (yüzey)","harsh and rude in manner; rough enough to scrape","His abrasive tone alienated even his supporters.","",1],["Betray","ele vermek, açığa vurmak; ihanet etmek","to reveal unintentionally; to be disloyal to","Her trembling hands betrayed the nervousness she tried to hide.","SAT'te genelde ilk anlam: \"betraying the vanity\" = kibri açığa vurmak, exposing.",0],["Temperate","ılıman (iklim); ölçülü (kişi)","having mild temperatures; showing moderation","Temperate forests lose their leaves in autumn.","",1],["Forgo","vazgeçmek, feragat etmek","to give up or do without something desirable","She chose to forgo dessert to save room for coffee.","",0],["Dissemination","yayma, yayılma (bilgi/fikir)","the spreading of information widely","The internet accelerated the dissemination of scientific findings.","fiil hâli: disseminate.",2],["Subservience","boyun eğme, itaatkârlık","willingness to obey others unquestioningly","The courtiers' subservience to the king was absolute.","",2],["Regal","krallara yakışır, görkemli","fit for a king; majestic","She entered the hall with a regal bearing.","",0],["Hinge on","-e bağlı olmak","to depend entirely on","The deal hinges on whether the board approves the budget.","",0],["Truncated","kısaltılmış, kesilmiş, yarım kalmış","shortened by cutting off a part","The truncated meeting left several issues unresolved.","",1],["Indexed by","-e göre sıralanmış, düzenlenmiş","organized according to a variable","The data is indexed by year and region.","",1],["Diaspora","diaspora, anayurt dışına dağılmış topluluk","a population scattered from its original homeland","The Armenian diaspora maintains strong cultural ties across continents.","",1],["Reinvigorate","canlandırmak, yeniden güç vermek","to give new energy or strength to","The new coach reinvigorated a team that had lost its spark.","",2],["Influx","akın, ani giriş","a sudden arrival of large numbers","The festival brought an influx of visitors to the small town.","",0],["Infinitesimal","sonsuz derecede küçük","extremely small, negligible","The difference between the two measurements was infinitesimal.","\"infinite\"ın büyüklük anlamıyla ilgisi yok — tam tersi.",2],["Inestimable","tahmin edilemez; paha biçilemez","too great to be calculated or measured; priceless","Her contribution to the field was of inestimable value.","",2],["Repository","depo, arşiv, hazne","a place where things are stored","The library is a repository of rare manuscripts.","",2],["Stale","bayat; tazeliğini veya özgünlüğünü yitirmiş","no longer fresh; no longer original","The argument felt stale after being repeated in every article.","Mecazi anlamı SAT'te daha sık: trite, hackneyed.",0],["Fraught","sorunlu, gerilim yüklü","filled with problems or tension","The two countries share a fraught history.","",1],["Contemplative","tefekküre dayalı, düşünceli","thoughtful, meditative","The film's contemplative pacing asks the viewer to slow down.","",2],["Soporific","uyku getiren","sleep-inducing","The lecturer's monotone delivery was thoroughly soporific.","Latince sopor (uyku).",1],["Equivocal","muğlak, iki anlama çekilebilir","open to more than one interpretation","The results were equivocal, so the team ran the test again.","Zıttı: unequivocal = kesin, kuşkuya yer bırakmayan.",1],["Orthodox","geleneksel, alışılagelmiş","conventional, traditional, established","She rejected the orthodox treatment in favour of a new therapy.","",1],["Compounding","katmerleştirmek, artırmak","making a problem or effect greater","Poor drainage was compounding the damage from the flood.","",2],["Expediting","hızlandırmak","speeding a process up","The new software is expediting the review process.","",2],["Suspend","askıda tutmak; askıya almak","to hold afloat or aloft; to stop temporarily","The current suspends fine particles in the water.","SAT'te fiziksel anlam çıkabiliyor: parçacıkları suda asılı tutmak.",1],["Deposited","çökelmiş, bırakılmış","settled or laid down","The river deposited a thick layer of silt along the bank.","Jeoloji anlamı: akıntının bıraktığı tortu.",1],["Vain","kibirli","conceited, self-admiring","He was too vain to admit he needed glasses.","\"in vain\" (boşuna) tamamen ayrı bir kalıp.",0],["Given to","-e meyilli, eğilimli","habitually inclined toward","She is given to exaggeration when telling stories.","\"Given to X\" = habitually tending toward X.",0],["Vices","ahlaki kusurlar, zaaflar","moral failings, weaknesses","The novel catalogues the vices of a comfortable society.","Zıttı: virtues.",0],["Causal","nedensel","relating to cause and effect","The study found no causal link between the two variables.","casual (gündelik) ile karıştırma — tek harf farkı.",0],["Espoused","benimsemiş, savunmuş","adopted and supported a belief or principle","The party espoused reforms it had opposed a decade earlier.","",1],["Delineate","ayrıntılarıyla belirtmek, tasvir etmek; sınırlarını çizmek","to describe or portray something precisely; to mark out the outline of","The report delineates the steps the agency must take next.","Kökü 'line' — bir şeyin çizgilerini/sınırlarını çizmek.",1],["Unearth","gün yüzüne çıkarmak, kazıp ortaya çıkarmak","to discover something hidden or lost, especially by searching","Researchers unearthed documents that contradicted the official account.","Aynı küme: disclose = divulge = evince = unearth = expose.",1],["Expose","ifşa etmek, açığa çıkarmak","to reveal something hidden, especially something dishonest","The investigation exposed a network of shell companies.","Aynı küme: disclose = divulge = evince = unearth = expose.",0],["Belie","yanıltıcı bir izlenim vermek; aksini göstermek, yalanlamak","to give a false impression of something; to contradict or show to be untrue","Her calm smile belied her intense anxiety.","'Yanlış anlamak' DEĞİL — yanlış izlenimi veren şeyin kendisi belie eder.",0],["Capricious","kaprisli, değişken, bir dediği bir dediğini tutmayan","changing suddenly and without any obvious reason","The weather here is capricious: sunshine one hour, hail the next.","mercurial ile eş anlamlı.",2],["Mercurial","değişken, ruh hali çabuk değişen","subject to sudden or unpredictable changes of mood or mind","His mercurial temper made him difficult to work with.","Cıva (mercury) kökünden; capricious ile eş anlamlı.",1],["Anachronism","çağına/zamanına uymayan şey, tarihsel tutarsızlık","something placed in the wrong historical period","The wristwatch in the Roman epic was an obvious anachronism.","ana- (karşı) + chronos (zaman).",2],["Esoteric","sadece küçük bir grubun anlayabileceği, çok özel/derin","likely to be understood by only a small number of people with specialized knowledge","The paper is full of esoteric jargon.","Zıttı: exoteric, accessible.",1],["Convoluted","karmaşık, dolambaçlı","extremely complex and difficult to follow","The plot was so convoluted that nobody could summarize it.","Kıvrım kıvrım anlamından geliyor.",2],["Perspicacious","zeki, kavrayışı güçlü, anlayışlı","having a ready insight into and understanding of things","A perspicacious reader will notice the contradiction immediately.","perspicuous (açık, anlaşılır) ile karıştırma: o metni tarif eder, bu kişiyi.",2],["Excoriate","sert biçimde eleştirmek, yerden yere vurmak","to criticize someone severely","The judge excoriated the company for concealing the data.","Düz anlamı 'derisini yüzmek'.",1],["Fastidious","titiz, detaycı; zor beğenen, müşkülpesent","very attentive to accuracy and detail; hard to please","She was fastidious about citing every source.","Hem övgü (titiz) hem eleştiri (zor beğenen) olabilir.",2],["Sycophant","dalkavuk, yağcı","a person who flatters someone powerful in order to gain advantage","The king was surrounded by sycophants who never contradicted him.","flatterer, toady, bootlicker.",1],["Contempt","küçümseme, hor görme, aşağılama","the feeling that someone or something is worthless or beneath consideration","She looked at the offer with open contempt.","contempt of court = mahkemeye saygısızlık.",1],["Virulent","öldürücü, çok şiddetli; zehir zemberek","extremely severe or harmful in its effects; bitterly hostile","A virulent strain of the virus spread through the region.","İkinci anlam: virulent criticism = çok sert eleştiri.",1],["Subdue","boyun eğdirmek, bastırmak; yumuşatmak","to bring under control by force; to make less intense","The troops subdued the rebellion within a week.","subdued = kısık, yumuşak (subdued lighting).",0],["Finesse","incelik, ustalık, maharet","refinement and delicacy of skill in handling something","She handled the negotiation with remarkable finesse.","Fiil hali de var: to finesse = ustalıkla idare etmek/atlatmak.",1],["Expound","ayrıntılı olarak açıklamak, izah etmek","to explain something in detail","He expounded his theory for the better part of an hour.","expand (genişletmek) ile karıştırma.",1],["Disingenuous","samimiyetsiz, içten pazarlıklı","not candid or sincere; pretending to know less than one really does","It was disingenuous of him to claim he had no idea about the deal.","Zıttı: candid / ingenuous.",2],["Ingenuous","saf, masum, art niyetsiz, kolay güvenen","innocent, trusting and unsuspecting; artless","Her ingenuous questions revealed how new she was to the field.","DİKKAT: ingenuous = saf. ingenious = zekice/yaratıcı. disingenuous = samimiyetsiz.",1],["Preempt","önlemek için önceden davranmak; yerini almak","to prevent something anticipated by acting first; to take the place of something planned","She took a painkiller to preempt the headache before it started.","İkinci anlam: planlanan bir yayını kesip yerine başkasını koymak.",1],["Accordingly","sonuç olarak, buna göre; duruma uygun biçimde","therefore, consequently; also: in a way that suits what has happened","The budget was cut, and the department scaled back its plans accordingly.","therefore = consequently = accordingly. İkinci anlamı: 'duruma uygun şekilde'.",2],["Obsolete","eskimiş, kullanım dışı kalmış, modası geçmiş","outdated; no longer used or useful","Fax machines became obsolete once email was everywhere.","obsolescent = eskimekte olan, henüz tam eskimemiş.",1],["Hasten","hızlandırmak, çabuklaştırmak; acele etmek","to make something happen sooner or faster; to hurry","Poor record-keeping hastened the company's collapse.","accelerate ile eş anlamlı. Kalıp: 'hasten to add' = hemen eklemek.",0],["Insolvency","borçlarını ödeyememe, ödeme aczi","the inability to pay one's debts","The airline filed for insolvency after a decade of losses.","Sıfatı: insolvent. Zıttı: solvent = ödeme gücü olan.",2],["Beneficiary","yararlanıcı, faydalanan kişi; lehtar, mirasçı","a person who receives an advantage, money, or benefit from something","She was the sole beneficiary of her aunt's estate.","benefit kökünden; hukuk metinlerinde 'lehtar/mirasçı' anlamında geçer.",2],["Amended","değiştirilmiş, düzeltilmiş, revize edilmiş","revised; altered or corrected, especially officially","The amended bill passed with only minor objections.","amend = resmi bir metni değiştirmek; amendment = değişiklik, anayasa maddesi.",1],["Foreground","ön plana çıkarmak, vurgulamak","to make something especially prominent or important; to emphasize","The essay foregrounds the voices that earlier histories ignored.","Zıttı: to background = arka plana itmek. SAT'ta fiil hâliyle çok çıkar.",2],["Incredulity","inanamama, şüpheyle karşılama","unwillingness or inability to believe something; disbelief","He stared at the results with open incredulity.","Sıfatı: incredulous = inanmayan. incredible (inanılmaz) ile karıştırma.",2],["Consternation","şaşkınlık ve endişe karışımı his, dehşete düşme","a feeling of sudden anxiety, shock or confusion","To the consternation of the organizers, the speaker never arrived.","dismay ile eş anlamlı; sadece şaşırmak değil, kaygılanmak da var.",2],["Commensurate","orantılı, denk, uygun ölçüde","corresponding in degree, size or extent; proportional","The salary is commensurate with experience.","Kalıbı: commensurate WITH. Zıttı: disproportionate.",2]];   /* [word, turkish, english, example, note, band] */
 var $ = function (id) { return document.getElementById(id); };
-var LS_LOG = 'lexicon.log.v2', LS_THEME = 'lexicon.theme.v1';
+
+var LS = { srs: 'lexicon.srs.v1', log: 'lexicon.log.v2', prof: 'lexicon.profile.v1' };
+
+/* ==================================================================
+   Spaced repetition — the same Leitner scheme the original Lexicon
+   uses, kept identical on purpose so the app people already like
+   behaves the way they expect.
+
+     right  →  box + 1 (max 5), streak + 1
+     wrong  →  box back to 0, streak reset
+
+   DUE      a word never seen, or whose box interval has elapsed
+   TRICKY   has been missed at least once and is not yet on a run of
+            two correct — that is, still shaky rather than simply new
+   MASTERED box 4 or better, i.e. survived a week-long gap twice over
+   ================================================================== */
+var BOX_DAYS = [0, 1, 2, 4, 7, 15];
+var DAY_MS = 864e5;
+
+function load(key, fallback) {
+  try {
+    var raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return fallback;
+}
+function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+
+var SRS = load(LS.srs, {});          /* word index -> {b,r,x,cs,last} */
+var LOG = load(LS.log, {});          /* dayKey -> {right,wrong,missed[]} */
+var PROF = load(LS.prof, { name: '', testDate: '', goal: 100, goalSet: false });
+
+function rec(i) { return SRS[i]; }
+function isDue(e) { return !e || !e.last ? true : (Date.now() - e.last) / DAY_MS >= BOX_DAYS[Math.min(e.b || 0, 5)]; }
+function isTricky(e) { return !!e && e.x > 0 && (e.cs || 0) < 2; }
+function isMastered(e) { return !!e && (e.b || 0) >= 4; }
+
+function grade(i, ok) {
+  var e = SRS[i] || { b: 0, r: 0, x: 0, cs: 0, last: 0 };
+  if (ok) { e.b = Math.min(5, (e.b || 0) + 1); e.r = (e.r || 0) + 1; e.cs = (e.cs || 0) + 1; }
+  else { e.b = 0; e.x = (e.x || 0) + 1; e.cs = 0; }
+  e.last = Date.now();
+  SRS[i] = e; save(LS.srs, SRS);
+}
+
+function idsWhere(fn) {
+  var out = [];
+  for (var i = 0; i < WORDS.length; i++) if (fn(SRS[i], i)) out.push(i);
+  return out;
+}
+function counts() {
+  var due = 0, tricky = 0, mastered = 0;
+  for (var i = 0; i < WORDS.length; i++) {
+    var e = SRS[i];
+    if (isDue(e)) due++;
+    if (isTricky(e)) tricky++;
+    if (isMastered(e)) mastered++;
+  }
+  return { due: due, tricky: tricky, mastered: mastered, total: WORDS.length };
+}
+
+/* ------------------------------- dates ---------------------------- */
+function dayKey(d) {
+  return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2)
+    + '-' + ('0' + d.getDate()).slice(-2);
+}
+function mondayOf(d) {
+  var x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() - ((x.getDay() + 6) % 7));   /* Monday starts the week */
+  return x;
+}
+function weekReviewed() {
+  var start = mondayOf(new Date()), n = 0;
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(start); d.setDate(d.getDate() + i);
+    var e = LOG[dayKey(d)];
+    if (e) n += e.right + e.wrong;
+  }
+  return n;
+}
+function daysToTest() {
+  if (!PROF.testDate) return null;
+  var parts = PROF.testDate.split('-');
+  var t = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  return Math.round((t - today) / DAY_MS);
+}
+function recordDay(right, wrong, missedNames) {
+  var k = dayKey(new Date());
+  var e = LOG[k] || { right: 0, wrong: 0, missed: [] };
+  e.right += right; e.wrong += wrong;
+  missedNames.forEach(function (w) { if (e.missed.indexOf(w) < 0) e.missed.push(w); });
+  LOG[k] = e; save(LS.log, LOG);
+}
+function streak() {
+  var n = 0, d = new Date();
+  if (!LOG[dayKey(d)]) d.setDate(d.getDate() - 1);
+  while (LOG[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function logDays() { return Object.keys(LOG).length; }
 
 /* ------------------------------- theme ---------------------------- */
 var THEMES = [
@@ -500,92 +779,106 @@ var THEMES = [
 function applyTheme(id) {
   if (!THEMES.some(function (t) { return t.id === id; })) id = 'ember';
   $('phone').dataset.theme = id;
-  try { localStorage.setItem(LS_THEME, id); } catch (e) {}
+  PROF.theme = id; save(LS.prof, PROF);
   [].forEach.call(document.querySelectorAll('#themes .sw'), function (b) {
     b.setAttribute('aria-pressed', String(b.dataset.t === id));
   });
 }
 function buildThemes() {
   $('themes').innerHTML = THEMES.map(function (t) {
-    return '<button class="sw" data-t="' + t.id + '" aria-pressed="false">'
-      + '<span class="dots">' + t.dots.map(function (c) {
-          return '<i style="background:' + c + '"></i>'; }).join('') + '</span>'
-      + '<em>' + t.name + '</em></button>';
+    return '<button class="sw" data-t="' + t.id + '" aria-pressed="false"><span class="dots">'
+      + t.dots.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join('')
+      + '</span><em>' + t.name + '</em></button>';
   }).join('');
   $('themes').addEventListener('click', function (ev) {
-    var b = ev.target.closest('.sw');
-    if (b) applyTheme(b.dataset.t);
+    var b = ev.target.closest('.sw'); if (b) applyTheme(b.dataset.t);
   });
 }
 
-/* ------------------------------ storage ---------------------------
-   Real sessions only. An empty log stays empty and the trail says so,
-   rather than inventing a fortnight of study that never happened. */
-function loadLog() {
-  try {
-    var raw = localStorage.getItem(LS_LOG);
-    if (raw) return JSON.parse(raw) || {};
-  } catch (e) {}
-  return {};
-}
-var LOG = loadLog();
-function saveLog() { try { localStorage.setItem(LS_LOG, JSON.stringify(LOG)); } catch (e) {} }
-function dayKey(d) {
-  return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2)
-    + '-' + ('0' + d.getDate()).slice(-2);
-}
-function record(right, wrong, missed) {
-  var k = dayKey(new Date());
-  var e = LOG[k] || { right: 0, wrong: 0, missed: [] };
-  e.right += right; e.wrong += wrong;
-  missed.forEach(function (w) { if (e.missed.indexOf(w) < 0) e.missed.push(w); });
-  LOG[k] = e; saveLog();
-}
-function streak() {
-  var n = 0, d = new Date();
-  if (!LOG[dayKey(d)]) d.setDate(d.getDate() - 1);   /* today may not be done yet */
-  while (LOG[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
-  return n;
-}
-function totals() {
-  var r = 0, w = 0, days = 0;
-  for (var k in LOG) {
-    if (!Object.prototype.hasOwnProperty.call(LOG, k)) continue;
-    days++; r += LOG[k].right; w += LOG[k].wrong;
-  }
-  return { right: r, wrong: w, days: days };
-}
-
 /* ---------------------------- navigation -------------------------- */
-var VIEWS = ['home','setup','session','result','map','day','practice','lessons','settings'];
+var VIEWS = ['home','study','session','result','map','day','practice','words','guide','settings'];
+var TABS = { home: 'home', study: 'study', practice: 'practice', words: 'words', guide: 'guide' };
+/* Sessions want the whole screen; everything else keeps the footer. */
+var NO_NAV = { session: 1, result: 1 };
+
 function show(name) {
   VIEWS.forEach(function (v) { $('v-' + v).hidden = (v !== name); });
   $('v-' + name).scrollTop = 0;
+  $('nav').hidden = !!NO_NAV[name];
+  var owner = TABS[name] || (name === 'map' || name === 'day' || name === 'settings' ? 'home' : null);
+  [].forEach.call($('nav').querySelectorAll('button'), function (b) {
+    b.setAttribute('aria-current', String(b.dataset.tab === owner));
+  });
+  if (name === 'home') renderHome();
   if (name === 'map') drawMap();
-  if (name === 'home') refreshHome();
-  if (name === 'settings') refreshSettings();
+  if (name === 'words') renderWords();
+  if (name === 'settings') renderSettings();
+  if (name === 'study') poolNote();
 }
 document.addEventListener('click', function (ev) {
-  var b = ev.target.closest('[data-go]');
-  if (b) show(b.dataset.go);
+  var g = ev.target.closest('[data-go]');
+  if (g) { show(g.dataset.go); return; }
+  var s = ev.target.closest('[data-start]');
+  if (s) startNamed(s.dataset.start);
+});
+$('nav').addEventListener('click', function (ev) {
+  var b = ev.target.closest('button'); if (b) show(b.dataset.tab);
 });
 
-function refreshHome() {
+/* ------------------------------- home ----------------------------- */
+function renderHome() {
+  var c = counts();
+  $('s-due').firstElementChild.textContent = c.due.toLocaleString('en-US');
+  $('s-tricky').firstElementChild.textContent = c.tricky.toLocaleString('en-US');
+  $('s-mastered').firstElementChild.textContent = c.mastered.toLocaleString('en-US');
+  $('s-words').firstElementChild.textContent = c.total.toLocaleString('en-US');
+  $('d-tricky').textContent = c.tricky + (c.tricky === 1 ? ' word' : ' words');
+
   var s = streak();
-  $('streak-line').textContent = s ? s + '-day streak' : 'no streak yet';
-  $('due-line').textContent = WORDS.length.toLocaleString('en-US') + ' words';
-}
-function refreshSettings() {
-  var t = totals();
-  $('data-line').textContent = t.days
-    ? t.days + (t.days === 1 ? ' day' : ' days') + ' recorded · '
-      + (t.right + t.wrong) + ' words reviewed'
-    : 'No sessions recorded yet.';
+  $('streakline').innerHTML = s
+    ? '<b>' + s + '</b> day' + (s === 1 ? '' : 's') + ' in a row'
+    : 'start today’s streak';
+
+  $('onboard').hidden = !!PROF.goalSet;
+  $('goalbox').hidden = !PROF.goalSet;
+  if (PROF.goalSet) {
+    var done = weekReviewed(), goal = PROF.goal || 100;
+    var pct = Math.min(100, Math.round(done / goal * 100));
+    $('goal-n').textContent = done + ' / ' + goal + ' words';
+    $('goal-n').className = 'n' + (done >= goal ? ' met' : '');
+    $('goal-bar').style.width = pct + '%';
+  }
+
+  /* The hero never lies about the size of the pile: if the week's goal
+     is already met it says so rather than nagging for more. */
+  var left = PROF.goalSet ? Math.max(0, (PROF.goal || 100) - weekReviewed()) : c.due;
+  var take = Math.max(0, Math.min(c.due, PROF.goalSet ? left : c.due));
+  if (c.due === 0) {
+    $('hero-t').textContent = 'Nothing due right now';
+    $('hero-s').textContent = 'Come back tomorrow, or take a quick quiz';
+  } else if (PROF.goalSet && left === 0) {
+    $('hero-t').textContent = 'Week’s goal met';
+    $('hero-s').textContent = c.due + ' still due — keep going if you like';
+  } else {
+    $('hero-t').textContent = 'Review what’s due this week';
+    $('hero-s').textContent = (take || c.due) + ' words waiting';
+  }
+
+  var dt = daysToTest();
+  if (dt === null) {
+    $('testday').innerHTML = '<button data-go="settings">Set your test day</button>';
+  } else if (dt > 0) {
+    $('testday').innerHTML = '<b>' + dt + '</b> day' + (dt === 1 ? '' : 's') + ' until test day';
+  } else if (dt === 0) {
+    $('testday').innerHTML = '<b>Test day is today.</b> Good luck.';
+  } else {
+    $('testday').innerHTML = '<button data-go="settings">Set a new test day</button>';
+  }
 }
 
 /* ------------------------------ filters --------------------------- */
-var F = { mode: 'flash', dir: 'en', len: 10, band: -1 };
-function wireSeg(id, key, cast) {
+var F = { mode: 'flash', dir: 'en', len: 10, band: -1, pool: 'due' };
+function wireSeg(id, key, cast, after) {
   var box = $(id);
   box.addEventListener('click', function (ev) {
     var b = ev.target.closest('button'); if (!b) return;
@@ -593,19 +886,26 @@ function wireSeg(id, key, cast) {
       o.setAttribute('aria-pressed', String(o === b));
     });
     F[key] = cast ? cast(b.dataset.v) : b.dataset.v;
-    poolNote();
+    if (after) after();
   });
 }
-wireSeg('f-mode', 'mode'); wireSeg('f-dir', 'dir');
-wireSeg('f-len', 'len', Number); wireSeg('f-band', 'band', Number);
+wireSeg('f-mode', 'mode', null, poolNote); wireSeg('f-dir', 'dir', null, poolNote);
+wireSeg('f-len', 'len', Number, poolNote); wireSeg('f-band', 'band', Number, poolNote);
+wireSeg('f-pool', 'pool', null, poolNote);
 
-function pool() {
-  return F.band < 0 ? WORDS : WORDS.filter(function (w) { return w[5] === F.band; });
+function poolIds() {
+  var base;
+  if (F.pool === 'due') base = idsWhere(function (e) { return isDue(e); });
+  else if (F.pool === 'tricky') base = idsWhere(function (e) { return isTricky(e); });
+  else base = idsWhere(function () { return true; });
+  if (F.band >= 0) base = base.filter(function (i) { return WORDS[i][5] === F.band; });
+  return base;
 }
 function poolNote() {
-  var n = pool().length;
-  $('pool-note').textContent = n.toLocaleString('en-US') + ' words in this pool · '
-    + Math.min(F.len, n) + ' this session';
+  var n = poolIds().length;
+  $('pool-note').textContent = n
+    ? n.toLocaleString('en-US') + ' words match · ' + Math.min(F.len, n) + ' this session'
+    : 'Nothing matches those filters yet.';
   $('start').disabled = n === 0;
 }
 
@@ -617,21 +917,38 @@ function shuffle(a) {
   }
   return a;
 }
-function startSession(deck) {
-  var p = deck || shuffle(pool().slice()).slice(0, F.len);
-  S = { deck: p, i: 0, right: 0, wrong: 0, missed: [], shown: false };
+function startIds(ids, mode) {
+  if (!ids.length) return;
+  S = { deck: ids, i: 0, right: 0, wrong: 0, missed: [], shown: false,
+        mode: mode || F.mode, dir: F.dir };
   show('session'); step();
 }
-$('start').addEventListener('click', function () { startSession(null); });
+function startNamed(kind) {
+  var c = counts(), ids;
+  if (kind === 'due') {
+    ids = shuffle(idsWhere(function (e) { return isDue(e); }));
+    var cap = PROF.goalSet ? Math.max(10, Math.min(50, PROF.goal - weekReviewed())) : 20;
+    ids = ids.slice(0, Math.max(10, Math.min(ids.length, cap)));
+  } else if (kind === 'tricky') {
+    ids = shuffle(idsWhere(function (e) { return isTricky(e); })).slice(0, 20);
+    if (!ids.length) { show('study'); return; }
+  } else {
+    ids = shuffle(idsWhere(function () { return true; })).slice(0, 20);
+  }
+  startIds(ids, kind === 'quick' ? 'test' : F.mode);
+}
+$('start').addEventListener('click', function () {
+  startIds(shuffle(poolIds()).slice(0, F.len), F.mode);
+});
 
-function askDir() { return F.dir === 'mix' ? (Math.random() < 0.5 ? 'en' : 'tr') : F.dir; }
+function askDir() { return S.dir === 'mix' ? (Math.random() < 0.5 ? 'en' : 'tr') : S.dir; }
 function step() {
   if (S.i >= S.deck.length) return finish();
-  var w = S.deck[S.i], dir = askDir();
+  var w = WORDS[S.deck[S.i]], dir = askDir();
   $('pnum').textContent = (S.i + 1) + '/' + S.deck.length;
   $('pbar').style.width = (S.i / S.deck.length * 100) + '%';
   S.shown = false;
-  if (F.mode === 'flash') renderFlash(w, dir); else renderTest(w, dir);
+  if (S.mode === 'flash') renderFlash(w, dir); else renderTest(w, dir);
 }
 function renderFlash(w, dir) {
   var front = dir === 'en' ? w[0] : (w[1] || w[2]);
@@ -654,18 +971,17 @@ function renderFlash(w, dir) {
     else { add('prompt', w[0]); add('en', w[2]); }
     if (w[3]) add('ex', w[3]);
   };
-  $('answers').innerHTML =
-    '<div class="pair"><button class="miss" id="b-miss">Missed</button>'
-    + '<button class="got" id="b-got">Got it</button></div>';
-  $('b-miss').onclick = function () { judge(false, w); };
-  $('b-got').onclick = function () { judge(true, w); };
+  $('answers').innerHTML = '<div class="pair"><button class="miss" id="b-miss">Missed</button>'
+    + '<button id="b-got">Got it</button></div>';
+  $('b-miss').onclick = function () { judge(false); };
+  $('b-got').onclick = function () { judge(true); };
 }
 function renderTest(w, dir) {
   var ask = dir === 'en' ? w[0] : (w[1] || w[2]);
   var correct = dir === 'en' ? (w[1] || w[2]) : w[0];
-  var p = pool(), opts = [correct], guard = 0;
-  while (opts.length < 4 && guard++ < 400) {
-    var c = p[Math.floor(Math.random() * p.length)];
+  var opts = [correct], guard = 0;
+  while (opts.length < 4 && guard++ < 500) {
+    var c = WORDS[Math.floor(Math.random() * WORDS.length)];
     var v = dir === 'en' ? (c[1] || c[2]) : c[0];
     if (v && opts.indexOf(v) < 0) opts.push(v);
   }
@@ -676,12 +992,10 @@ function renderTest(w, dir) {
   el.textContent = ask;
   $('card').appendChild(el);
   $('card').onclick = null;
-  var html = '<div class="choices">';
-  opts.forEach(function (o, i) {
-    html += '<button class="ch" data-v="' + i + '"><i>' + 'ABCD'[i] + '</i>'
+  $('answers').innerHTML = '<div class="choices">' + opts.map(function (o, i) {
+    return '<button class="ch" data-v="' + i + '"><i>' + 'ABCD'[i] + '</i>'
       + String(o).replace(/</g, '&lt;') + '</button>';
-  });
-  $('answers').innerHTML = html + '</div>';
+  }).join('') + '</div>';
   [].forEach.call($('answers').querySelectorAll('.ch'), function (b, i) {
     b.onclick = function () {
       if (S.shown) return;
@@ -692,12 +1006,14 @@ function renderTest(w, dir) {
         if (opts[j] === correct) o.classList.add('right');
         else if (j === i) o.classList.add('wrong');
       });
-      setTimeout(function () { judge(ok, w); }, ok ? 420 : 900);
+      setTimeout(function () { judge(ok); }, ok ? 420 : 900);
     };
   });
 }
-function judge(ok, w) {
-  if (ok) S.right++; else { S.wrong++; S.missed.push(w); }
+function judge(ok) {
+  var id = S.deck[S.i];
+  grade(id, ok);
+  if (ok) S.right++; else { S.wrong++; S.missed.push(id); }
   S.i++; step();
 }
 function finish() {
@@ -709,22 +1025,23 @@ function finish() {
     : pct >= 60 ? 'Solid — a few to revisit.' : 'Worth another pass.';
   $('r-right').textContent = S.right; $('r-wrong').textContent = S.wrong;
   $('r-total').textContent = tot;
-  record(S.right, S.wrong, S.missed.map(function (w) { return w[0]; }));
+  recordDay(S.right, S.wrong, S.missed.map(function (i) { return WORDS[i][0]; }));
   var missed = S.missed.slice();
   $('r-list').innerHTML = missed.length ? wordList(missed) : '';
   var again = $('r-again');
   again.hidden = missed.length === 0;
-  again.onclick = function () { startSession(shuffle(missed.slice())); };
+  again.onclick = function () { startIds(shuffle(missed.slice()), S.mode); };
   show('result');
 }
-function wordList(items) {
-  return '<div class="wl">' + items.map(function (w) {
+function wordList(ids) {
+  return '<div class="wl">' + ids.map(function (i) {
+    var w = WORDS[i];
     return '<div><b>' + w[0] + '</b><span>' + (w[1] || w[2] || '') + '</span></div>';
   }).join('') + '</div>';
 }
-function byName(name) {
-  for (var i = 0; i < WORDS.length; i++) if (WORDS[i][0] === name) return WORDS[i];
-  return null;
+function indexOfWord(name) {
+  for (var i = 0; i < WORDS.length; i++) if (WORDS[i][0] === name) return i;
+  return -1;
 }
 
 /* -------------------------------- trail --------------------------- */
@@ -732,17 +1049,16 @@ var DAYS = 21, STEP = 74;
 function drawMap() {
   var wrap = $('mapwrap');
   wrap.innerHTML = '';
-  $('map-empty').hidden = totals().days > 0;
+  $('map-empty').hidden = logDays() > 0;
   wrap.style.height = (DAYS * STEP + 30) + 'px';
   var today = new Date();
   for (var i = 0; i < DAYS; i++) {
-    var d = new Date(today); d.setDate(d.getDate() - i);   /* newest at the top */
+    var d = new Date(today); d.setDate(d.getDate() - i);
     var key = dayKey(d), e = LOG[key];
     var y = i * STEP + 8, x = 50 + Math.sin(i * 0.78) * 27;
     if (i < DAYS - 1) {
       for (var s = 1; s <= 3; s++) {
-        var t = s / 4;
-        var dot = document.createElement('span');
+        var t = s / 4, dot = document.createElement('span');
         dot.className = 'dot';
         dot.style.left = (50 + Math.sin((i + t) * 0.78) * 27) + '%';
         dot.style.top = (y + 26 + t * STEP) + 'px';
@@ -751,9 +1067,8 @@ function drawMap() {
     }
     var tot = e ? e.right + e.wrong : 0;
     var acc = tot ? e.right / tot : 0;
-    var cls = !e ? '' : (acc >= 0.8 ? 'full' : 'part');
     var b = document.createElement('button');
-    b.className = 'node ' + cls + (i === 0 ? ' today' : '');
+    b.className = 'node ' + (!e ? '' : (acc >= 0.8 ? 'full' : 'part')) + (i === 0 ? ' today' : '');
     b.style.left = x + '%'; b.style.top = y + 'px';
     b.innerHTML = '<b>' + d.getDate() + '</b><small>'
       + ['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()] + '</small>';
@@ -767,22 +1082,115 @@ var MONTH = ['January','February','March','April','May','June','July',
              'August','September','October','November','December'];
 function openDay(key, d) {
   var e = LOG[key];
-  $('d-title').textContent = d.getDate() + ' ' + MONTH[d.getMonth()];
+  $('dd-title').textContent = d.getDate() + ' ' + MONTH[d.getMonth()];
   var tot = e ? e.right + e.wrong : 0;
-  $('d-sub').textContent = e ? (tot + ' words reviewed') : 'No session on this day.';
-  $('d-right').textContent = e ? e.right : 0;
-  $('d-wrong').textContent = e ? e.wrong : 0;
-  $('d-acc').textContent = (tot ? Math.round(e.right / tot * 100) : 0) + '%';
+  $('dd-sub').textContent = e ? (tot + ' words reviewed') : 'No session on this day.';
+  $('dd-right').textContent = e ? e.right : 0;
+  $('dd-wrong').textContent = e ? e.wrong : 0;
+  $('dd-acc').textContent = (tot ? Math.round(e.right / tot * 100) : 0) + '%';
   var missed = [];
-  if (e) e.missed.forEach(function (n) { var w = byName(n); if (w) missed.push(w); });
-  $('d-lab').hidden = missed.length === 0;
-  $('d-list').innerHTML = missed.length ? wordList(missed) : '';
-  var btn = $('d-practice');
+  if (e) e.missed.forEach(function (n) { var i = indexOfWord(n); if (i >= 0) missed.push(i); });
+  $('dd-lab').hidden = missed.length === 0;
+  $('dd-list').innerHTML = missed.length ? wordList(missed) : '';
+  var btn = $('dd-practice');
   btn.hidden = missed.length === 0;
   btn.textContent = 'Practice these ' + missed.length;
-  btn.onclick = function () { startSession(shuffle(missed.slice())); };
+  btn.onclick = function () { startIds(shuffle(missed.slice()), F.mode); };
   show('day');
 }
+
+/* -------------------------------- words --------------------------- */
+var WF = 'all', WQ = '', WOPEN = -1, WCAP = 60;
+$('w-search').addEventListener('input', function () {
+  WQ = this.value.trim().toLowerCase(); WOPEN = -1; renderWords();
+});
+$('w-filter').addEventListener('click', function (ev) {
+  var b = ev.target.closest('button'); if (!b) return;
+  [].forEach.call(this.querySelectorAll('button'), function (o) {
+    o.setAttribute('aria-pressed', String(o === b));
+  });
+  WF = b.dataset.v; WOPEN = -1; renderWords();
+});
+function wordMatches(i) {
+  var e = SRS[i];
+  if (WF === 'due' && !isDue(e)) return false;
+  if (WF === 'tricky' && !isTricky(e)) return false;
+  if (WF === 'mastered' && !isMastered(e)) return false;
+  if (!WQ) return true;
+  var w = WORDS[i];
+  return (w[0] + ' ' + w[1] + ' ' + w[2]).toLowerCase().indexOf(WQ) >= 0;
+}
+function renderWords() {
+  var hits = [];
+  for (var i = 0; i < WORDS.length && hits.length <= WCAP; i++) if (wordMatches(i)) hits.push(i);
+  var total = 0;
+  for (var j = 0; j < WORDS.length; j++) if (wordMatches(j)) total++;
+  $('w-count').textContent = total.toLocaleString('en-US')
+    + (total === 1 ? ' word' : ' words') + (WQ ? ' matching “' + WQ + '”' : '');
+  $('w-list').innerHTML = hits.slice(0, WCAP).map(function (i) {
+    var w = WORDS[i], e = SRS[i];
+    var pip = isMastered(e) ? ' mastered' : (isTricky(e) ? ' tricky' : '');
+    var html = '<button class="wrow" data-i="' + i + '"><span class="pip' + pip + '"></span>'
+      + '<span class="w">' + w[0] + '</span><span class="t">' + (w[1] || w[2]) + '</span></button>';
+    if (i === WOPEN) {
+      html += '<div class="wdetail">'
+        + (w[1] ? '<p class="tr">' + w[1] + '</p>' : '')
+        + (w[2] ? '<p class="en">' + w[2] + '</p>' : '')
+        + (w[3] ? '<p class="ex">' + w[3] + '</p>' : '')
+        + (w[4] ? '<p class="nt">' + w[4] + '</p>' : '')
+        + '</div>';
+    }
+    return html;
+  }).join('');
+  $('w-more').textContent = total > WCAP
+    ? 'Showing the first ' + WCAP + '. Search to narrow it down.' : '';
+}
+$('w-list').addEventListener('click', function (ev) {
+  var b = ev.target.closest('.wrow'); if (!b) return;
+  var i = Number(b.dataset.i);
+  WOPEN = (WOPEN === i) ? -1 : i;
+  renderWords();
+});
+
+/* ------------------------------ settings -------------------------- */
+function renderSettings() {
+  $('p-name').value = PROF.name || '';
+  $('p-test').value = PROF.testDate || '';
+  $('p-goal').value = PROF.goal || 100;
+  [].forEach.call($('goal-presets').querySelectorAll('button'), function (b) {
+    b.setAttribute('aria-pressed', String(Number(b.dataset.v) === (PROF.goal || 100)));
+  });
+  var dt = daysToTest();
+  $('p-test-hint').textContent = dt === null
+    ? 'The countdown on the home screen comes from this.'
+    : dt >= 0 ? dt + ' day' + (dt === 1 ? '' : 's') + ' to go.'
+              : 'That date has passed — pick a new one.';
+  var days = logDays(), r = 0, w = 0;
+  for (var k in LOG) { if (Object.prototype.hasOwnProperty.call(LOG, k)) { r += LOG[k].right; w += LOG[k].wrong; } }
+  $('data-line').textContent = days
+    ? days + (days === 1 ? ' day' : ' days') + ' recorded · ' + (r + w) + ' words reviewed'
+    : 'No sessions recorded yet.';
+}
+$('p-name').addEventListener('input', function () { PROF.name = this.value; save(LS.prof, PROF); });
+$('p-test').addEventListener('change', function () {
+  PROF.testDate = this.value; save(LS.prof, PROF); renderSettings();
+});
+function setGoal(n) {
+  PROF.goal = Math.max(10, Math.min(1000, n || 100));
+  PROF.goalSet = true; save(LS.prof, PROF); renderSettings();
+}
+$('p-goal').addEventListener('change', function () { setGoal(Number(this.value)); });
+$('goal-presets').addEventListener('click', function (ev) {
+  var b = ev.target.closest('button'); if (!b) return;
+  setGoal(Number(b.dataset.v));
+});
+$('wipe').addEventListener('click', function () {
+  SRS = {}; LOG = {}; save(LS.srs, SRS); save(LS.log, LOG);
+  renderSettings();
+  var self = this;
+  self.textContent = 'Progress cleared';
+  setTimeout(function () { self.textContent = 'Clear my progress'; }, 1600);
+});
 
 /* ----------------------------- SAT item --------------------------- */
 (function () {
@@ -798,19 +1206,10 @@ function openDay(key, d) {
   });
 })();
 
-/* ------------------------------- wipe ----------------------------- */
-$('wipe').addEventListener('click', function () {
-  LOG = {}; saveLog(); refreshSettings(); refreshHome();
-  var self = this;
-  self.textContent = 'Progress cleared';
-  setTimeout(function () { self.textContent = 'Clear my progress'; }, 1600);
-});
-
 /* ------------------------------- boot ----------------------------- */
 buildThemes();
-var savedTheme = 'ember';
-try { savedTheme = localStorage.getItem(LS_THEME) || 'ember'; } catch (e) {}
-applyTheme(savedTheme);
+applyTheme(PROF.theme || 'ember');
 poolNote();
-refreshHome();
+show('home');
+
 </script>
