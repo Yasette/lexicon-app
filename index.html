@@ -547,6 +547,18 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 /* "Saved" — quiet confirmation that an auto-saving field really took. */
 .saved{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.12em;
   text-transform:uppercase;color:var(--sage);margin-left:8px}
+
+
+/* The colours alone left you inferring the verdict; say it. */
+.verdict{display:flex;align-items:center;gap:8px;margin:14px 0 0;padding:10px 12px;
+  border-radius:10px;font-size:13.5px;font-weight:700;letter-spacing:.01em}
+.verdict .mk{width:18px;height:18px;flex:none;border-radius:50%;display:grid;
+  place-items:center;font-size:11px;line-height:1;color:#fff}
+.verdict.ok{background:var(--paper2);color:var(--sage);border:1px solid var(--sage)}
+.verdict.ok .mk{background:var(--sage)}
+.verdict.no{background:var(--accentsoft);color:var(--accent);border:1px solid var(--accent)}
+.verdict.no .mk{background:var(--accent)}
+.verdict small{font-weight:600;color:var(--ink2);letter-spacing:0}
 </style>
 
 <div class="stage">
@@ -761,6 +773,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
         <div class="qmeta"><span class="qtag" id="q-tag"></span><span class="qnum" id="q-num"></span></div>
         <p class="qstem" id="q-stem"></p>
         <div class="choices" id="q-choices"></div>
+        <div class="verdict" id="q-verdict" hidden></div>
         <div class="qex" id="q-ex" hidden></div>
         <div class="qnav">
           <button id="q-prev">← Previous</button>
@@ -1576,6 +1589,17 @@ function renderQuestion() {
     return '<button class="' + cls + '" data-i="' + i + '"' + (picked >= 0 ? ' disabled' : '')
       + '><i>' + 'ABCD'[i] + '</i>' + String(o).replace(/</g, '&lt;') + '</button>';
   }).join('');
+  var v = $('q-verdict');
+  if (picked < 0) {
+    v.hidden = true;
+  } else {
+    var ok = picked === q.a;
+    v.hidden = false;
+    v.className = 'verdict ' + (ok ? 'ok' : 'no');
+    v.innerHTML = '<span class="mk">' + (ok ? '✓' : '✕') + '</span>'
+      + (ok ? 'Correct'
+            : 'Incorrect <small>· the answer is ' + 'ABCD'[q.a] + '</small>');
+  }
   var ex = $('q-ex');
   ex.hidden = picked < 0 || !q.ex;
   ex.textContent = q.ex || '';
