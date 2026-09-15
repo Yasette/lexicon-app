@@ -1,0 +1,10 @@
+{
+  "appId": "com.yasette.lexicon",
+  "appName": "Lexicon",
+  "webDir": "www",
+  "backgroundColor": "#F5EEDC",
+  "ios": {
+    "contentInset": "never",
+    "limitsNavigationsToAppBoundDomains": false
+  }
+}

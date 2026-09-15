@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+tests/.chrome-profile/
+.claude/
+
+# App Store build products (rebuilt by tools/build-www.mjs and cap sync)
+www/
+ios/App/Pods/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/App/build/
+ios/DerivedData/

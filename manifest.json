@@ -1,18 +1,24 @@
 {
-  "name": "Lexicon — SAT Reading & Writing",
+  "name": "Lexicon — SAT Vocabulary",
   "short_name": "Lexicon",
-  "description": "SAT Reading & Writing vocabulary: weekly word lists, spaced study sessions, quizzes and drills. Works offline.",
+  "description": "SAT Reading & Writing vocabulary: spaced study sessions, practice questions and grammar sheets, with meanings in your own language. Works offline.",
   "lang": "en",
   "dir": "ltr",
   "start_url": "./",
   "scope": "./",
-  "id": "/lexicon/",
+  "id": "/lexicon-app/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "background_color": "#F5EEDC",
   "theme_color": "#F5EEDC",
-  "categories": ["education", "books"],
+  "categories": [
+    "education",
+    "books"
+  ],
   "icons": [
     {
       "src": "icon-192.png",

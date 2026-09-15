@@ -1,0 +1,22 @@
+{
+  "name": "lexicon-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lexicon — SAT Reading & Writing vocabulary. The web app is the repo root; www/ and ios/ are the App Store build.",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node tests/data.test.mjs && node tests/ui/smoke.mjs",
+    "build:www": "node tools/build-www.mjs",
+    "ios:sync": "node tools/build-www.mjs && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "store:shots": "node tools/store-shots.mjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "^8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.2"
+  }
+}

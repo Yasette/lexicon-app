@@ -8,12 +8,51 @@
  *
  * Bump CACHE when the shipped files change.
  */
-const CACHE = 'lexicon-v3';
+const CACHE = 'lexicon-app-v7';
 
 const PRECACHE = [
   './',
   './index.html',
   './manifest.json',
+  './config.js',
+  './sync.js',
+  './native-auth.js',
+  './vendor/supabase.js',
+  './data/words.js',
+  './data/questions.js',
+  './data/sheets.js',
+  './data/tricky.js',
+  './data/zh-Hans.js',
+  './data/zh-Hant.js',
+  './data/ko.js',
+  './data/ja.js',
+  './data/es.js',
+  './data/pt.js',
+  './data/vi.js',
+  './data/ar.js',
+  './data/ru.js',
+  './data/hi.js',
+  './fonts/fonts.css',
+  './fonts/fraunces-normal-latin-ext.woff2',
+  './fonts/fraunces-normal-latin.woff2',
+  './fonts/manrope-normal-cyrillic.woff2',
+  './fonts/manrope-normal-latin-ext.woff2',
+  './fonts/manrope-normal-latin.woff2',
+  './fonts/manrope-normal-vietnamese.woff2',
+  './fonts/newsreader-italic-latin-ext.woff2',
+  './fonts/newsreader-italic-latin.woff2',
+  './fonts/newsreader-italic-vietnamese.woff2',
+  './fonts/newsreader-normal-latin-ext.woff2',
+  './fonts/newsreader-normal-latin.woff2',
+  './fonts/newsreader-normal-vietnamese.woff2',
+  './fonts/source-serif-4-italic-cyrillic.woff2',
+  './fonts/source-serif-4-italic-latin-ext.woff2',
+  './fonts/source-serif-4-italic-latin.woff2',
+  './fonts/source-serif-4-italic-vietnamese.woff2',
+  './fonts/source-serif-4-normal-cyrillic.woff2',
+  './fonts/source-serif-4-normal-latin-ext.woff2',
+  './fonts/source-serif-4-normal-latin.woff2',
+  './fonts/source-serif-4-normal-vietnamese.woff2',
   './icon-180.png',
   './icon-192.png',
   './icon-512.png',
@@ -67,21 +106,22 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // The page (and any navigation): freshest wins, cache is the safety net.
-  if (request.mode === 'navigate' || request.destination === 'document') {
+  // The page, the scripts and the word data: freshest wins, cache is the
+  // safety net. (Scripts change with every release; icons never do.)
+  if (request.mode === 'navigate' || request.destination === 'document' || request.destination === 'script') {
     event.respondWith(
       fromNetwork(request, NET_TIMEOUT)
         .then((response) => {
           if (response && response.ok) {
             const copy = response.clone();
-            caches.open(CACHE).then((c) => c.put('./index.html', copy));
+            caches.open(CACHE).then((c) => c.put(request.destination === 'script' ? request : './index.html', copy));
           }
           return response;
         })
         .catch(() =>
           caches
-            .match('./index.html')
-            .then((hit) => hit || caches.match('./'))
+            .match(request.destination === 'script' ? request : './index.html')
+            .then((hit) => hit || (request.destination === 'script' ? null : caches.match('./')))
             .then(
               (hit) =>
                 hit ||
