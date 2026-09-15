@@ -31,24 +31,29 @@ async function run(name, width, height, outDir) {
   const shot = (f) => cdp.shot(path.join(outDir, f + '.png'));
   const ev = (js) => cdp.eval(js);
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: mock });
+  /* the welcome screen first, before the seeded profile exists */
+  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: "document.addEventListener('DOMContentLoaded', function () { var st = document.createElement('style'); st.textContent = '.grain{display:none}'; document.head.appendChild(st); });" });
+  await cdp.goto(url, 1200);
+  await ev("localStorage.clear(); document.querySelector('#v-welcome').scrollTop = 0"); await shot('08-welcome');
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: seed() });
+  /* The paper-grain overlay is an SVG turbulence filter; rasterising it at 3x in
+     software wedges headless Chrome's screenshot path, so the store shots skip
+     the grain (a 30%-opacity texture nobody will miss at store size). */
   await cdp.goto(url, 1500);
   await shot('01-home');
-  await ev("F.mode='flash'; F.dir='en'; startIds([indexOfWord('Ameliorate'), 1, 2], 'flash'); document.getElementById('card').click()"); await sleep(500);
+  await ev("var fi = indexOfWord('Ameliorate'); if (fi < 0) fi = 8; F.mode='flash'; F.dir='en'; startIds([fi, 1, 2], 'flash'); document.getElementById('card').click()"); await sleep(500);
   await shot('02-flashcard');
-  await ev("startIds([indexOfWord('Alacrity'), 1, 2, 3], 'test')"); await sleep(200);
-  await ev("(function(){var b=document.querySelectorAll('#answers .ch'); var c=meaningOf(WORDS[indexOfWord('Alacrity')]); for (var j=0;j<b.length;j++) if (b[j].textContent.slice(1)===c) { b[j].click(); return; } b[0].click();})()"); await sleep(500);
+  await ev("var ti = indexOfWord('Alacrity'); if (ti < 0) ti = 12; F.dir='en'; startIds([ti, 1, 2, 3], 'test')"); await sleep(200);
+  await ev("(function(){var b=document.querySelectorAll('#answers .ch'); var c=meaningOf(WORDS[S.deck[0]]); for (var j=0;j<b.length;j++) if (b[j].textContent.slice(1)===c) { b[j].click(); return; } b[0].click();})()"); await sleep(500);
   await shot('03-test');
   await ev("show('practice'); QDRILL=null; QF='wic'; QN=0; buildSet(); renderQuestion(); document.querySelectorAll('#q-choices .ch')[QSET[0].a].click()"); await sleep(500);
   await ev("document.querySelector('#v-practice').scrollTop = 0"); await shot('04-practice');
-  await ev("show('words'); WF='all'; WQ=''; WLET=''; WPRE=null; WSUF=null; WOPEN=indexOfWord('Abstruse'); renderWords()"); await sleep(300);
+  await ev("show('words'); WF='all'; WQ=''; WLET=''; WPRE=null; WSUF=null; WOPEN=(indexOfWord('Abstruse') >= 0 ? indexOfWord('Abstruse') : 2); renderWords()"); await sleep(300);
   await shot('05-words');
   await ev("show('guide'); openDrill('rv')"); await sleep(300);
   await shot('06-drill');
   await ev("show('map')"); await sleep(400);
   await shot('07-progress');
-  await ev("localStorage.clear()"); await cdp.goto(url, 1200);
-  await ev("document.querySelector('#v-welcome').scrollTop = 0"); await shot('08-welcome');
   const errs = cdp.errors.slice();
   await cdp.close(); fs.rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 });
   console.log(name + ': ' + fs.readdirSync(outDir).length + ' files in ' + outDir + (errs.length ? '\n  ERRORS: ' + errs.join('\n  ') : ''));
