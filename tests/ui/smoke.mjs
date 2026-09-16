@@ -303,7 +303,7 @@ await t('an account with a password can sign in with it (App Review’s way in)'
   assert(await visible('acct-pwrow'), 'password row');
   await ev("document.getElementById('acct-email').value='reviewer' + '@' + 'example.org'; document.getElementById('acct-pw').value='wrong'");
   await click('#acct-pwrow [data-auth="password"]'); await sleep(80);
-  assert((await ev("document.querySelector('#acct [data-auth-msg]').textContent")).includes('did not work'), 'wrong password message');
+  assert((await ev("document.querySelector('#acct [data-auth-msg]').textContent")).includes('Most accounts have no password'), 'wrong password message should point to the email path');
   assert(!(await visible('acct-in')), 'wrong password must not sign in');
   await ev("document.getElementById('acct-pw').value='correct-horse'");
   await click('#acct-pwrow [data-auth="password"]'); await sleep(150);

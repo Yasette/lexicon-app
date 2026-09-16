@@ -219,8 +219,18 @@
       var r3 = await sb.auth.signInWithOAuth({ provider: provider, options: { redirectTo: here() } });
       if (r3.error) throw r3.error;
     } catch (e) {
-      msg(btn, 'Sign-in did not work: ' + (e.message || e), true);
+      msg(btn, 'Sign-in did not work: ' + explain(e), true);
     }
+  }
+  /* The server's own words are for logs; these are for the person. A 500 on
+     the email request means the email service (SMTP) refused to send, not
+     that the address was wrong. */
+  function explain(e) {
+    var m = String((e && e.message) || e), st = e && e.status;
+    if (st === 500 || /error sending/i.test(m)) return 'the server could not send the email just now. Your address is fine; the email service is the problem. Try again in a few minutes.';
+    if (st === 429 || /rate limit|after \d+ seconds/i.test(m)) return 'please wait a minute before asking for another email.';
+    if (/invalid login credentials/i.test(m)) return 'wrong email or password. Most accounts have no password at all: use “Send me a sign-in email” instead.';
+    return m;
   }
   async function verifyCode(btn) {
     var email = emailOf(btn), code = ($(btn.dataset.code).value || '').replace(/\D/g, '');
@@ -244,7 +254,7 @@
       if (r.error) throw r.error;
       msg(btn, '');
     } catch (e) {
-      msg(btn, 'Sign-in did not work: ' + (e.message || e), true);
+      msg(btn, 'Sign-in did not work: ' + explain(e), true);
     }
   }
   async function signOut() {
