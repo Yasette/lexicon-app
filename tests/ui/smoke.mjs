@@ -253,6 +253,21 @@ await t('guide drills: a deck reads as a sheet and drills as a practice set', as
   await ev("show('practice')");
   assert(await visible('q-filters') && await ev("QSET.length>0 && QSET[0].sec!=='drill'"), 'practice back to the bank');
 });
+await t('every practice option shows a meaning, and the nav sits above them', async () => {
+  const bad = await ev(`(function(){ QDRILL=null; QF='wic'; QN=0; buildSet(); var bad=[]; for (var i=0;i<QSET.length;i++){ QI=i; QANS[i]=QSET[i].a; renderQuestion();
+    [].forEach.call(document.querySelectorAll('#q-gloss div'), function(d,j){ if(!d.querySelector('span').textContent.trim()) bad.push(QSET[i].id+':'+QSET[i].o[j]); }); }
+    return bad; })()`);
+  assert(bad.length === 0, 'options without a meaning: ' + bad.join(', '));
+  assert(await ev("!!(document.querySelector('.qnav').compareDocumentPosition(document.getElementById('q-gloss')) & Node.DOCUMENT_POSITION_FOLLOWING)"), 'Previous/Next should come before the meanings');
+  assert((await ev("getComputedStyle(document.querySelector('#q-gloss span')).fontFamily")).includes('Source Serif'), 'meanings should be set in the serif');
+  assert((await ev("getComputedStyle(document.getElementById('q-ex')).fontFamily")).includes('Source Serif'), 'explanation should be set in the serif');
+  await ev("QANS=QSET.map(function(){return -1;}); QI=0; renderQuestion()");
+});
+await t('Settings has a Reach us line when a contact address is configured', async () => {
+  await ev("show('settings')");
+  assert(await visible('reach'), 'Reach us panel');
+  assert((await ev("document.getElementById('reach-mail').getAttribute('href')")).indexOf('mailto:help') === 0, 'mail link');
+});
 await t('tall phones centre the home screen and scale the type; short phones scale down', async () => {
   await ev("show('home')");
   const base = await ev("document.querySelector('#v-home .mast').getBoundingClientRect().top");

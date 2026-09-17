@@ -20,6 +20,9 @@ window.LEXICON_CONFIG = {
      build of @supabase/supabase-js 2.116.0 (MIT). */
   supabaseSdkUrl: 'vendor/supabase.js',
 
+  /* Shown in Settings → Reach us (a mail link) and on the privacy page. */
+  contactEmail: 'lexicon.yaso@gmail.com',
+
   /* Version 1 asks every new user to sign in on the welcome screen, so their
      progress lives in the database from day one. false turns that into an
      offer: Start works without an account and Settings still has sign-in. */

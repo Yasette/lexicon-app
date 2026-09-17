@@ -348,7 +348,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   border-bottom:1px solid var(--rule)}
 .wl div:last-child{border-bottom:0}
 .wl b{font-family:var(--serif);font-size:15.5px;font-weight:600;flex:none;color:var(--ink)}
-.wl span{font-size:12.5px;color:var(--mute);line-height:1.4;overflow:hidden}
+.wl span{font-family:var(--serif);font-size:13.5px;color:var(--mute);line-height:1.4;overflow:hidden}
 
 /* ============================== TRAIL ============================= */
 .mapwrap{position:relative;margin:4px auto 0;width:100%;max-width:300px}
@@ -384,14 +384,14 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .wrow:hover{background:var(--raise)}
 .wrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .wrow .w{font-family:var(--serif);font-size:calc(16px * var(--s));font-weight:600;color:var(--ink);flex:none}
-.wrow .t{font-size:calc(12.5px * var(--s));color:var(--mute);line-height:1.4;flex:1;overflow:hidden;
+.wrow .t{font-family:var(--serif);font-size:calc(13.5px * var(--s));color:var(--mute);line-height:1.4;flex:1;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
 .wrow .pip{width:7px;height:7px;border-radius:50%;flex:none;background:var(--rule2)}
 .wrow .pip.tricky{background:var(--gold)}
 .wrow .pip.mastered{background:var(--sage)}
 .wdetail{padding:13px 15px;border-radius:11px;background:var(--raise);
   border:1px solid var(--rule2);margin-top:-6px}
-.wdetail p{margin:0 0 7px;font-size:calc(13.5px * var(--s));line-height:1.55}
+.wdetail p{margin:0 0 7px;font-family:var(--serif);font-size:calc(14.5px * var(--s));line-height:1.55}
 .wdetail p:last-child{margin-bottom:0}
 .wdetail .tr{color:var(--accent);font-weight:600}
 .wdetail .en{font-family:var(--serif);color:var(--ink)}
@@ -492,7 +492,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .qnum{font-size:11px;font-weight:700;color:var(--mute);font-variant-numeric:tabular-nums}
 .qstem{margin:0 0 15px;font-family:var(--serif);font-size:calc(15.5px * var(--s));line-height:1.68;color:var(--ink)}
 .qex{margin:12px 0 0;padding:11px 13px;border-radius:10px;background:var(--accentsoft);
-  border:1px solid var(--rule2);font-size:13px;line-height:1.55;color:var(--ink2)}
+  border:1px solid var(--rule2);font-family:var(--serif);font-size:14.5px;line-height:1.55;color:var(--ink2)}
 .qnav{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
 .qnav button{padding:12px;border-radius:11px;background:var(--raise);
   border:1px solid var(--rule);box-shadow:var(--shadow-sm);
@@ -629,7 +629,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 /* No frame: framed, it read as a fifth answer. A mark and a word, in the
    answer's colour, say it. */
 .verdict{display:flex;align-items:center;gap:8px;margin:14px 0 0;padding:0 2px;
-  font-size:14px;font-weight:700;letter-spacing:.01em}
+  font-family:var(--serif);font-size:15.5px;font-weight:600;letter-spacing:.01em}
 .verdict .mk{width:18px;height:18px;flex:none;border-radius:50%;display:grid;
   place-items:center;font-size:11px;line-height:1;color:#fff}
 .verdict.ok{color:var(--sage)}
@@ -663,7 +663,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .opts-gloss i{font-style:normal;font-family:var(--control);font-size:12px;color:var(--mute);
   width:16px;flex:none}
 .opts-gloss b{font-family:var(--serif);font-weight:600;color:var(--ink);flex:none}
-.opts-gloss span{color:var(--ink2);line-height:1.45}
+.opts-gloss span{font-family:var(--serif);font-size:14.5px;color:var(--ink2);line-height:1.45}
 .opts-gloss .is-ans b{color:var(--sage)}
 
 /* ------------------------- welcome (first run) ---------------------- */
@@ -1083,12 +1083,12 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
         <div class="choices" id="q-choices"></div>
         <button class="idk" id="q-idk" hidden>I don’t know this word</button>
         <div class="verdict" id="q-verdict" hidden></div>
-        <div class="opts-gloss" id="q-gloss" hidden></div>
-        <div class="qex" id="q-ex" hidden></div>
         <div class="qnav">
           <button id="q-prev">← Previous</button>
           <button id="q-next">Next →</button>
         </div>
+        <div class="opts-gloss" id="q-gloss" hidden></div>
+        <div class="qex" id="q-ex" hidden></div>
       </div>
       <div class="qdone" id="q-done" hidden>
         <b id="q-score">0</b><span id="q-scoresub"></span>
@@ -1244,6 +1244,13 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
       <div class="panel">
         <p class="lab">Theme</p>
         <div class="swatches" id="themes"></div>
+      </div>
+
+      <div class="panel" id="reach" hidden>
+        <p class="lab">Reach us</p>
+        <p style="margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--ink2)">A wrong meaning,
+          a question, an idea for the app: write to us. Every message is read.</p>
+        <a class="go ghost" id="reach-mail" href="#" style="display:block;text-align:center;text-decoration:none"></a>
       </div>
 
       <div class="panel">
@@ -2467,6 +2474,13 @@ function gradeChoices(box, answer, picked, animate) {
     if (animate && j === picked) b.classList.add('picked');
   });
 }
+/* Options that are not in the word list carry their own short meaning in
+   the question: g = English, g_<lang> = the same in that language. */
+function optionGloss(q, o) {
+  var en = q.g && q.g[o] ? q.g[o] : '';
+  var nat = PROF.lang && PROF.lang !== 'en' && q['g_' + PROF.lang] && q['g_' + PROF.lang][o] ? q['g_' + PROF.lang][o] : '';
+  return en + (nat ? ' · ' + nat : '');
+}
 var ANIM = false;              /* true only while an answer is being revealed */
 function renderQuestion(keepChoices) {
   renderQSections();
@@ -2505,6 +2519,7 @@ function renderQuestion(keepChoices) {
       var k = indexOfWord(String(o)), m = '';
       if (k < 0) k = indexOfWord(String(o).charAt(0).toUpperCase() + String(o).slice(1));
       if (k >= 0) m = (WORDS[k][W_EN] || '') + (glossOf(WORDS[k]) ? ' · ' + glossOf(WORDS[k]) : '');
+      else m = optionGloss(q, o);
       return '<div' + (i === q.a ? ' class="is-ans"' : '') + '><i>' + 'ABCD'[i] + '</i>'
         + '<b>' + esc(o) + '</b><span>' + esc(m) + '</span></div>';
     }).join('');
@@ -2651,6 +2666,9 @@ $('add-save').addEventListener('click', function () {
 
 /* ------------------------------ settings -------------------------- */
 function renderSettings() {
+  var ce = (window.LEXICON_CONFIG || {}).contactEmail || '';
+  $('reach').hidden = !ce;
+  if (ce) { $('reach-mail').href = 'mailto:' + ce + '?subject=' + encodeURIComponent('Lexicon'); $('reach-mail').textContent = ce; }
   var live = document.activeElement;
   if (live !== $('p-name')) $('p-name').value = PROF.name || '';
   if (live !== $('p-test')) $('p-test').value = PROF.testDate || '';

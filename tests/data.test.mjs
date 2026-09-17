@@ -36,7 +36,11 @@ QUESTIONS.forEach(q => {
   check(q.p.includes('___'), 'no blank in stem ' + q.id);
   check(q.ex && !TRCH.test(q.ex), 'English explanation missing or not English: ' + q.id);
 });
-console.log('  ' + QUESTIONS.length + ' questions');
+const listed = new Set(BASE.map(r => r[0].toLowerCase()));
+QUESTIONS.filter(q => q.sec === 'wic').forEach(q => q.o.forEach(o =>
+  check(listed.has(String(o).toLowerCase()) || (q.g && q.g[o]), 'practice option without a meaning: ' + q.id + ' ' + o)));
+QUESTIONS.forEach(q => { if (q.g) Object.keys(q.g).forEach(o => check(q.o.includes(o) && q.g[o] && !TRCH.test(q.g[o]), 'stray or non-English option gloss: ' + q.id + ' ' + o)); });
+console.log('  ' + QUESTIONS.length + ' questions, every option explained');
 
 console.log('sheets.js');
 SHEETS.forEach(s => check(s.title && s.cat && s.html && !TRCH.test(s.html), 'sheet ' + s.title));

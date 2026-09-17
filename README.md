@@ -163,6 +163,15 @@ Checklist Apple will hold you to:
 - Bump `CACHE` in `sw.js` on every web release; `npm run ios:sync` before
   every archive.
 
+## Reach us, and an email for every new account
+
+`contactEmail` in `config.js` puts a “Reach us” mail link in Settings and the
+same address on the privacy page. To get an email yourself whenever someone
+creates an account, see `supabase/notify-signups.sql` and
+`tools/signup-mailer.gs` (a Google Apps Script that mails the account it is
+deployed from; the SQL adds a trigger that calls it through pg_net). The
+runbook has the click-by-click version.
+
 ## Freemium later
 
 `profiles.plan` / `plan_until` in the schema are reserved for it and can only be

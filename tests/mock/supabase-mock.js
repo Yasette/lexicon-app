@@ -6,7 +6,7 @@
  * and rpc(). Everything lives in memory and is thrown away with the page.
  */
 (function () {
-  var cfg = { supabaseUrl: 'https://mock.local', supabaseKey: 'mock-key', supabaseSdkUrl: 'about:blank', authProviders: ['email', 'google'], requireAccount: true };
+  var cfg = { supabaseUrl: 'https://mock.local', supabaseKey: 'mock-key', supabaseSdkUrl: 'about:blank', authProviders: ['email', 'google'], requireAccount: true, contactEmail: 'help' + '@' + 'mock.local' };
   Object.defineProperty(window, 'LEXICON_CONFIG', { get: function () { return cfg; }, set: function () {}, configurable: true });
 
   var rows = {};          /* key -> value, for the single fake person */
