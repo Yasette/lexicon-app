@@ -8,7 +8,7 @@
  *
  * Bump CACHE when the shipped files change.
  */
-const CACHE = 'lexicon-app-v7';
+const CACHE = 'lexicon-app-v9';
 
 const PRECACHE = [
   './',
