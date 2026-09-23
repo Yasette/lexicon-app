@@ -17,7 +17,7 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
   Google App Passwords anywhere in the repo or in chat.
 - Vanilla JS, one `index.html`, no build step for the web app. Data lives in
   `data/*.js`. Keep it that way.
-- Run `npm test` before every commit (data checks + 36 headless-Chrome checks;
+- Run `npm test` before every commit (data checks + 52 headless-Chrome checks;
   needs Node 22+ and Google Chrome). Add a check for every behaviour you add.
 - Bump `CACHE` in `sw.js` when shipped files change.
 
@@ -35,7 +35,7 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
 - `sync.js` accounts + cloud sync (email code/link, password for accounts that have one,
   Google/Apple hidden until `authProviders` lists them); `native-auth.js` the phone-side
   bridge for Google/Apple (1.1); `config.js` deployment settings (`requireAccount`,
-  `authProviders`, `contactEmail`, `nativeAuth`).
+  `authProviders`, `contactEmail`, `appStoreId` for the review link, `nativeAuth`).
 - `data/words.js` rows `[word, english, synonyms, turkish, example, note, band, related]`;
   `data/questions.js` (`g`/`g_tr` = meanings for options not in the list);
   `data/sheets.js`; `data/tricky.js`; `data/<lang>.js` glosses keyed by headword.
@@ -56,13 +56,21 @@ with a small rise animation. Word list reads like lined paper; search in one box
 filters live in a sheet behind an underlined "Filter". Subtitles under headings
 stay short. Unearned milestones are grey. The name is used only for the home greeting.
 
-## State (17 September 2026)
+## State (17 September 2026, evening)
 
-Branch `polish/audit-2026-09`, committed. Accounts required at first run.
-Supabase live with email sign-in; custom SMTP via a Gmail App Password was being
-set up by the owner. Xcode project builds and runs in the simulator. Apple
-Developer enrolment is in progress through a parent's Individual account.
-The launch checklist is the "Lexicon Launch Runbook" artifact; open items:
-SMTP + templates, reviewer account, GitHub Pages, Apple enrolment, App Store
-Connect listing, TestFlight, submission; Google/Apple sign-in in 1.1;
-native-speaker review of the ten machine-drafted gloss languages.
+Branch `polish/audit-2026-09`, uncommitted work on top of it: sync.js
+rewritten around four safety rules (see its header; README "Accounts and
+sync"), Reach us as a plain link, App Store review link (`appStoreId`) and
+privacy link (`privacyUrl`) in Settings, schema.sql gained key/size checks
+and a server-side updated_at stamp (run the new block in the SQL editor).
+Accounts required at first run. Supabase live with email sign-in; sign-in
+emails failed with a 500 (custom SMTP via a Gmail App Password half set up:
+regenerate the 16-character App Password, smtp.gmail.com:465, sender = the
+same Gmail address, then `{{ .Token }}` in both templates and the Site URL).
+Xcode project builds and runs in the simulator. Apple Developer enrolment is
+in progress through a parent's Individual account. The launch checklist is
+the "Lexicon Launch Runbook" artifact; open items: SMTP + templates, Site URL,
+GitHub Pages (privacyUrl must be live), reviewer account, Apple enrolment,
+App Store Connect listing (then fill `appStoreId`), TestFlight, submission;
+Google/Apple sign-in in 1.1; native-speaker review of the ten machine-drafted
+gloss languages.

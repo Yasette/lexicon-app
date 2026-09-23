@@ -1,7 +1,9 @@
 -- Lexicon — an email to you for every new account.
 --
 -- Run once in the SQL editor, AFTER tools/signup-mailer.gs is deployed as a
--- Google Apps Script web app: paste its URL and the same SECRET below first.
+-- Google Apps Script web app. Paste this file into the editor and replace the
+-- two PASTE placeholders THERE, in the editor: never save the real URL or the
+-- secret into this file, it is in git.
 -- The trigger posts {secret, email, created, provider} to that URL through
 -- pg_net (asynchronous, non-blocking); the script emails the account it was
 -- deployed from. A failure here can never block a sign-up.

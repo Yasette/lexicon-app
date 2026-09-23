@@ -15,6 +15,26 @@ create table if not exists public.user_data (
 );
 alter table public.user_data enable row level security;
 
+-- Only the five keys the app writes, and no value over 2 MB, so an account
+-- cannot be used as free storage. (Safe to run again after a schema update.)
+alter table public.user_data drop constraint if exists user_data_key_check;
+alter table public.user_data add constraint user_data_key_check
+  check (key in ('lexicon.srs.v2', 'lexicon.log.v2', 'lexicon.profile.v1', 'lexicon.notes.v1', 'lexicon.mine.v1'));
+alter table public.user_data drop constraint if exists user_data_value_size;
+alter table public.user_data add constraint user_data_value_size
+  check (pg_column_size(value) <= 2097152);
+
+-- updated_at is stamped by the server, whatever the phone's clock says.
+create or replace function public.stamp_updated_at() returns trigger
+language plpgsql as $$
+begin
+  new.updated_at := now();
+  return new;
+end $$;
+drop trigger if exists stamp_updated_at on public.user_data;
+create trigger stamp_updated_at before insert or update on public.user_data
+  for each row execute procedure public.stamp_updated_at();
+
 drop policy if exists "own rows" on public.user_data;
 create policy "own rows" on public.user_data
   for all

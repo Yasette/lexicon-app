@@ -8,13 +8,14 @@
 // 3. Deploy → New deployment → type: Web app → Execute as: Me → Who has
 //    access: Anyone → Deploy. Authorise when asked (it needs "send email as
 //    you"). Copy the Web app URL.
-// 4. Put the URL and the SECRET into supabase/notify-signups.sql and run it in
-//    Supabase's SQL editor.
+// 4. Paste supabase/notify-signups.sql into Supabase's SQL editor, replace the
+//    two PASTE placeholders there (in the editor, not in the file: the file is
+//    in git) with the URL and the SECRET, and run it.
 //
 // Every new account then produces one email to this mailbox. Google allows a
 // consumer account 100 such emails a day, which is plenty.
 
-var SECRET = 'PASTE-A-LONG-RANDOM-SECRET-HERE';
+var SECRET = 'PASTE-A-LONG-RANDOM-SECRET-HERE';   // change it in the script editor only; never commit the real one
 
 function doPost(e) {
   var data = {};

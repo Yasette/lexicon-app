@@ -263,10 +263,33 @@ await t('every practice option shows a meaning, and the nav sits above them', as
   assert((await ev("getComputedStyle(document.getElementById('q-ex')).fontFamily")).includes('Source Serif'), 'explanation should be set in the serif');
   await ev("QANS=QSET.map(function(){return -1;}); QI=0; renderQuestion()");
 });
-await t('Settings has a Reach us line when a contact address is configured', async () => {
+await t('Settings has a Reach us line when a contact address is configured: an underlined link on the left, not a box', async () => {
   await ev("show('settings')");
   assert(await visible('reach'), 'Reach us panel');
   assert((await ev("document.getElementById('reach-mail').getAttribute('href')")).indexOf('mailto:help') === 0, 'mail link');
+  const st = await ev("(function(){var a=document.getElementById('reach-mail'), p=document.getElementById('reach'), c=getComputedStyle(a); var ar=a.getBoundingClientRect(), pr=p.getBoundingClientRect(); return {underline:c.textDecorationLine, border:c.borderStyle, bg:c.backgroundColor, left:ar.left-pr.left, width:ar.width/pr.width, cls:a.className};})()");
+  assert(st.underline === 'underline', 'underlined, got ' + st.underline);
+  assert(st.border === 'none' && st.bg === 'rgba(0, 0, 0, 0)', 'no box around the address');
+  assert(!/\bgo\b/.test(st.cls), 'must not be a button');
+  assert(st.left < 30 && st.width < 0.9, 'address should sit on the left, not stretch across: left ' + st.left + ', width ' + st.width);
+});
+await t('Settings offers an App Store review link above Clear my progress, only when the app has an id', async () => {
+  assert(await visible('rate'), 'review panel');
+  const a = await ev("(function(){var a=document.getElementById('rate-link'); return {href:a.href, target:a.target, rel:a.rel, text:a.textContent, before:!!(a.compareDocumentPosition(document.getElementById('wipe')) & Node.DOCUMENT_POSITION_FOLLOWING), underline:getComputedStyle(a).textDecorationLine};})()");
+  assert(a.href === 'https://apps.apple.com/app/id1234567890?action=write-review', 'href: ' + a.href);
+  assert(a.target === '_blank' && /noopener/.test(a.rel), 'must open outside the app');
+  assert(a.text === 'Let us know what you think about this app', 'link text: ' + a.text);
+  assert(a.before, 'review link should sit above Clear my progress');
+  assert(a.underline === 'underline', 'underlined');
+  await ev("__mock.cfg.appStoreId = ''; renderSettings()");
+  assert(!(await visible('rate')), 'no id, no dead link');
+  await ev("__mock.cfg.appStoreId = 'id 12-34'; renderSettings()");
+  assert((await ev("document.getElementById('rate-link').href")) === 'https://apps.apple.com/app/id1234?action=write-review', 'only digits reach the address');
+  await ev("__mock.cfg.appStoreId = '1234567890'; renderSettings()");
+});
+await t('Settings links the privacy policy above Clear my progress', async () => {
+  const a = await ev("(function(){var a=document.getElementById('privacy-link'); return {hidden:a.hidden, href:a.href, target:a.target, before:!!(a.compareDocumentPosition(document.getElementById('wipe')) & Node.DOCUMENT_POSITION_FOLLOWING)};})()");
+  assert(!a.hidden && a.href === 'https://mock.local/privacy.html' && a.target === '_blank' && a.before, 'privacy link: ' + JSON.stringify(a));
 });
 await t('tall phones centre the home screen and scale the type; short phones scale down', async () => {
   await ev("show('home')");
@@ -332,6 +355,7 @@ await t('a returning person on a new phone skips the welcome once the profile ar
   await ev("__mock.seed(LS.prof, { lang: 'ko', theme: 'plum', goalSet: true, goal: 150 }); __mock.signIn()"); await sleep(500);
   assert(await visible('v-home'), 'should land on home with the pulled profile');
   assert(await ev("PROF.lang === 'ko' && PROF.goal === 150"), 'pulled profile applied');
+  assert(await ev("document.documentElement.dataset.theme") === 'plum', 'the account’s theme should follow to a new phone');
   await click('[data-auth="signout"]'); await sleep(150);
 });
 await t('signing in pulls the server copy and merges it with local progress', async () => {
@@ -356,6 +380,157 @@ await t('deleting the account needs two taps and calls the server', async () => 
   await click('[data-auth="delete"]'); await sleep(100);
   assert((await ev('__mock.calls()')).rpc.includes('delete_my_account'), 'rpc called');
   assert(await visible('acct-out'), 'signed out again');
+});
+await t('a phone that cannot fetch the account copy never pushes over it, and retries by itself', async () => {
+  await ev("localStorage.clear(); localStorage.setItem(LS.prof, JSON.stringify({ lang: 'tr', theme: 'ember' }))");
+  await cdp.goto(url, 1200);
+  await ev("__mock.seed(LS.srs, { 'zealous': { b: 4, r: 4, x: 0, cs: 4, last: 1 } }); __mock.hooks.failSelect = 2; __mock.signIn()");
+  await sleep(300);
+  const before = (await ev('__mock.calls()')).upsert;
+  await ev("F.mode='flash'; startIds([7],'flash'); document.getElementById('card').click(); document.getElementById('b-got').click()");
+  await sleep(3200);
+  assert((await ev('__mock.calls()')).upsert === before, 'must not send anything while the server copy cannot be read');
+  assert(await ev("!!__mock.rows()[LS.srs].zealous"), 'the server copy must stay intact');
+  assert((await ev("document.getElementById('acct-sync').textContent")).includes('safe on this device'), 'status should say the progress is safe');
+  await sleep(5200);                                    /* the retry fires 5 s after the last failure */
+  assert(await ev("!!SRS['zealous'] && !!SRS[BASE[7][0].toLowerCase()]"), 'the retry should merge both sides: ' + await ev('Object.keys(SRS).join()'));
+  const srs = await ev("__mock.rows()[LS.srs]");
+  assert(srs.zealous && srs[await ev('BASE[7][0].toLowerCase()')], 'the merge is pushed after the retry');
+});
+await t('a change made while a push is in flight is pushed again', async () => {
+  await ev("__mock.hooks.slowUpsert = 600");
+  await ev("startIds([8],'flash'); document.getElementById('card').click(); document.getElementById('b-got').click()");
+  await sleep(2700);                                    /* the push is now in flight */
+  await ev("startIds([9],'flash'); document.getElementById('card').click(); document.getElementById('b-got').click()");
+  await sleep(4200);
+  await ev("__mock.hooks.slowUpsert = 0");
+  const srs = await ev("__mock.rows()[LS.srs]");
+  assert(srs[await ev('BASE[8][0].toLowerCase()')] && srs[await ev('BASE[9][0].toLowerCase()')], 'the second change must reach the server too');
+});
+await t('two phones at once: a change here merges with what the other phone sent, nothing is overwritten', async () => {
+  await ev("(function(){ var s = __mock.rows()[LS.srs]; s['zephyr'] = { b: 2, r: 2, x: 0, cs: 2, last: Date.now() }; __mock.seed(LS.srs, s); })()");   /* the other phone sent a word since we last read */
+  await ev("startIds([12],'flash'); document.getElementById('card').click(); document.getElementById('b-got').click()");
+  await sleep(3200);
+  const srs = await ev("__mock.rows()[LS.srs]");
+  assert(srs.zephyr && srs[await ev('BASE[12][0].toLowerCase()')], 'both phones’ words must be on the server: ' + Object.keys(srs).join());
+  assert(await ev("!!SRS['zephyr']"), 'the other phone’s word arrived here too');
+});
+await t('signing out on one phone leaves the other phones signed in', async () => {
+  await ev("show('settings')"); await click('[data-auth="signout"]'); await sleep(200);
+  assert(await visible('acct-out'), 'signed out');
+  assert((await ev('__mock.calls()')).signOut.scope === 'local', 'sign-out must be local to this phone');
+});
+await t('signing out with changes the server has not received asks twice', async () => {
+  await ev("__mock.signIn()"); await sleep(300);
+  await ev("__mock.hooks.failUpsert = true");
+  await ev("startIds([10],'flash'); document.getElementById('card').click(); document.getElementById('b-got').click()");
+  await ev("show('settings')"); await click('[data-auth="signout"]'); await sleep(200);
+  assert(await visible('acct-in'), 'the first tap must not sign out while changes are unsaved');
+  assert((await ev("document.querySelector('[data-auth=\"signout\"]').textContent")) === 'Tap again to sign out anyway', 'button asks again');
+  assert((await ev("document.querySelector('#acct [data-auth-msg]').textContent")).includes('not reached your account'), 'says why');
+  await click('[data-auth="signout"]'); await sleep(200);
+  assert(await visible('acct-out'), 'the second tap signs out');
+  await ev("__mock.hooks.failUpsert = false");
+});
+await t('a different account on the same phone starts from its own copy, not the previous person’s', async () => {
+  const w7 = await ev('BASE[7][0].toLowerCase()');
+  assert(await ev("!!SRS['" + w7 + "']"), 'the first person’s progress is on the phone');
+  await ev("__mock.seed(LS.srs, { 'zenith': { b: 1, r: 1, x: 0, cs: 1, last: 5 } }, 'user-2222-other'); __mock.signInAs('user-2222-other')"); await sleep(500);
+  assert(await ev("Object.keys(SRS).join()") === 'zenith', 'the second person should see only their own copy, got ' + await ev("Object.keys(SRS).join()"));
+  await sleep(3000);
+  assert(!(await ev("(__mock.rows('user-2222-other')[LS.srs] || {})['" + w7 + "']")), 'the first person’s words must not be pushed into the second account');
+  assert(await ev("!!__mock.rows()[LS.srs]['" + w7 + "']"), 'the first account keeps its copy');
+  await click('[data-auth="signout"]'); await sleep(200);
+  await ev("__mock.signIn()"); await sleep(500);
+  assert(await ev("!!SRS['" + w7 + "'] && !SRS['zenith']"), 'the first person gets their own copy back');
+});
+await t('a server reply that arrives after another account signed in is thrown away', async () => {
+  await click('[data-auth="signout"]'); await sleep(200);
+  await ev("__mock.hooks.slowSelect = 700; __mock.signIn()"); await sleep(100);        /* the first account’s sync is in flight */
+  await ev("__mock.hooks.slowSelect = 0; __mock.expire(); __mock.seed(LS.srs, { 'zonal': { b: 1, r: 1, x: 0, cs: 1, last: 3 } }, 'user-3333-third'); __mock.signInAs('user-3333-third')");
+  await sleep(1500);
+  assert(await ev("Object.keys(SRS).join()") === 'zonal', 'only the third account’s copy should be on the phone, got ' + await ev('Object.keys(SRS).join()'));
+  assert(!(await ev("__mock.rows('user-3333-third')[LS.srs]")).zealous, 'the first account’s words must not be sent into the third');
+  await click('[data-auth="signout"]'); await sleep(200);
+  await ev("__mock.signIn()"); await sleep(500);
+  assert(await ev("!!SRS['zealous']"), 'the first account is back with its own copy');
+});
+await t('a clear made before ever signing in on this phone does not wipe the account', async () => {
+  await click('[data-auth="signout"]'); await sleep(200);
+  await ev("localStorage.clear(); localStorage.setItem(LS.prof, JSON.stringify({ lang: 'tr' }))");
+  await cdp.goto(url, 1200);                              /* the reload gives a fresh mock, so re-seed the account */
+  await ev("__mock.seed(LS.srs, { 'zealous': { b: 4, r: 4, x: 0, cs: 4, last: 1 } })");
+  await ev("show('settings')"); await click('#wipe'); await click('#wipe');
+  assert(await ev("!!PROF.clearedAt"), 'the clear is stamped locally');
+  await ev("__mock.signIn()"); await sleep(500);
+  assert(await ev("!!SRS['zealous']"), 'the account’s progress must survive: ' + await ev('Object.keys(SRS).join()'));
+  assert(await ev("!!__mock.rows()[LS.srs].zealous"), 'and stay on the server');
+});
+await t('a word removed on one phone stays removed on the other', async () => {
+  await ev("show('add'); document.getElementById('add-text').value='glib - fluent but shallow'; document.getElementById('add-save').click()");
+  await sleep(3000);
+  assert((await ev("__mock.rows()[LS.mine]")).some((r) => r[0] === 'glib'), 'own word pushed');
+  await ev("__mock.seed(LS.mine, [])");                   /* the other phone removed it */
+  await ev("Sync.pull()"); await sleep(400);
+  assert(!(await ev("MINE.some(function (r) { return r[0] === 'glib'; })")), 'a word deleted elsewhere must not come back from this phone');
+  await ev("show('add'); document.getElementById('add-text').value='frangible = easily broken'; document.getElementById('add-save').click()");
+  await sleep(3000);
+  assert((await ev("__mock.rows()[LS.mine]")).some((r) => r[0] === 'frangible'), 'second word pushed');
+  await ev("removeMine(BASE.length); Sync.pull()"); await sleep(400);
+  assert(await ev("MINE.length") === 0, 'a word removed here must not be resurrected by a pull');
+  await sleep(3000);
+  assert((await ev("__mock.rows()[LS.mine]")).length === 0, 'the removal reaches the server');
+});
+await t('Clear my progress sticks, even when the other phone still holds the old copy', async () => {
+  await ev("F.mode='flash'; startIds([11],'flash'); document.getElementById('card').click(); document.getElementById('b-got').click()");
+  await sleep(3000);
+  const old = await ev("__mock.rows()[LS.srs]");
+  assert(Object.keys(old).length > 0, 'progress on the server');
+  await ev("show('settings')"); await click('#wipe'); await click('#wipe'); await sleep(3000);
+  assert(Object.keys(await ev("__mock.rows()[LS.srs]")).length === 0, 'the clear reached the server');
+  await ev("(function(){ var copy = " + JSON.stringify(old) + "; copy['zeal'] = { b: 1, r: 1, x: 0, cs: 1, last: Date.now() + 1000 }; __mock.seed(LS.srs, copy); })()");
+  await ev("Sync.pull()"); await sleep(400);             /* the other phone pushed its old copy back, plus a word studied after the clear */
+  assert(await ev("Object.keys(SRS).join()") === 'zeal', 'only what was studied after the clear should survive, got ' + await ev("Object.keys(SRS).join()"));
+});
+await t('malformed server rows are ignored, not applied', async () => {
+  await ev("__mock.seed(LS.mine, {}); __mock.seed(LS.srs, 'junk'); __mock.seed(LS.log, { '2021-01-01': 'x', 'not-a-day': { right: 1 } }); __mock.seed(LS.prof, { testDate: 42, miles: { first: 'nope' }, idk: 'x', name: 'Zed' })");
+  await ev("Sync.pull()"); await sleep(400);
+  assert(await ev("Array.isArray(MINE)"), 'own words must stay a list');
+  assert(await ev("typeof SRS === 'object' && !Array.isArray(SRS) && !!SRS['zeal']"), 'progress must stay an object, with its words');
+  assert(await ev("!LOG['2021-01-01'] && !LOG['not-a-day']"), 'junk days dropped');
+  assert(await ev("PROF.testDate === '' && !(PROF.miles && PROF.miles.first) && !PROF.idk && PROF.name === 'Zed'"), 'profile tidied, good fields kept: ' + JSON.stringify(await ev('PROF')));
+  await ev("show('home'); show('miles'); show('settings')"); /* screens that read these must not throw */
+});
+await t('sign-in errors name the real problem', async () => {
+  await click('[data-auth="signout"]'); await sleep(200);
+  await ev("document.getElementById('acct-email').value='errors' + '@' + 'example.org'");
+  const say = async (err) => { await ev("__mock.hooks.otpError = " + JSON.stringify(err)); await click('#acct-emailrow [data-auth="email"]'); await sleep(60); return ev("document.querySelector('#acct [data-auth-msg]').textContent"); };
+  assert((await say({ status: 500, message: 'Database error saving new user' })).includes('set up your account'), 'database error');
+  assert((await say({ status: 500, message: 'Error sending magic link email' })).includes('email service'), 'email service error');
+  assert((await say({ message: 'Load failed' })).includes('could not reach the server'), 'network error');
+  await ev("__mock.hooks.otpError = null");
+});
+await t('the code is checked against the address the email went to, and one email per minute', async () => {
+  await ev("document.getElementById('acct-email').value='first' + '@' + 'example.org'");
+  await click('#acct-emailrow [data-auth="email"]'); await sleep(60);
+  const n = (await ev('__mock.calls()')).otpCount;
+  await ev("document.getElementById('acct-email').value='second' + '@' + 'example.org'; document.getElementById('acct-code').value='123456'");
+  await click('#acct-coderow [data-auth="code"]'); await sleep(200);
+  assert((await ev('__mock.calls()')).verify.email === 'first' + '@' + 'example.org', 'the code belongs to the address it was sent to');
+  assert(await visible('acct-in'), 'signed in with the code');
+  await click('[data-auth="signout"]'); await sleep(200);
+  await ev("document.getElementById('acct-email').value='first' + '@' + 'example.org'");
+  await click('#acct-emailrow [data-auth="email"]'); await sleep(60);
+  assert((await ev('__mock.calls()')).otpCount === n, 'a second tap within a minute must not send another email');
+  assert((await ev("document.querySelector('#acct [data-auth-msg]').textContent")).includes('Already sent'), 'says so');
+});
+await t('a sign-in that expires is announced in Settings, and nothing is lost', async () => {
+  await ev("__mock.signIn()"); await sleep(300);
+  const n = await ev('Object.keys(SRS).length');
+  await ev("__mock.expire()"); await sleep(100);
+  assert(await visible('acct-out'), 'shows signed out');
+  assert((await ev("document.querySelector('#acct [data-auth-msg]').textContent")).includes('signed out'), 'explains what happened');
+  assert(await ev('Object.keys(SRS).length') === n, 'local progress untouched');
 });
 await t('no console errors or exceptions during sync', async () => { assert(cdp.errors.length === 0, cdp.errors.join('\n')); });
 

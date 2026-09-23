@@ -89,7 +89,7 @@ body{margin:0;background:var(--paper2);color:var(--ink);font-family:var(--ui);
   -webkit-font-smoothing:antialiased}
 button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer}
 
-.stage{min-height:100dvh;width:100%;overflow-x:hidden;display:flex;
+.stage{min-height:100vh;min-height:100dvh;width:100%;overflow-x:hidden;display:flex;
   align-items:center;justify-content:center;padding:28px 16px;background:var(--paper2)}
 .phone{position:relative;width:390px;max-width:100%;height:844px;
   border-radius:34px;overflow:hidden;display:flex;flex-direction:column;
@@ -102,7 +102,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   /* padding-top is 0 in a browser tab; inside the App Store build the
      status bar sits over the page, and this keeps the page below it with the
      theme's paper showing behind the clock. */
-  .phone{width:100%;height:100dvh;border-radius:0;box-shadow:none;padding-top:env(safe-area-inset-top)}
+  .phone{width:100%;height:100vh;height:100dvh;border-radius:0;box-shadow:none;padding-top:env(safe-area-inset-top)}
 }
 
 /* Paper grain — the same fractal-noise SVG the original overlays, scoped
@@ -745,6 +745,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .linkbtn{font-family:var(--control);font-size:15.5px;font-weight:600;color:var(--accent);
   text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;padding:2px 0}
 .linkbtn:hover{color:var(--accent2)}
+a.linkbtn{display:inline-block;overflow-wrap:anywhere}
 .linkrow .sum{flex:1;min-width:0;font-family:var(--ui);font-size:12.5px;color:var(--mute);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .linkrow .clear{font-family:var(--ui);font-size:12px;font-weight:700;color:var(--mute);
@@ -1248,15 +1249,23 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
 
       <div class="panel" id="reach" hidden>
         <p class="lab">Reach us</p>
-        <p style="margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--ink2)">A wrong meaning,
+        <p style="margin:0 0 8px;font-size:13px;line-height:1.55;color:var(--ink2)">A wrong meaning,
           a question, an idea for the app: write to us. Every message is read.</p>
-        <a class="go ghost" id="reach-mail" href="#" style="display:block;text-align:center;text-decoration:none"></a>
+        <a class="linkbtn" id="reach-mail" href="#"></a>
+      </div>
+
+      <div class="panel" id="rate" hidden>
+        <p class="lab">Rate the app</p>
+        <p style="margin:0 0 8px;font-size:13px;line-height:1.55;color:var(--ink2)">A review on the
+          App Store helps other students find Lexicon.</p>
+        <a class="linkbtn" id="rate-link" href="#" target="_blank" rel="noopener">Let us know what you think about this app</a>
       </div>
 
       <div class="panel">
         <p class="lab">Your data</p>
-        <p style="margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--ink2)"
+        <p style="margin:0 0 10px;font-size:13px;line-height:1.55;color:var(--ink2)"
            id="data-line">No sessions recorded yet.</p>
+        <p style="margin:0 0 12px"><a class="linkbtn" id="privacy-link" href="#" target="_blank" rel="noopener" hidden>Privacy policy</a></p>
         <button class="go ghost" id="wipe">Clear my progress</button>
       </div>
     </div>
@@ -1375,15 +1384,26 @@ var LOG = load(LS.log, {}), NOTES = load(LS.notes, {});
 
 /* Words you add live after the shipped list, never inside it, so an index
    already recorded in your progress never points at a different word. */
-var MINE = load(LS.mine, []);
+var MINE = load(LS.mine, []); if (!Array.isArray(MINE)) MINE = [];
 var WORDS = BASE.concat(MINE);
 function isMine(i) { return i >= BASE.length; }
 function rebuildWords() { WORDS = BASE.concat(MINE); }
-var PROF = load(LS.prof, { name: '', testDate: '', goal: 100, goalSet: false, theme: 'ember' });
-/* The Turkish on/off switch became a language choice. Off meant English only;
-   on was the default and so said nothing — those people choose on first run. */
-if (!PROF.lang && PROF.tr === false) PROF.lang = 'en';
-if (PROF.lang && !LANGS.some(function (l) { return l.id === PROF.lang; })) PROF.lang = 'en';
+/* The profile as the app wants it: defaults filled in, wrong shapes dropped.
+   Used at boot and again whenever a copy arrives from the server. */
+function tidyProf(p) {
+  if (!p || typeof p !== 'object' || Array.isArray(p)) p = {};
+  if (typeof p.name !== 'string') p.name = '';
+  if (typeof p.testDate !== 'string' || (p.testDate && !/^\d{4}-\d{2}-\d{2}$/.test(p.testDate))) p.testDate = '';
+  if (typeof p.goal !== 'number' || !(p.goal > 0)) p.goal = 100;
+  if (typeof p.goalSet !== 'boolean') p.goalSet = !!p.goalSet;
+  if (p.theme != null && typeof p.theme !== 'string') delete p.theme;   /* no default: the account's choice wins on a new phone */
+  /* The Turkish on/off switch became a language choice. Off meant English only;
+     on was the default and so said nothing — those people choose on first run. */
+  if (!p.lang && p.tr === false) p.lang = 'en';
+  if (p.lang && !LANGS.some(function (l) { return l.id === p.lang; })) p.lang = 'en';
+  return p;
+}
+var PROF = tidyProf(load(LS.prof, null));
 
 function isDue(e) { return !e || !e.last ? true : (Date.now() - e.last) / DAY_MS >= BOX_DAYS[Math.min(e.b || 0, 5)]; }
 function isTricky(e) { return !!e && e.x > 0 && (e.cs || 0) < 2; }
@@ -1523,14 +1543,14 @@ var THEMES = [
   { id: 'rose',    name: 'Rose',    dots: ['#A83352', '#F9EDF0', '#C24468'] },
   { id: 'sage',    name: 'Sage',    dots: ['#47573A', '#EEF2E9', '#5C7049'] }
 ];
-function applyTheme(id) {
+function applyTheme(id, quiet) {
   if (!THEMES.some(function (t) { return t.id === id; })) id = 'ember';
   $('phone').dataset.theme = id;
   /* the paper outside the page (and the phone's status bar) follow the theme too */
   document.documentElement.dataset.theme = id;
   var meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim();
-  PROF.theme = id; save(LS.prof, PROF);
+  if (!quiet && PROF.theme !== id) { PROF.theme = id; save(LS.prof, PROF); }
   [].forEach.call(document.querySelectorAll('#themes .sw'), function (b) {
     b.setAttribute('aria-pressed', String(b.dataset.t === id));
   });
@@ -1551,6 +1571,7 @@ var VIEWS = ['welcome','home','study','session','result','map','day','miles','pr
 var TABS = { home: 'home', study: 'study', practice: 'practice', words: 'words', guide: 'guide' };
 var NO_NAV = { session: 1, result: 1, welcome: 1 };
 function show(name) {
+  if (name !== 'session' && MINE_NEXT) { MINE = MINE_NEXT; MINE_NEXT = null; rebuildWords(); }
   VIEWS.forEach(function (v) { $('v-' + v).hidden = (v !== name); });
   $('v-' + name).scrollTop = 0;
   $('nav').hidden = !!NO_NAV[name];
@@ -2666,9 +2687,18 @@ $('add-save').addEventListener('click', function () {
 
 /* ------------------------------ settings -------------------------- */
 function renderSettings() {
-  var ce = (window.LEXICON_CONFIG || {}).contactEmail || '';
+  var cfg = window.LEXICON_CONFIG || {}, ce = cfg.contactEmail || '';
   $('reach').hidden = !ce;
   if (ce) { $('reach-mail').href = 'mailto:' + ce + '?subject=' + encodeURIComponent('Lexicon'); $('reach-mail').textContent = ce; }
+  /* The App Store's own "write a review" page. The id is the number App
+     Store Connect gives the app; until it is set there is no page to open,
+     so the panel stays hidden rather than showing a dead link. */
+  var asid = String(cfg.appStoreId || '').replace(/\D/g, '');
+  $('rate').hidden = !asid;
+  if (asid) $('rate-link').href = 'https://apps.apple.com/app/id' + asid + '?action=write-review';
+  var pu = String(cfg.privacyUrl || '');
+  $('privacy-link').hidden = !/^https:\/\//.test(pu);
+  if (!$('privacy-link').hidden) $('privacy-link').href = pu;
   var live = document.activeElement;
   if (live !== $('p-name')) $('p-name').value = PROF.name || '';
   if (live !== $('p-test')) $('p-test').value = PROF.testDate || '';
@@ -2744,6 +2774,7 @@ $('wipe').addEventListener('click', function () {
   /* progress only: words you added are yours and survive this. */
   SRS = {}; LOG = {}; NOTES = {};
   delete PROF.perfect; delete PROF.bestStreak; delete PROF.miles; delete PROF.qmiss; delete PROF.celebrated; delete PROF.idk;
+  PROF.clearedAt = Date.now();               /* so an older copy on another phone cannot bring it all back */
   save(LS.srs, SRS); save(LS.log, LOG); save(LS.notes, NOTES); save(LS.prof, PROF);
   renderSettings();
   self.textContent = 'Progress cleared';
@@ -2752,11 +2783,14 @@ $('wipe').addEventListener('click', function () {
 
 /* Cloud sync (sync.js) calls this after pulling progress down, so whatever
    screen is open reflects what just arrived. */
+var MINE_NEXT = null;
 function reloadState() {
   SRS = load(LS.srs, {}); LOG = load(LS.log, {}); NOTES = load(LS.notes, {});
-  MINE = load(LS.mine, []); rebuildWords();
-  var p = load(LS.prof, null); if (p) PROF = p;
-  applyTheme(PROF.theme || 'ember'); renderLangSeg();
+  var mine = load(LS.mine, []); if (!Array.isArray(mine)) mine = [];
+  if (!$('v-session').hidden) MINE_NEXT = mine;    /* mid-session: the deck holds row numbers; the list waits */
+  else { MINE = mine; rebuildWords(); }
+  PROF = tidyProf(load(LS.prof, null));
+  applyTheme(PROF.theme || 'ember', true); renderLangSeg();
   var cur = VIEWS.filter(function (v) { return !$('v-' + v).hidden; })[0];
   if (cur === 'welcome' && PROF.lang) { show('home'); greetStreak(); return; }   /* signed in on a new phone: skip the welcome */
   if (cur && cur !== 'session') show(cur);
@@ -2765,7 +2799,7 @@ window.App = { reloadState: reloadState, show: show, LS: LS };
 
 /* ------------------------------- boot ----------------------------- */
 buildThemes();
-applyTheme(PROF.theme || 'ember');
+applyTheme(PROF.theme || 'ember', true);
 renderLangSeg();
 poolNote();
 if (PROF.lang) { show('home'); greetStreak(); } else { welcomeDefault(); show('welcome'); }

@@ -23,6 +23,18 @@ window.LEXICON_CONFIG = {
   /* Shown in Settings → Reach us (a mail link) and on the privacy page. */
   contactEmail: 'lexicon.yaso@gmail.com',
 
+  /* The app's numeric Apple ID, from App Store Connect → the app → App
+     Information → General Information → Apple ID (it exists as soon as the
+     app record is created, before the first submission). With it, Settings
+     shows "Let us know what you think about this app", a link to the App
+     Store's write-a-review page. Empty = the panel stays hidden. */
+  appStoreId: '',
+
+  /* The privacy policy, linked from Settings → Your data (Apple wants it
+     inside the app as well as on the listing). privacy.html in this repo,
+     served by GitHub Pages; the address must be live before submission. */
+  privacyUrl: 'https://yasette.github.io/lexicon-app/privacy.html',
+
   /* Version 1 asks every new user to sign in on the welcome screen, so their
      progress lives in the database from day one. false turns that into an
      offer: Start works without an account and Settings still has sign-in. */

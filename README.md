@@ -56,6 +56,11 @@ Five keys in `localStorage`, mirrored to the server when someone is signed in:
 Progress is keyed by the word, never by the row number, so `data/words.js` can be
 edited freely. (`lexicon.srs.v1`, keyed by row, is converted on first load.)
 
+Two more keys are sync bookkeeping, never shown: `lexicon.sync.owner.v1` (the
+account this phone's progress was last pushed to) and `lexicon.sync.shadow.v1`
+(per key, the copy the phone and the server last agreed on, which is what lets
+a deletion on one phone reach the other).
+
 Practice answers are logged per day as `qr` / `qw` (kept apart from word
 reviews), so they count for the streak and the trail without touching the word
 statistics. The profile also holds `qmiss` (missed question ids, until answered
@@ -91,6 +96,15 @@ person's rows private). `supabase/schema.sql` has been run. Sign-in is by
 email only for now: one email carries a link (signs you in where you tap it —
 fine for the web app) and a 6-digit code (works anywhere, including the App
 Store build, where a link would open Safari instead of the app).
+
+Four rules keep the account copy safe (the header of `sync.js` has the
+detail): nothing is pushed until the server copy has been pulled and merged
+once, so a new phone can never overwrite an account with its own empty copy;
+a push clears only the dirty flags it actually sent; merges are three-way
+against the last agreed copy, so removed words, cleared notes and "Clear my
+progress" stick across phones while anything new survives; and a different
+account signing in on the same phone starts from its own server copy instead
+of absorbing the previous person's progress.
 
 Version 1 asks every new user to sign in on the welcome screen (Start waits
 for it), so progress lives in the database from day one; `requireAccount:
@@ -163,10 +177,13 @@ Checklist Apple will hold you to:
 - Bump `CACHE` in `sw.js` on every web release; `npm run ios:sync` before
   every archive.
 
-## Reach us, and an email for every new account
+## Reach us, a review link, and an email for every new account
 
 `contactEmail` in `config.js` puts a “Reach us” mail link in Settings and the
-same address on the privacy page. To get an email yourself whenever someone
+same address on the privacy page. `appStoreId` (the numeric Apple ID from
+App Store Connect → App Information) adds “Let us know what you think about
+this app” above Clear my progress, a link straight to the App Store's
+write-a-review page; leave it empty and the panel stays hidden. To get an email yourself whenever someone
 creates an account, see `supabase/notify-signups.sql` and
 `tools/signup-mailer.gs` (a Google Apps Script that mails the account it is
 deployed from; the SQL adds a trigger that calls it through pg_net). The
