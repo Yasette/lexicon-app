@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node tools/serve.mjs",
-    "test": "node tests/data.test.mjs && node tests/ui/smoke.mjs",
+    "test": "node tests/data.test.mjs && node tests/smtp-check.test.mjs && node tests/ui/smoke.mjs",
+    "smtp:check": "node tools/smtp-check.mjs",
     "build:www": "node tools/build-www.mjs",
     "ios:sync": "node tools/build-www.mjs && npx cap sync ios",
     "ios:open": "npx cap open ios",

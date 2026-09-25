@@ -28,6 +28,7 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
     npm run ios:sync            # rebuild www/ and copy into the Xcode project (before every archive)
     npm run ios:open            # open ios/App/App.xcodeproj
     npm run store:shots         # regenerate store/screenshots/ at Apple's sizes
+    npm run smtp:check          # test a Gmail address + App Password on this Mac before Supabase gets them
 
 ## Where things are
 
@@ -43,7 +44,8 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
 - `ios/` Capacitor 8 project (SPM, iPhone only, bundle id `com.yasette.lexicon`);
   `www/` is its build input (git-ignored). `store/` App Store screenshots.
 - `tests/` data checks, headless-Chrome smoke suite (`tests/ui`), the mock backend.
-- `privacy.html` the privacy policy for the store listing (GitHub Pages).
+- `privacy.html` the privacy policy, `support.html` the help page (Support URL); both served by
+  GitHub Pages from the repo root (`.nojekyll` keeps Pages from running Jekyll).
 
 ## Design taste (the owner's, keep it)
 
@@ -55,22 +57,23 @@ outlined-no-fill on Practice). No frame on the verdict. Answers grade green/red
 with a small rise animation. Word list reads like lined paper; search in one box;
 filters live in a sheet behind an underlined "Filter". Subtitles under headings
 stay short. Unearned milestones are grey. The name is used only for the home greeting.
+Grading colours are semantic, never the theme accent: a wrong pick, “Incorrect” and wrong
+dots use `--bad`/`--badsoft` (red in every theme), the answer uses `--sage` (green). After
+any answer every choice is explained (word, meaning, gloss) below Next.
 
-## State (17 September 2026, evening)
+## State (25 September 2026)
 
-Branch `polish/audit-2026-09`, uncommitted work on top of it: sync.js
-rewritten around four safety rules (see its header; README "Accounts and
-sync"), Reach us as a plain link, App Store review link (`appStoreId`) and
-privacy link (`privacyUrl`) in Settings, schema.sql gained key/size checks
-and a server-side updated_at stamp (run the new block in the SQL editor).
-Accounts required at first run. Supabase live with email sign-in; sign-in
-emails failed with a 500 (custom SMTP via a Gmail App Password half set up:
-regenerate the 16-character App Password, smtp.gmail.com:465, sender = the
-same Gmail address, then `{{ .Token }}` in both templates and the Site URL).
-Xcode project builds and runs in the simulator. Apple Developer enrolment is
-in progress through a parent's Individual account. The launch checklist is
-the "Lexicon Launch Runbook" artifact; open items: SMTP + templates, Site URL,
-GitHub Pages (privacyUrl must be live), reviewer account, Apple enrolment,
-App Store Connect listing (then fill `appStoreId`), TestFlight, submission;
-Google/Apple sign-in in 1.1; native-speaker review of the ten machine-drafted
-gloss languages.
+Branch `polish/audit-2026-09` is merged into `main` and pushed. The repo is
+public and GitHub Pages serves `main` from the root: `privacy.html` and
+`support.html` are the store listing's Privacy Policy and Support URLs (the
+in-app Privacy link opens the former). All tests pass (data, 4 SMTP-checker,
+54 browser checks) and a Release build for a real iPhone compiles.
+Accounts required at first run; sign-in emails work (the Lexicon Gmail
+account via SMTP); the App Review account (password sign-in) exists.
+Apple Developer account: a parent's, Individual, team F34V6LU6Y6, agreements
+accepted, signed in to Xcode and set as DEVELOPMENT_TEAM in the project.
+Never accept or handle that Apple ID's password; the owner or the parent
+types it into Apple's own sign-in boxes. Next: App Store Connect record,
+archive + upload, listing, TestFlight, submission, all in the "Lexicon Launch
+Runbook" artifact. Google/Apple sign-in in 1.1; native-speaker review of the
+ten machine-drafted gloss languages.

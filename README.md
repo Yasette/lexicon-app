@@ -30,8 +30,10 @@ native-auth.js      Google/Apple inside the phone app (1.1); idle until its plug
 sync.js             accounts + cloud sync; does nothing until config.js has keys
 sw.js               service worker: offline copy, network-first
 privacy.html        the privacy policy the App Store listing links to
+support.html        the help page the App Store listing links to (Support URL)
 supabase/schema.sql database tables, Row Level Security, account deletion
-tools/              serve.mjs (local server), build-www.mjs (copies the app into www/ for iOS)
+tools/              serve.mjs (local server), build-www.mjs (copies the app into www/ for iOS),
+                    smtp-check.mjs (tests a Gmail address + App Password before Supabase gets them)
 ios/                the Xcode project (Capacitor, iPhone only); www/ is its build input, ignored by git
 store/              App Store screenshots at Apple's sizes (node tools/store-shots.mjs)
 tests/              data checks, headless-Chrome smoke test, fake backend (never shipped)

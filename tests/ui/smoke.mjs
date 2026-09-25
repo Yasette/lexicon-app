@@ -291,6 +291,52 @@ await t('Settings links the privacy policy above Clear my progress', async () =>
   const a = await ev("(function(){var a=document.getElementById('privacy-link'); return {hidden:a.hidden, href:a.href, target:a.target, before:!!(a.compareDocumentPosition(document.getElementById('wipe')) & Node.DOCUMENT_POSITION_FOLLOWING)};})()");
   assert(!a.hidden && a.href === 'https://mock.local/privacy.html' && a.target === '_blank' && a.before, 'privacy link: ' + JSON.stringify(a));
 });
+await t('a wrong pick is red and the right answer green, in every theme', async () => {
+  const bad = await ev(`(async function(){
+    var still = document.createElement('style'); still.textContent = '*{transition:none!important;animation:none!important}';
+    document.head.appendChild(still);
+    function rgb(s){ var m = String(s).match(/\\d+/g); return m ? m.slice(0, 3).map(Number) : [0, 0, 0]; }
+    var out = [], keep = PROF.theme || 'ember';
+    for (var t = 0; t < THEMES.length; t++) {
+      applyTheme(THEMES[t].id);
+      show('practice'); QDRILL = null; QF = 'wic'; QN = 0; buildSet(); QI = 0; renderQuestion();
+      var q = QSET[0], wrong = (q.a + 1) % 4;
+      document.querySelectorAll('#q-choices .ch')[wrong].click();
+      var w = rgb(getComputedStyle(document.querySelector('#q-choices .ch.wrong')).borderTopColor);
+      var r = rgb(getComputedStyle(document.querySelector('#q-choices .ch.right')).borderTopColor);
+      var v = rgb(getComputedStyle(document.getElementById('q-verdict')).color);
+      var p = rgb(getComputedStyle(document.querySelector('#q-gloss .is-pick b')).color);
+      if (!(w[0] > w[1] + 50 && w[0] > w[2] + 30)) out.push(THEMES[t].id + ' wrong pick ' + w);
+      if (!(r[1] > r[0] && r[1] > r[2])) out.push(THEMES[t].id + ' right answer ' + r);
+      if (!(v[0] > v[1] + 50)) out.push(THEMES[t].id + ' Incorrect ' + v);
+      if (!(p[0] > p[1] + 50)) out.push(THEMES[t].id + ' picked word in the explanations ' + p);
+      QANS[0] = -1;
+    }
+    applyTheme(keep); still.remove();
+    return out; })()`);
+  assert(bad.length === 0, bad.join('; '));
+});
+await t('the study test explains every choice after answering, below Next', async () => {
+  const r = await ev(`(function(){
+    F.dir = 'en'; startIds([0, 1, 2], 'test');
+    var btns = document.querySelectorAll('#answers .ch'), want = meaningOf(WORDS[0]), pick = -1, ans = -1;
+    for (var j = 0; j < btns.length; j++) { if (btns[j].textContent.slice(1) === want) ans = j; else if (pick < 0) pick = j; }
+    btns[pick].click();
+    var rows = document.querySelectorAll('#answers .opts-gloss div'), next = document.querySelector('#answers .go');
+    return { n: rows.length, ans: ans, pick: pick,
+      ansCls: rows[ans] ? rows[ans].className : '', pickCls: rows[pick] ? rows[pick].className : '',
+      words: [].map.call(rows, function (d) { return d.querySelector('b').textContent; }),
+      right: rows[ans] ? rows[ans].querySelector('b').textContent === WORDS[0][0] : false,
+      meanings: [].every.call(rows, function (d) { return d.querySelector('span').textContent.trim().length > 0; }),
+      below: !!(next && rows.length && (next.compareDocumentPosition(rows[0]) & Node.DOCUMENT_POSITION_FOLLOWING)) };
+  })()`);
+  assert(r.n === 4, 'four explanation rows, got ' + r.n);
+  assert(r.ansCls === 'is-ans' && r.pickCls === 'is-pick', JSON.stringify(r));
+  assert(r.right && r.words.every(Boolean), 'each row names its word: ' + r.words.join(', '));
+  assert(r.meanings, 'each row has a meaning');
+  assert(r.below, 'the explanations should come after Next');
+  await ev("show('home')");
+});
 await t('tall phones centre the home screen and scale the type; short phones scale down', async () => {
   await ev("show('home')");
   const base = await ev("document.querySelector('#v-home .mast').getBoundingClientRect().top");

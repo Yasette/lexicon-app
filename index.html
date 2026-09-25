@@ -30,6 +30,7 @@
   --ink:#1B1610;   --ink2:#463B2D;   --mute:#75664F;
   --accent:#8C2E14; --accent2:#A84322; --accentsoft:#F0DCCF;
   --gold:#8F6A22;  --sage:#47573A; --sagesoft:#DEE3D2;
+  --bad:#8C2E14; --badsoft:#F0DCCF;
   --rule:#D3C29A;  --rule2:#B9A578;
   --tintA:rgba(140,46,20,.05); --tintB:rgba(143,106,34,.06);
 }
@@ -38,6 +39,7 @@
   --ink:#131826;   --ink2:#2E3854;   --mute:#57637F;
   --accent:#22367F; --accent2:#3049A8; --accentsoft:#D0DAF3;
   --gold:#2F5F80;  --sage:#35604F; --sagesoft:#D2E1DA;
+  --bad:#A3262A; --badsoft:#F4D9D9;
   --rule:#B4C0DC;  --rule2:#93A3C7;
   --tintA:rgba(34,54,127,.05); --tintB:rgba(47,95,128,.06);
 }
@@ -46,6 +48,7 @@
   --ink:#1E1424;   --ink2:#402F4A;   --mute:#6E5C79;
   --accent:#5E2578; --accent2:#78389A; --accentsoft:#E6D1EE;
   --gold:#8A4D78;  --sage:#455F4D; --sagesoft:#D5E0D7;
+  --bad:#A3263A; --badsoft:#F4D8DC;
   --rule:#CBB6D8;  --rule2:#B096C3;
   --tintA:rgba(94,37,120,.05); --tintB:rgba(138,77,120,.06);
 }
@@ -54,6 +57,7 @@
   --ink:#211A0B;   --ink2:#4A3C1C;   --mute:#75643B;
   --accent:#7A5711; --accent2:#956D1B; --accentsoft:#F1DFA5;
   --gold:#7A5A17;  --sage:#54642E; --sagesoft:#DEE3C9;
+  --bad:#A12A1C; --badsoft:#F5DAD3;
   --rule:#D6BF82;  --rule2:#BEA35F;
   --tintA:rgba(122,87,17,.05); --tintB:rgba(122,90,23,.06);
 }
@@ -62,6 +66,7 @@
   --ink:#24141A;   --ink2:#4C2F38;   --mute:#7F5E6A;
   --accent:#9A2846; --accent2:#B63A5C; --accentsoft:#F3D0DA;
   --gold:#985A32;  --sage:#50604B; --sagesoft:#D8E0D3;
+  --bad:#A8261E; --badsoft:#F5D6D3;
   --rule:#DCB5C1;  --rule2:#C795A5;
   --tintA:rgba(154,40,70,.05); --tintB:rgba(152,90,50,.06);
 }
@@ -70,6 +75,7 @@
   --ink:#161D12;   --ink2:#35422C;   --mute:#5F6C53;
   --accent:#3B4B30; --accent2:#4F633D; --accentsoft:#D4DDC5;
   --gold:#766324;  --sage:#375848; --sagesoft:#CFDCC7;
+  --bad:#A3302A; --badsoft:#F2D9D5;
   --rule:#B8C6A6;  --rule2:#9CAF87;
   --tintA:rgba(59,75,48,.05); --tintB:rgba(118,99,36,.06);
 }
@@ -318,8 +324,8 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .ch{transition:background .22s ease,border-color .22s ease,color .22s ease,opacity .22s ease}
 .ch.right,.ch.right:hover{background:var(--sagesoft);border-color:var(--sage);color:var(--sage);font-weight:600}
 .ch.right i{background:var(--sage);color:#fff}
-.ch.wrong,.ch.wrong:hover{background:var(--accentsoft);border-color:var(--accent);color:var(--accent)}
-.ch.wrong i{background:var(--accent);color:#fff}
+.ch.wrong,.ch.wrong:hover{background:var(--badsoft);border-color:var(--bad);color:var(--bad)}
+.ch.wrong i{background:var(--bad);color:#fff}
 .ch.dim,.ch.dim:hover{opacity:.5}
 .ch.picked{animation:pick .32s ease}
 @keyframes pick{0%{transform:scale(1)}45%{transform:scale(.975)}100%{transform:scale(1)}}
@@ -563,8 +569,8 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .qdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule2);
   background:var(--paper);display:grid;place-items:center;font-size:9px;font-weight:700;
   color:var(--mute);transition:background .14s ease,border-color .14s ease}
-.qdot.done{background:var(--accent);border-color:var(--accent);color:#fff}
-.qdot.wrongdot{background:var(--paper2);border-color:var(--accent);color:var(--accent)}
+.qdot.done{background:var(--sage);border-color:var(--sage);color:#fff}
+.qdot.wrongdot{background:var(--badsoft);border-color:var(--bad);color:var(--bad)}
 .qdot.now{box-shadow:0 0 0 2px var(--accentsoft);border-color:var(--accent)}
 .qdot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .qdone{text-align:center;padding:18px 12px;border-radius:12px;background:var(--accentsoft);
@@ -634,8 +640,8 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   place-items:center;font-size:11px;line-height:1;color:#fff}
 .verdict.ok{color:var(--sage)}
 .verdict.ok .mk{background:var(--sage)}
-.verdict.no{color:var(--accent)}
-.verdict.no .mk{background:var(--accent)}
+.verdict.no{color:var(--bad)}
+.verdict.no .mk{background:var(--bad)}
 .verdict small{font-weight:600;color:var(--ink2);letter-spacing:0}
 
 
@@ -665,6 +671,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .opts-gloss b{font-family:var(--serif);font-weight:600;color:var(--ink);flex:none}
 .opts-gloss span{font-family:var(--serif);font-size:14.5px;color:var(--ink2);line-height:1.45}
 .opts-gloss .is-ans b{color:var(--sage)}
+.opts-gloss .is-pick b{color:var(--bad)}
 
 /* ------------------------- welcome (first run) ---------------------- */
 #v-welcome{padding:0 22px 22px;text-align:center}
@@ -1882,15 +1889,30 @@ function renderTest(w, dir) {
      word with the very same meaning — otherwise two options are right. */
   var avoid = {}, me = w[W_WORD].toLowerCase(); avoid[me] = 1;
   synList(w).forEach(function (x) { avoid[String(x).toLowerCase()] = 1; });
-  var opts = [correct], guard = 0;
+  var opts = [{ v: correct, row: w }], guard = 0;
+  var has = function (v) { return opts.some(function (o) { return o.v === v; }); };
   while (opts.length < 4 && guard++ < 600) {
     var c = WORDS[Math.floor(Math.random() * WORDS.length)];
     if (avoid[c[W_WORD].toLowerCase()]) continue;
     if (synList(c).some(function (x) { return String(x).toLowerCase() === me; })) continue;
     var v = dir === 'en' ? meaningOf(c) : c[W_WORD];
-    if (v && opts.indexOf(v) < 0) opts.push(v);
+    if (v && !has(v)) opts.push({ v: v, row: c });
   }
   shuffle(opts);
+  var ans = opts.map(function (o) { return o.v; }).indexOf(correct);
+  /* After an answer: what every choice means, so the three wrong ones teach
+     something too. The word you picked reads red, the answer green. */
+  function explainChoices(picked) {
+    var box = document.createElement('div');
+    box.className = 'opts-gloss rise';
+    box.innerHTML = opts.map(function (o, i) {
+      var r = o.row, g = glossOf(r), m = (r[W_EN] || '') + (g ? (r[W_EN] ? ' · ' : '') + g : '');
+      var cls = i === ans ? 'is-ans' : (i === picked ? 'is-pick' : '');
+      return '<div' + (cls ? ' class="' + cls + '"' : '') + '><i>' + 'ABCD'[i] + '</i><b>'
+        + esc(r[W_WORD]) + '</b><span>' + esc(m) + '</span></div>';
+    }).join('');
+    $('answers').appendChild(box);
+  }
   $('card').innerHTML = '';
   var el = document.createElement('div');
   el.className = 'prompt' + (dir === 'en' ? '' : ' tr');
@@ -1898,7 +1920,7 @@ function renderTest(w, dir) {
   $('card').appendChild(el);
   $('card').onclick = null;
   $('answers').innerHTML = '<div class="choices">' + opts.map(function (o, i) {
-    return '<button class="ch" data-v="' + i + '"><i>' + 'ABCD'[i] + '</i>' + esc(o) + '</button>';
+    return '<button class="ch" data-v="' + i + '"><i>' + 'ABCD'[i] + '</i>' + esc(o.v) + '</button>';
   }).join('') + '</div><button class="idk" id="s-idk">I don’t know this word</button>';
   /* Read the answer before moving on. Auto-advancing meant the one moment
      you might learn something flashed past. */
@@ -1931,19 +1953,21 @@ function renderTest(w, dir) {
     b.onclick = function () {
       if (S.shown) return;
       S.shown = true;
-      var ok = opts[i] === correct;
-      gradeChoices($('answers'), opts.indexOf(correct), i, true);
+      var ok = i === ans;
+      gradeChoices($('answers'), ans, i, true);
       $('s-idk').remove();
       reveal(ok, false);
+      explainChoices(i);
     };
   });
   /* No guess: the right answer is shown, the word goes to the Don't know pile. */
   $('s-idk').onclick = function () {
     if (S.shown) return;
     S.shown = true;
-    gradeChoices($('answers'), opts.indexOf(correct), -1, false);
+    gradeChoices($('answers'), ans, -1, false);
     this.remove();
     reveal(false, true);
+    explainChoices(-1);
   };
 }
 function judge(ok, idk) {
@@ -2541,7 +2565,7 @@ function renderQuestion(keepChoices) {
       if (k < 0) k = indexOfWord(String(o).charAt(0).toUpperCase() + String(o).slice(1));
       if (k >= 0) m = (WORDS[k][W_EN] || '') + (glossOf(WORDS[k]) ? ' · ' + glossOf(WORDS[k]) : '');
       else m = optionGloss(q, o);
-      return '<div' + (i === q.a ? ' class="is-ans"' : '') + '><i>' + 'ABCD'[i] + '</i>'
+      return '<div' + (i === q.a ? ' class="is-ans"' : (i === picked ? ' class="is-pick"' : '')) + '><i>' + 'ABCD'[i] + '</i>'
         + '<b>' + esc(o) + '</b><span>' + esc(m) + '</span></div>';
     }).join('');
     gloss.hidden = false;
