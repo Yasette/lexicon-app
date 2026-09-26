@@ -337,6 +337,47 @@ await t('the study test explains every choice after answering, below Next', asyn
   assert(r.below, 'the explanations should come after Next');
   await ev("show('home')");
 });
+await t('every text field is at least 16px on small and large phones, so iOS never zooms', async () => {
+  const bad = []; let seen = 0;
+  for (const [w, h] of [[375, 667], [440, 956]]) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 2, mobile: true });
+    await sleep(150);
+    const r = await ev(`(function(){ var out = [], n = 0;
+      function grab(){ [].forEach.call(document.querySelectorAll('input,select,textarea'), function (el) { n++;
+        var px = parseFloat(getComputedStyle(el).fontSize);
+        if (px < 16) out.push((el.id || String(el.className) || el.tagName) + ' ' + px + 'px'); }); }
+      ['welcome','home','study','practice','words','guide','add','settings','map','miles'].forEach(function (v) { show(v); grab(); });
+      openDay(dayKey(new Date()), new Date()); grab();
+      openFilter(); grab(); closeFilter();
+      show('home'); return { out: out, n: n }; })()`);
+    seen = Math.max(seen, r.n);
+    r.out.forEach((x) => bad.push(w + 'px wide: ' + x));
+  }
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+  assert(seen >= 12, 'expected every field to be found, saw ' + seen);
+  assert(bad.length === 0, bad.join('; '));
+});
+await t('nothing on any screen is wider than the phone, from 320 to 440 wide', async () => {
+  const keep = await ev('PROF.name || ""'), bad = [];
+  await ev("PROF.name = 'Alexandria-Christina Montgomery'");
+  for (const w of [320, 375, 402, 440]) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', { width: w, height: 800, deviceScaleFactor: 2, mobile: true });
+    await sleep(150);
+    const r = await ev(`(function(){ var W = document.documentElement.clientWidth, out = [];
+      ['home','study','practice','words','guide','settings','map','miles','add'].forEach(function (name) {
+        show(name); var v = document.getElementById('v-' + name);
+        if (v.scrollWidth > v.clientWidth + 1) out.push(name + ' scrolls sideways');
+        [].forEach.call(v.querySelectorAll('*'), function (el) { var b = el.getBoundingClientRect();
+          if (b.width && (b.right > W + 0.5 || b.left < -0.5)) out.push(name + ': ' + (el.id || String(el.className).slice(0, 30) || el.tagName)); });
+      });
+      if (document.documentElement.scrollWidth > W) out.push('the page itself');
+      show('home'); return out; })()`);
+    r.forEach((x) => bad.push(w + 'px: ' + x));
+  }
+  await ev('PROF.name = ' + JSON.stringify(keep) + '; renderHome()');
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+  assert(bad.length === 0, bad.slice(0, 10).join('; '));
+});
 await t('tall phones centre the home screen and scale the type; short phones scale down', async () => {
   await ev("show('home')");
   const base = await ev("document.querySelector('#v-home .mast').getBoundingClientRect().top");
@@ -577,6 +618,13 @@ await t('a sign-in that expires is announced in Settings, and nothing is lost', 
   assert(await visible('acct-out'), 'shows signed out');
   assert((await ev("document.querySelector('#acct [data-auth-msg]').textContent")).includes('signed out'), 'explains what happened');
   assert(await ev('Object.keys(SRS).length') === n, 'local progress untouched');
+});
+await t('the App Store build locks the zoom; the web version stays zoomable', async () => {
+  assert(!(await ev("document.querySelector('meta[name=viewport]').content")).includes('maximum-scale'), 'the web version must stay zoomable');
+  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: 'window.Capacitor = window.Capacitor || {};' });   /* what the native bridge provides; last test, so it cannot leak */
+  await cdp.goto(url, 1200);
+  const vp = await ev("document.querySelector('meta[name=viewport]').content");
+  assert(vp.includes('maximum-scale=1') && vp.includes('viewport-fit=cover'), vp);
 });
 await t('no console errors or exceptions during sync', async () => { assert(cdp.errors.length === 0, cdp.errors.join('\n')); });
 

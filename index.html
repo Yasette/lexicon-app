@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* In the App Store build the page is the whole app, so it never zooms, like
+   any native screen. Capacitor puts window.Capacitor on the page before
+   anything else runs; the web version has none and stays pinch-zoomable.
+   What actually stops iOS zooming on focus is that every field is 16px or
+   larger (see .txt below). */
+if (window.Capacitor) document.querySelector('meta[name="viewport"]').setAttribute('content',
+  'width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1');
+</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -259,7 +268,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 
 input[type=date],input[type=number]{width:100%;padding:11px 12px;border-radius:10px;
   background:var(--paper);border:1px solid var(--rule);color:var(--ink);
-  font-family:var(--ui);font-size:14px}
+  font-family:var(--ui);font-size:16px}
 input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
 /* ============================ SESSION ============================= */
@@ -468,7 +477,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   background:var(--accentsoft);border:1px solid var(--rule);
   box-shadow:var(--shadow-sm);display:flex;align-items:stretch}
 .pit textarea{width:100%;border:0;background:none;resize:none;font-family:var(--serif);
-  font-size:13px;line-height:1.45;color:var(--ink2);padding:0;min-height:40px}
+  font-size:16px;line-height:1.45;color:var(--ink2);padding:0;min-height:40px}
 .pit textarea::placeholder{color:var(--mute);opacity:.75;font-style:italic}
 .pit textarea:focus{outline:none}
 .pit:focus-within{border-color:var(--accent)}
@@ -649,7 +658,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .mineflag{flex:none;font-family:var(--control);font-size:11px;font-style:italic;
   color:var(--gold)}
 .addbox{width:100%;padding:12px;border-radius:10px;background:var(--paper);
-  border:1px solid var(--rule);font-family:var(--serif);font-size:14.5px;line-height:1.6;
+  border:1px solid var(--rule);font-family:var(--serif);font-size:16px;line-height:1.6;
   color:var(--ink);resize:vertical}
 .addbox:focus{outline:2px solid var(--accent);outline-offset:1px}
 #w-add{margin-top:2px}
@@ -745,7 +754,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .acct-btns{display:flex;flex-direction:column;gap:8px}
 .acct-btns .go{padding:12px;font-size:15.5px}
 .acct-btns input{width:100%;padding:11px 12px;border-radius:10px;background:var(--paper);
-  border:1px solid var(--rule);color:var(--ink);font-family:var(--ui);font-size:14px}
+  border:1px solid var(--rule);color:var(--ink);font-family:var(--ui);font-size:16px}
 
 /* ------------------- words: one Filter link, a sheet for the rest ------ */
 .linkrow{display:flex;align-items:center;gap:12px;padding:0 4px}
@@ -802,8 +811,11 @@ a.linkbtn{display:inline-block;overflow-wrap:anywhere}
 .field > input{display:block;width:100%;min-width:0;max-width:100%}
 input[type=date]{-webkit-appearance:none;appearance:none;min-height:44px;text-align:left}
 input[type=date]::-webkit-date-and-time-value{text-align:left}
+/* Every field is at least 16px, and none uses the --s type scale (0.95 on
+   small phones). iOS zooms the whole page when a smaller field gets focus,
+   and inside the app that zoom stays until the app is reopened. */
 .txt{width:100%;padding:11px 12px;border-radius:10px;background:var(--paper);border:1px solid var(--rule);
-  color:var(--ink);font-family:var(--ui);font-size:14px}
+  color:var(--ink);font-family:var(--ui);font-size:16px}
 </style>
 </head>
 <body>
@@ -1182,9 +1194,7 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
         <p class="lab">Profile <em class="saved" id="name-saved" hidden></em></p>
         <div class="field">
           <label for="p-name">What should the app call you?</label>
-          <input id="p-name" type="text" placeholder="Optional"
-            style="width:100%;padding:11px 12px;border-radius:10px;background:var(--paper);
-                   border:1px solid var(--rule);color:var(--ink);font-family:var(--ui);font-size:14px">
+          <input id="p-name" type="text" class="txt" placeholder="Optional">
         </div>
         <div class="field">
           <label for="p-test">Test day</label>
