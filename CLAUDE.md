@@ -20,6 +20,9 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
 - Run `npm test` before every commit (data checks + 52 headless-Chrome checks;
   needs Node 22+ and Google Chrome). Add a check for every behaviour you add.
 - Bump `CACHE` in `sw.js` when shipped files change.
+- **No College Board (or other publisher) material.** The practice bank in
+  `data/questions.js` was rewritten from scratch in October 2026; new questions must be
+  original too, with a `why` for every option (the data test enforces it).
 - Every input, select and textarea is at least 16px and outside the `--s` type scale:
   iOS zooms the page when a smaller field gets focus, and in the app the zoom sticks.
 - Bump `CURRENT_PROJECT_VERSION` in the Xcode project for every upload (build 1 is in

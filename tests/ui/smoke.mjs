@@ -105,7 +105,8 @@ await t('practice: gloss only for word questions, explanation in two languages',
   assert(await ev("document.querySelectorAll('#q-choices .ch.right').length") === 1 && await ev("document.querySelectorAll('#q-choices .ch.dim, #q-choices .ch.wrong').length") === 3, 'options graded green / red / dim');
   assert(await ev("document.querySelectorAll('#q-ex p').length") === 2, 'English + Turkish explanation');
   await ev("QI = QSET.findIndex(function(q){return q.sec==='wr';}); renderQuestion()"); await click('#q-choices .ch');
-  assert(!(await visible('q-gloss')), 'no gloss block for rules questions');
+  assert(await visible('q-gloss'), 'rules questions explain their options too');
+  assert(await ev("document.querySelectorAll('#q-gloss .why').length") === 4 && await ev("document.querySelectorAll('#q-gloss .mean').length") === 0, 'four reasons, no word meanings for punctuation');
 });
 await t('clearing progress needs two taps', async () => {
   await ev("show('settings')"); await click('#wipe');
@@ -290,6 +291,27 @@ await t('Settings offers an App Store review link above Clear my progress, only 
 await t('Settings links the privacy policy above Clear my progress', async () => {
   const a = await ev("(function(){var a=document.getElementById('privacy-link'); return {hidden:a.hidden, href:a.href, target:a.target, before:!!(a.compareDocumentPosition(document.getElementById('wipe')) & Node.DOCUMENT_POSITION_FOLLOWING)};})()");
   assert(!a.hidden && a.href === 'https://mock.local/privacy.html' && a.target === '_blank' && a.before, 'privacy link: ' + JSON.stringify(a));
+});
+await t('every practice question explains all four options, and nothing runs off a small phone', async () => {
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 320, height: 640, deviceScaleFactor: 2, mobile: true });
+  await sleep(150);
+  const bad = await ev(`(function(){ show('practice'); QDRILL = null; QF = 'all'; QN = 0; buildSet(); var bad = [], W = document.documentElement.clientWidth, v = document.getElementById('v-practice');
+    for (var i = 0; i < QSET.length; i++) { QI = i; QANS[i] = (QSET[i].a + 1) % 4; renderQuestion();
+      var rows = document.querySelectorAll('#q-gloss > div');
+      if (rows.length !== 4) bad.push(QSET[i].id + ': ' + rows.length + ' rows');
+      [].forEach.call(rows, function (d, j) { if (!d.querySelector('.why') || !d.querySelector('.why').textContent.trim()) bad.push(QSET[i].id + ' option ' + 'ABCD'[j] + ' has no reason'); });
+      if (v.scrollWidth > v.clientWidth + 1) bad.push(QSET[i].id + ' scrolls sideways');
+      [].forEach.call(v.querySelectorAll('#q-gloss *, #q-choices *'), function (el) { var b = el.getBoundingClientRect(); if (b.width && b.right > W + 0.5) bad.push(QSET[i].id + ' too wide'); }); }
+    QANS = QSET.map(function () { return -1; }); QI = 0; renderQuestion();
+    return bad; })()`);
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+  assert(bad.length === 0, bad.slice(0, 8).join('; '));
+});
+await t('Missed ignores ids from the retired question bank', async () => {
+  await ev("PROF.qmiss = ['c1', 'g7', QUESTIONS[0].id]; show('practice')");
+  assert(await ev("document.querySelector('#q-filter [data-v=miss] small').textContent") === '1', 'only the live question counts');
+  assert(await ev("PROF.qmiss.length === 1 && PROF.qmiss[0] === QUESTIONS[0].id"), 'stale ids pruned: ' + await ev('JSON.stringify(PROF.qmiss)'));
+  await ev("PROF.qmiss = []; save(LS.prof, PROF); renderQSections()");
 });
 await t('a wrong pick is red and the right answer green, in every theme', async () => {
   const bad = await ev(`(async function(){

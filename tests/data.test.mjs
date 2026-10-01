@@ -40,6 +40,14 @@ const listed = new Set(BASE.map(r => r[0].toLowerCase()));
 QUESTIONS.filter(q => q.sec === 'wic').forEach(q => q.o.forEach(o =>
   check(listed.has(String(o).toLowerCase()) || (q.g && q.g[o]), 'practice option without a meaning: ' + q.id + ' ' + o)));
 QUESTIONS.forEach(q => { if (q.g) Object.keys(q.g).forEach(o => check(q.o.includes(o) && q.g[o] && !TRCH.test(q.g[o]), 'stray or non-English option gloss: ' + q.id + ' ' + o)); });
+QUESTIONS.forEach(q => {
+  check(Array.isArray(q.why) && q.why.length === 4 && q.why.every(w => w && w.trim().length > 20 && !TRCH.test(w)), 'every option needs an English explanation: ' + q.id);
+  check(q.why && /^Correct\b/.test(q.why[q.a]) && q.why.filter(w => /^Correct\b/.test(w)).length === 1, 'exactly the answer\'s explanation starts with Correct: ' + q.id);
+  check(q.ex_tr && q.ex_tr.trim(), 'Turkish summary: ' + q.id);
+  check(new Set(q.o).size === 4, 'four different options: ' + q.id);
+  if (q.sec === 'wic') q.o.forEach(o => check(listed.has(String(o).toLowerCase()), 'words-in-context option not in the word list: ' + q.id + ' ' + o));
+});
+check(!QUESTIONS.some(q => /^[cg]\d+$/.test(q.id)), 'an id from the retired bank is back');
 console.log('  ' + QUESTIONS.length + ' questions, every option explained');
 
 console.log('sheets.js');

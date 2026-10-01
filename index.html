@@ -681,6 +681,11 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .opts-gloss span{font-family:var(--serif);font-size:14.5px;color:var(--ink2);line-height:1.45}
 .opts-gloss .is-ans b{color:var(--sage)}
 .opts-gloss .is-pick b{color:var(--bad)}
+/* practice rows: the option, its meaning (word questions), then why it is
+   right or wrong; long options wrap instead of pushing the row wide */
+.opts-gloss .opt{flex:1;min-width:0}
+.opts-gloss .opt b{margin-right:6px}
+.opts-gloss .why{display:block;margin-top:3px;color:var(--ink)}
 
 /* ------------------------- welcome (first run) ---------------------- */
 #v-welcome{padding:0 22px 22px;text-align:center}
@@ -2472,7 +2477,12 @@ function qPool() {
 }
 /* the Missed chip only means something once something has been missed */
 function renderQSections() {
-  var n = (PROF.qmiss || []).length, b = $('q-filter').querySelector('[data-v="miss"]');
+  /* ids of questions that are no longer in the bank (the bank was rewritten
+     in October 2026) drop out, so Missed never counts questions it cannot show */
+  var have = {}; QUESTIONS.forEach(function (q) { have[q.id] = 1; });
+  var qm = (PROF.qmiss || []).filter(function (id) { return have[id]; });
+  if (PROF.qmiss && qm.length !== PROF.qmiss.length) { PROF.qmiss = qm; save(LS.prof, PROF); }
+  var n = qm.length, b = $('q-filter').querySelector('[data-v="miss"]');
   b.disabled = n === 0;
   b.innerHTML = 'Missed' + (n ? ' <small>' + n + '</small>' : '');
   /* inside a drill the section and count chips make no sense; a way back does */
@@ -2565,7 +2575,7 @@ function renderQuestion(keepChoices) {
             : (picked === -2 ? 'Not sure yet' : 'Incorrect') + ' <small>the answer is ' + 'ABCD'[q.a] + '</small>');
   }
   var gloss = $('q-gloss');
-  if (picked === -1 || q.sec !== 'wic') {   /* punctuation options have no meanings to gloss */
+  if (picked === -1 || !(q.sec === 'wic' || q.why)) {   /* drills explain themselves below */
     gloss.hidden = true; gloss.innerHTML = '';
   } else {
     /* The original explains the options, not only the answer: knowing why
@@ -2575,8 +2585,11 @@ function renderQuestion(keepChoices) {
       if (k < 0) k = indexOfWord(String(o).charAt(0).toUpperCase() + String(o).slice(1));
       if (k >= 0) m = (WORDS[k][W_EN] || '') + (glossOf(WORDS[k]) ? ' · ' + glossOf(WORDS[k]) : '');
       else m = optionGloss(q, o);
+      if (q.sec !== 'wic') m = '';            /* punctuation options have no meanings */
+      var why = q.why && q.why[i] ? q.why[i] : '';
       return '<div' + (i === q.a ? ' class="is-ans"' : (i === picked ? ' class="is-pick"' : '')) + '><i>' + 'ABCD'[i] + '</i>'
-        + '<b>' + esc(o) + '</b><span>' + esc(m) + '</span></div>';
+        + '<span class="opt"><b>' + esc(o) + '</b>' + (m ? '<span class="mean">' + esc(m) + '</span>' : '')
+        + (why ? '<span class="why">' + esc(why) + '</span>' : '') + '</span></div>';
     }).join('');
     gloss.hidden = false;
     gloss.innerHTML = rows;
