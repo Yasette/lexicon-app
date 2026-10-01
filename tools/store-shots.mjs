@@ -46,7 +46,7 @@ async function run(name, width, height, outDir) {
   await ev("var ti = indexOfWord('Alacrity'); if (ti < 0) ti = 12; F.dir='en'; startIds([ti, 1, 2, 3], 'test')"); await sleep(200);
   await ev("(function(){var b=document.querySelectorAll('#answers .ch'); var c=meaningOf(WORDS[S.deck[0]]); for (var j=0;j<b.length;j++) if (b[j].textContent.slice(1)===c) { b[j].click(); return; } b[0].click();})()"); await sleep(500);
   await shot('03-test');
-  await ev("show('practice'); QDRILL=null; QF='wic'; QN=0; buildSet(); renderQuestion(); document.querySelectorAll('#q-choices .ch')[QSET[0].a].click()"); await sleep(500);
+  await ev("show('practice'); QDRILL=null; RUNS={}; QT=1; buildSet(); renderQuestion(); document.querySelectorAll('#q-choices .ch')[QSET[0].a].click()"); await sleep(500);
   await ev("document.querySelector('#v-practice').scrollTop = 0"); await shot('04-practice');
   await ev("show('words'); WF='all'; WQ=''; WLET=''; WPRE=null; WSUF=null; WOPEN=(indexOfWord('Abstruse') >= 0 ? indexOfWord('Abstruse') : 2); renderWords()"); await sleep(300);
   await shot('05-words');

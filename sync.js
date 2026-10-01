@@ -46,7 +46,7 @@
   var DAY = /^\d{4}-\d{2}-\d{2}$/;
   /* profile fields that are progress (cleared by "Clear my progress"), as
      opposed to settings */
-  var DERIVED = { perfect: 1, bestStreak: 1, miles: 1, idk: 1, qmiss: 1, celebrated: 1, clearedAt: 1 };
+  var DERIVED = { perfect: 1, bestStreak: 1, miles: 1, idk: 1, qmiss: 1, ptest: 1, celebrated: 1, clearedAt: 1 };
   var WAITS = [5000, 5000, 10000, 20000, 40000, 60000];
 
   var sb = null, user = null, dirty = {}, timer = null, busy = false, again = false, lastPush = 0;
@@ -237,6 +237,9 @@
       if (Object.keys(v).length) out.miles = v;
       v = foldList(Lp.idk, Rp.idk, B && arr(B.idk), itemKey); if (v.length) out.idk = v;
       v = foldList(Lp.qmiss, Rp.qmiss, B && arr(B.qmiss), itemKey); if (v.length) out.qmiss = v;
+      var okScore = function (n, k) { return typeof n === 'number' && n >= 0 && /^\d+$/.test(k); };   /* best score per practice test */
+      v = fold(clean(Lp.ptest, okScore), clean(Rp.ptest, okScore), B && clean(B.ptest, okScore), function (a, b) { return Math.max(a, b); });
+      if (Object.keys(v).length) out.ptest = v;
       if (cut) out.clearedAt = cut;
       return out;
     }
@@ -430,6 +433,7 @@
       var keep = {};
       if (isObj(prof)) { if (prof.lang) keep.lang = prof.lang; if (prof.theme) keep.theme = prof.theme; }
       KEYS.forEach(dropLocal); clearShadow(); dirty = {};
+      if (LS.runs) dropLocal(LS.runs);           /* half-done practice tests are progress too */
       writeLocal(LS.prof, keep); setShadow(LS.prof, keep);
       if (window.App) App.reloadState();
     } else if (!was && isObj(prof) && prof.clearedAt) {

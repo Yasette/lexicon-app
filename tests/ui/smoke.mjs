@@ -99,7 +99,7 @@ await t('word list pages with Show more', async () => {
   assert(await ev("document.querySelectorAll('#w-list .wrow').length") === 120);
 });
 await t('practice: gloss only for word questions, explanation in two languages', async () => {
-  await ev("show('practice'); QF='all'; QN=0; buildSet(); QI=0; renderQuestion()");
+  await ev("show('practice'); QT=0; QF='all'; QN=0; buildSet(); QI=0; renderQuestion()");
   await click('#q-choices .ch');
   assert(await visible('q-gloss'), 'gloss shown for words-in-context');
   assert(await ev("document.querySelectorAll('#q-choices .ch.right').length") === 1 && await ev("document.querySelectorAll('#q-choices .ch.dim, #q-choices .ch.wrong').length") === 3, 'options graded green / red / dim');
@@ -127,7 +127,7 @@ await t('theme choice is applied and saved', async () => {
 });
 await t('practice answers count toward the day and the streak, misses are remembered', async () => {
   const before = await ev("(LOG[dayKey(new Date())] || {}).qr || 0") + await ev("(LOG[dayKey(new Date())] || {}).qw || 0");
-  await ev("show('practice'); QF='all'; QN=0; buildSet(); QI=0; renderQuestion()");
+  await ev("show('practice'); QT=0; QF='all'; QN=0; buildSet(); QI=0; renderQuestion()");
   const wrongIdx = await ev("(QSET[0].a + 1) % 4");
   await click('#q-choices .ch:nth-child(' + (wrongIdx + 1) + ')');
   const e = await ev('LOG[dayKey(new Date())]');
@@ -189,7 +189,7 @@ console.log('sync (mock backend)');
 await ev("localStorage.clear(); localStorage.setItem(LS.prof, JSON.stringify({ lang: 'tr', theme: 'ember' }))");
 await cdp.goto(url, 1500);
 await t('“I don’t know this word” feeds the Don’t know pile from practice, tests, cards and the list', async () => {
-  await ev("show('practice'); QDRILL=null; QF='wic'; QN=0; buildSet(); renderQuestion()");
+  await ev("show('practice'); QDRILL=null; QT=0; QF='wic'; QN=0; buildSet(); renderQuestion()");
   assert(await visible('q-idk'), 'link hidden before answering');
   assert(await ev('questionWord(QSET[QI])') >= 0, 'first question’s answer is not in the word list');
   const before = await ev("(LOG[dayKey(new Date())]||{}).qw||0");
@@ -255,7 +255,7 @@ await t('guide drills: a deck reads as a sheet and drills as a practice set', as
   assert(await visible('q-filters') && await ev("QSET.length>0 && QSET[0].sec!=='drill'"), 'practice back to the bank');
 });
 await t('every practice option shows a meaning, and the nav sits above them', async () => {
-  const bad = await ev(`(function(){ QDRILL=null; QF='wic'; QN=0; buildSet(); var bad=[]; for (var i=0;i<QSET.length;i++){ QI=i; QANS[i]=QSET[i].a; renderQuestion();
+  const bad = await ev(`(function(){ QDRILL=null; QT=0; QF='wic'; QN=0; buildSet(); var bad=[]; for (var i=0;i<QSET.length;i++){ QI=i; QANS[i]=QSET[i].a; renderQuestion();
     [].forEach.call(document.querySelectorAll('#q-gloss div'), function(d,j){ if(!d.querySelector('span').textContent.trim()) bad.push(QSET[i].id+':'+QSET[i].o[j]); }); }
     return bad; })()`);
   assert(bad.length === 0, 'options without a meaning: ' + bad.join(', '));
@@ -295,7 +295,7 @@ await t('Settings links the privacy policy above Clear my progress', async () =>
 await t('every practice question explains all four options, and nothing runs off a small phone', async () => {
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: 320, height: 640, deviceScaleFactor: 2, mobile: true });
   await sleep(150);
-  const bad = await ev(`(function(){ show('practice'); QDRILL = null; QF = 'all'; QN = 0; buildSet(); var bad = [], W = document.documentElement.clientWidth, v = document.getElementById('v-practice');
+  const bad = await ev(`(function(){ show('practice'); QDRILL = null; QT = 0; QF = 'all'; QN = 0; buildSet(); var bad = [], W = document.documentElement.clientWidth, v = document.getElementById('v-practice');
     for (var i = 0; i < QSET.length; i++) { QI = i; QANS[i] = (QSET[i].a + 1) % 4; renderQuestion();
       var rows = document.querySelectorAll('#q-gloss > div');
       if (rows.length !== 4) bad.push(QSET[i].id + ': ' + rows.length + ' rows');
@@ -313,6 +313,66 @@ await t('Missed ignores ids from the retired question bank', async () => {
   assert(await ev("PROF.qmiss.length === 1 && PROF.qmiss[0] === QUESTIONS[0].id"), 'stale ids pruned: ' + await ev('JSON.stringify(PROF.qmiss)'));
   await ev("PROF.qmiss = []; save(LS.prof, PROF); renderQSections()");
 });
+await t('Practice opens on the first unfinished test: 30 questions, words first, a chip for every test', async () => {
+  await ev("PROF.ptest = {}; RUNS = {}; save(LS.runs, RUNS); save(LS.prof, PROF); QT = -1; QSET = []; QDRILL = null; show('practice')");
+  assert(await ev('NTESTS') === 10, 'ten tests, got ' + await ev('NTESTS'));
+  assert(await ev('QT') === 1 && await ev('QSET.length') === 30, 'Practice 1 with 30 questions');
+  assert(await ev("QSET.slice(0, 15).every(function (q) { return q.sec === 'wic'; }) && QSET.slice(15).every(function (q) { return q.sec === 'wr'; })"), 'words first, then rules');
+  assert(await ev("document.querySelectorAll('#q-test button').length") === 11, 'a chip per test plus Mixed');
+  assert(await ev("document.querySelector('#q-test [data-v=\"1\"]').getAttribute('aria-pressed')") === 'true', 'Practice 1 chip pressed');
+  assert(!(await visible('q-mix')), 'section and length chips belong to Mixed');
+  assert((await ev("document.getElementById('q-tinfo').textContent")) === '30 questions, words first, then rules', 'info line');
+  await ev("PROF.ptest = { 1: 20 }; QT = -1; QSET = []; show('practice')");
+  assert(await ev('QT') === 2, 'a finished test is skipped when Practice opens');
+  await ev("PROF.ptest = {}; save(LS.prof, PROF)");
+});
+await t('a practice test keeps its answers, records the best score, and can be taken again', async () => {
+  await click('#q-test [data-v="4"]');
+  assert(await ev('QT') === 4 && await ev('QSET[0].t') === 4 && await ev('QI') === 0, 'Practice 4 open at the start');
+  for (let i = 0; i < 3; i++) await ev("document.querySelectorAll('#q-choices .ch')[QSET[QI].a].click(); document.getElementById('q-next').click()");
+  assert((await ev("document.getElementById('q-tinfo').textContent")).indexOf('3 of 30 answered') === 0, 'progress line');
+  await click('#q-test [data-v="5"]');
+  assert(await ev('QANS.every(function (a) { return a === -1; })'), 'another test starts empty');
+  await click('#q-test [data-v="4"]');
+  assert(await ev('QANS.slice(0, 3).every(function (a, i) { return a === QSET[i].a; }) && QI === 3'), 'answers kept, resumed at the first unanswered');
+  assert(await ev("Object.keys(JSON.parse(localStorage.getItem(LS.runs))['4']).length") === 3, 'kept on this phone');
+  /* the rest: right on even questions, wrong on odd ones */
+  await ev("(function () { for (var i = 3; i < QSET.length; i++) { QI = i; renderQuestion(); document.querySelectorAll('#q-choices .ch')[i % 2 ? (QSET[i].a + 1) % 4 : QSET[i].a].click(); } })()");
+  const want = await ev('QANS.filter(function (a, i) { return a === QSET[i].a; }).length');
+  assert(await ev('PROF.ptest && PROF.ptest[4]') === want, 'best score recorded: ' + JSON.stringify(await ev('PROF.ptest')));
+  assert(await ev("JSON.parse(localStorage.getItem(LS.prof)).ptest['4']") === want, 'saved in the profile');
+  assert(await visible('q-done') && await visible('q-doneacts'), 'score with Take it again');
+  assert((await ev("document.getElementById('q-nexttest').textContent")) === 'Practice 5 →', 'next test offered');
+  assert(await ev("!!document.querySelector('#q-test [data-v=\"4\"] .tick')"), 'finished test ticked');
+  await click('#q-again');
+  assert(await ev('QANS.every(function (a) { return a === -1; }) && QI === 0') && !(await visible('q-done')), 'fresh start');
+  assert(await ev('PROF.ptest[4]') === want, 'best survives a retake');
+  await ev("(function () { for (var i = 0; i < QSET.length; i++) { QI = i; renderQuestion(); document.querySelectorAll('#q-choices .ch')[(QSET[i].a + 1) % 4].click(); } })()");
+  assert(await ev('PROF.ptest[4]') === want, 'a worse score does not replace the best');
+  await click('#q-nexttest');
+  assert(await ev('QT') === 5 && await ev('QI') === 0, 'next test opens');
+  await click('#q-test [data-v="10"]');
+  await ev("(function () { for (var i = 0; i < QSET.length; i++) { QI = i; renderQuestion(); document.querySelectorAll('#q-choices .ch')[QSET[i].a].click(); } })()");
+  assert(await ev('PROF.ptest[10]') === 30 && (await ev("document.getElementById('q-scoresub').textContent")) === 'Every one.', 'a perfect last test');
+  assert(!(await visible('q-nexttest')) && await visible('q-again'), 'no next test after the last one');
+});
+await t('Mixed draws from all ten tests by section and length', async () => {
+  await click('#q-test [data-v="0"]');
+  assert(await visible('q-mix') && (await ev("document.getElementById('q-tinfo').textContent")) === '', 'section and length shown, no test line');
+  await click('#q-count [data-v="20"]');
+  assert(await ev('QT') === 0 && await ev('QSET.length') === 20, 'twenty questions');
+  await click('#q-filter [data-v="wr"]'); await click('#q-count [data-v="30"]');
+  assert(await ev("QSET.length === 30 && QSET.every(function (q) { return q.sec === 'wr'; })"), 'thirty rules questions');
+  assert(await ev('new Set(QUESTIONS.map(function (q) { return q.t; })).size') === 10, 'the pool spans every test');
+  await click('#q-filter [data-v="all"]');
+});
+await t('Clear my progress also clears practice-test answers and best scores', async () => {
+  await ev("RUNS = { 2: { p2w1: 0 } }; save(LS.runs, RUNS); PROF.ptest = { 2: 21 }; save(LS.prof, PROF)");
+  await ev("show('settings')"); await click('#wipe'); await click('#wipe');
+  assert(await ev("!PROF.ptest && Object.keys(RUNS).length === 0 && localStorage.getItem(LS.runs) === '{}'"), 'cleared');
+  await ev("show('practice')");
+  assert(!(await ev("!!document.querySelector('#q-test .tick')")), 'no ticks left');
+});
 await t('a wrong pick is red and the right answer green, in every theme', async () => {
   const bad = await ev(`(async function(){
     var still = document.createElement('style'); still.textContent = '*{transition:none!important;animation:none!important}';
@@ -321,7 +381,7 @@ await t('a wrong pick is red and the right answer green, in every theme', async 
     var out = [], keep = PROF.theme || 'ember';
     for (var t = 0; t < THEMES.length; t++) {
       applyTheme(THEMES[t].id);
-      show('practice'); QDRILL = null; QF = 'wic'; QN = 0; buildSet(); QI = 0; renderQuestion();
+      show('practice'); QDRILL = null; QT = 0; QF = 'wic'; QN = 0; buildSet(); QI = 0; renderQuestion();
       var q = QSET[0], wrong = (q.a + 1) % 4;
       document.querySelectorAll('#q-choices .ch')[wrong].click();
       var w = rgb(getComputedStyle(document.querySelector('#q-choices .ch.wrong')).borderTopColor);
@@ -415,6 +475,38 @@ await t('tall phones centre the home screen and scale the type; short phones sca
   assert(await ev("document.querySelector('#v-home .mast').getBoundingClientRect().top") < base + 1, 'short phone should pin to the top');
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
   await sleep(100);
+});
+await t('the flashcard sits in the middle of the phone under a small counter, front and back, with or without a notch', async () => {
+  const where = () => ev(`(function () { var c = document.getElementById('card').getBoundingClientRect(), t = document.querySelector('.track').getBoundingClientRect(),
+      h = document.querySelector('.hud').getBoundingClientRect(), v = document.getElementById('v-session'), a = document.getElementById('answers').getBoundingClientRect();
+    return { mid: (c.top + c.bottom) / 2, screen: innerHeight / 2, top: c.top, trackBottom: t.bottom, hud: h.height, scrolls: v.scrollHeight > v.clientHeight, answersTop: a.top, cardBottom: c.bottom }; })()`);
+  const sizes = [[390, 844], [375, 667], [440, 956]];
+  for (const [w, h] of sizes) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 2, mobile: true }); await sleep(150);
+    await ev("F.mode = 'flash'; F.dir = 'en'; startIds([indexOfWord('Abate') >= 0 ? indexOfWord('Abate') : 0], 'flash')"); await sleep(100);
+    let p = await where();
+    assert(p.hud <= 50, 'counter strip too tall: ' + p.hud);
+    assert(Math.abs(p.mid - p.screen) <= 2, w + 'x' + h + ': card centred at ' + p.mid + ', screen middle ' + p.screen);
+    assert(p.answersTop >= p.cardBottom - 1 && !p.scrolls, 'Again / Got it below the card, nothing to scroll');
+    await click('#card'); await sleep(100);
+    p = await where();
+    assert(Math.abs(p.mid - p.screen) <= 2 && p.top > p.trackBottom, w + 'x' + h + ': flipped card should stay centred: ' + JSON.stringify(p));
+    await ev("startNamed('quick')"); await sleep(100);
+    p = await where();
+    assert(!p.scrolls && p.top > p.trackBottom, w + 'x' + h + ': a quiz question and its four choices fit without scrolling: ' + JSON.stringify(p));
+  }
+  /* with the status bar and home indicator of a notched iPhone, the middle is still the phone's middle */
+  let insets = true;
+  try { await cdp.send('Emulation.setSafeAreaInsetsOverride', { insets: { top: 59, topMax: 59, bottom: 34, bottomMax: 34, left: 0, leftMax: 0, right: 0, rightMax: 0 } }); } catch (e) { insets = false; }
+  if (insets) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', { width: 393, height: 852, deviceScaleFactor: 2, mobile: true }); await sleep(150);
+    await ev("F.mode = 'flash'; startIds([0], 'flash')"); await sleep(100);
+    const p = await where();
+    assert(Math.abs(p.mid - p.screen) <= 2 && p.top > p.trackBottom, 'notched phone: card centred at ' + p.mid + ', screen middle ' + p.screen);
+    await cdp.send('Emulation.setSafeAreaInsetsOverride', { insets: {} }).catch(() => {});
+  }
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true }); await sleep(100);
+  await ev("S = null; show('home')");
 });
 await t('welcome says settings can be changed later and offers sign-in before Start', async () => {
   assert((await ev("document.getElementById('v-welcome').textContent")).includes('changed later, in Settings'), 'copy');
@@ -524,6 +616,17 @@ await t('two phones at once: a change here merges with what the other phone sent
   assert(srs.zephyr && srs[await ev('BASE[12][0].toLowerCase()')], 'both phones’ words must be on the server: ' + Object.keys(srs).join());
   assert(await ev("!!SRS['zephyr']"), 'the other phone’s word arrived here too');
 });
+await t('best practice-test scores merge by the higher one across phones', async () => {
+  await ev("PROF.ptest = { 2: 20, 3: 18 }; save(LS.prof, PROF)");
+  await sleep(3200);
+  await ev("(function () { var p = __mock.rows()[LS.prof]; p.ptest = { 2: 25, 3: 12, 4: 10 }; __mock.seed(LS.prof, p); })()");   /* the other phone */
+  await ev('Sync.pull()'); await sleep(400);
+  const pt = await ev('PROF.ptest');
+  assert(pt && pt[2] === 25 && pt[3] === 18 && pt[4] === 10, 'merged here: ' + JSON.stringify(pt));
+  await sleep(3200);
+  const sp = await ev('__mock.rows()[LS.prof].ptest');
+  assert(sp && sp[2] === 25 && sp[3] === 18 && sp[4] === 10, 'merged on the server: ' + JSON.stringify(sp));
+});
 await t('signing out on one phone leaves the other phones signed in', async () => {
   await ev("show('settings')"); await click('[data-auth="signout"]'); await sleep(200);
   assert(await visible('acct-out'), 'signed out');
@@ -544,8 +647,10 @@ await t('signing out with changes the server has not received asks twice', async
 await t('a different account on the same phone starts from its own copy, not the previous person’s', async () => {
   const w7 = await ev('BASE[7][0].toLowerCase()');
   assert(await ev("!!SRS['" + w7 + "']"), 'the first person’s progress is on the phone');
+  await ev("RUNS = { 3: { p3w1: 1 } }; save(LS.runs, RUNS)");
   await ev("__mock.seed(LS.srs, { 'zenith': { b: 1, r: 1, x: 0, cs: 1, last: 5 } }, 'user-2222-other'); __mock.signInAs('user-2222-other')"); await sleep(500);
   assert(await ev("Object.keys(SRS).join()") === 'zenith', 'the second person should see only their own copy, got ' + await ev("Object.keys(SRS).join()"));
+  assert(await ev("localStorage.getItem(LS.runs) === null && Object.keys(RUNS).length === 0"), 'the first person’s half-done tests must not carry over');
   await sleep(3000);
   assert(!(await ev("(__mock.rows('user-2222-other')[LS.srs] || {})['" + w7 + "']")), 'the first person’s words must not be pushed into the second account');
   assert(await ev("!!__mock.rows()[LS.srs]['" + w7 + "']"), 'the first account keeps its copy');

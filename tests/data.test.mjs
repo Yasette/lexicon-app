@@ -48,7 +48,39 @@ QUESTIONS.forEach(q => {
   if (q.sec === 'wic') q.o.forEach(o => check(listed.has(String(o).toLowerCase()), 'words-in-context option not in the word list: ' + q.id + ' ' + o));
 });
 check(!QUESTIONS.some(q => /^[cg]\d+$/.test(q.id)), 'an id from the retired bank is back');
-console.log('  ' + QUESTIONS.length + ' questions, every option explained');
+/* ten practice tests of 30: 15 words in context, then 15 rules, with the
+   answers spread over A-D so no letter is a pattern to learn */
+const TESTS = 10;
+check(QUESTIONS.every(q => Number.isInteger(q.t) && q.t >= 1 && q.t <= TESTS), 'every question belongs to a test 1-' + TESTS);
+for (let t = 1; t <= TESTS; t++) {
+  const qs = QUESTIONS.filter(q => q.t === t);
+  check(qs.length === 30, 'Practice ' + t + ' has ' + qs.length + ' questions, not 30');
+  check(qs.slice(0, 15).every(q => q.sec === 'wic') && qs.slice(15).every(q => q.sec === 'wr'), 'Practice ' + t + ': 15 words in context, then 15 rules');
+  for (const sec of ['wic', 'wr']) {
+    const pos = [0, 1, 2, 3].map(i => qs.filter(q => q.sec === sec && q.a === i).length);
+    check(pos.every(n => n >= 3), 'Practice ' + t + ' ' + sec + ': answers lean on one letter ' + pos.join('/'));
+  }
+}
+check(QUESTIONS.every((q, i) => i === 0 || q.t >= QUESTIONS[i - 1].t), 'questions are grouped by test, in order');
+const stems = QUESTIONS.map(q => q.p);
+check(new Set(stems).size === stems.length, 'two questions share a passage');
+const wicAnswers = QUESTIONS.filter(q => q.sec === 'wic').map(q => String(q.o[q.a]).toLowerCase());
+check(new Set(wicAnswers).size === wicAnswers.length, 'a word is the answer twice: ' + wicAnswers.filter((w, i) => wicAnswers.indexOf(w) !== i).join(', '));
+/* a distractor the list calls a synonym of the answer would make two options right */
+const synOf = new Map(BASE.map(r => [r[0].toLowerCase(), r[2].map(s => s.toLowerCase())]));
+QUESTIONS.filter(q => q.sec === 'wic').forEach(q => {
+  const ans = String(q.o[q.a]).toLowerCase();
+  q.o.forEach((o, j) => {
+    const w = String(o).toLowerCase();
+    if (j !== q.a) check(!(synOf.get(ans) || []).includes(w) && !(synOf.get(w) || []).includes(ans), 'distractor listed as a synonym of the answer: ' + q.id + ' ' + o);
+  });
+});
+/* "a ___" or "an ___": every option must take that article, or grammar alone rules one out */
+const vowelSound = w => /^[aeiou]/i.test(w) && !/^(ub|un[ai]|uti|usu|ura|ure|uro|eu|one)/i.test(w);
+QUESTIONS.forEach(q => {
+  if (/\b(a|an)\s+___/i.test(q.p)) check(new Set(q.o.map(o => vowelSound(String(o)))).size === 1, 'the article before the blank gives an option away: ' + q.id);
+});
+console.log('  ' + QUESTIONS.length + ' questions in ' + TESTS + ' tests, every option explained');
 
 console.log('sheets.js');
 SHEETS.forEach(s => check(s.title && s.cat && s.html && !TRCH.test(s.html), 'sheet ' + s.title));

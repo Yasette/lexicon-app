@@ -272,20 +272,38 @@ input[type=date],input[type=number]{width:100%;padding:11px 12px;border-radius:1
 input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
 /* ============================ SESSION ============================= */
-.hud{display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:26px 20px 12px;flex:none}
-.xbtn{width:40px;height:40px;border-radius:11px;border:1px solid var(--rule2);
-  background:var(--paper);display:grid;place-items:center;font-size:15px;color:var(--ink2);
+/* The card sits in the middle of the phone, not in the middle of what is left
+   under the counter. The counter is a small strip floating over the top; the
+   stack takes the whole screen, and two equal flexible rows hold the card
+   between them, with Again / Got it hanging below it in the lower one. The
+   bottom padding adds back the status-bar inset the top already lost, so the
+   middle is the phone's middle. When the card and its answers need the room
+   (a long meaning, the test's explanations), the rows give way to them. */
+:root{--hudh:48px}
+.hud{position:absolute;top:0;left:0;right:0;z-index:2;height:var(--hudh);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 20px 0}
+.xbtn{position:relative;width:32px;height:32px;border-radius:9px;border:1px solid var(--rule2);
+  background:var(--paper);display:grid;place-items:center;font-size:12px;color:var(--ink2);
   line-height:1;padding:0}
+.xbtn::after{content:"";position:absolute;inset:-6px}   /* a 44px target for a 32px button */
 .xbtn:hover{background:var(--card);color:var(--accent)}
 .xbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.hud-sp{width:40px;flex:none}
-.hud .n{font-family:var(--control);font-size:15px;letter-spacing:.14em;color:var(--mute);
+.hud-sp{width:32px;flex:none}
+.hud .n{font-family:var(--control);font-size:12.5px;letter-spacing:.14em;color:var(--mute);
   font-variant-numeric:tabular-nums}
 /* the thin gold rule the original runs under the counter */
-.track{flex:none;height:2px;margin:0 20px;background:var(--rule);overflow:hidden;border-radius:1px}
+.track{position:absolute;top:var(--hudh);left:20px;right:20px;z-index:2;height:2px;
+  background:var(--rule);overflow:hidden;border-radius:1px}
 .track i{display:block;height:100%;background:var(--gold);transition:width .3s ease}
-.stack{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:22px}
+/* exactly the screen's height: sized by its content instead, a grid makes both
+   flexible rows as tall as the answers, and the card drops */
+.stack{flex:1 1 0;min-height:0;display:grid;
+  grid-template-rows:minmax(calc(var(--hudh) + 2px),1fr) auto minmax(min-content,1fr);
+  padding:12px 22px calc(12px + env(safe-area-inset-top))}
+.stack > #card{grid-row:2}
+/* when the answers run past the screen, their own bottom padding keeps the
+   last line clear of the home indicator */
+.stack > #answers{grid-row:3;align-self:start;padding:16px 0 calc(12px + env(safe-area-inset-bottom))}
 .card{border-radius:16px;padding:28px 20px;background:var(--card);
   border:1px solid var(--rule);box-shadow:var(--shadow);text-align:center;
   min-height:240px;display:flex;flex-direction:column;align-items:center;
@@ -586,6 +604,17 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   border:1px solid var(--rule2);margin-top:12px}
 .qdone b{display:block;font-family:var(--display);font-size:26px;font-weight:640;color:var(--accent)}
 .qdone span{display:block;margin-top:4px;font-size:13px;color:var(--ink2)}
+.qdone-acts{display:flex;justify-content:center;gap:22px;margin-top:10px}
+/* the numbered tests: two even rows of six, Mixed taking the last two cells;
+   a finished test carries a small green tick */
+.seg.tests{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.seg.tests button{padding:8px 0;text-align:center;font-variant-numeric:lining-nums}
+.seg.tests button[data-v="0"]{grid-column:span 2}
+.seg.tests .tick{color:var(--sage);font-weight:700;margin-left:3px}
+.seg.tests button[aria-pressed="true"] .tick{color:var(--paper);opacity:.85}
+.qtinfo{margin:8px 2px 0;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink2)}
+.qtinfo:empty{display:none}
+.qmix{margin-top:12px}
 
 
 /* The search is the one boxed thing on the Words screen: a raised bar with
@@ -1084,19 +1113,24 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
         <span class="sum" id="q-drilltitle"></span>
       </div>
       <div class="filters" id="q-filters">
-        <p class="lab">Section</p>
-        <div class="seg outline" id="q-filter">
-          <button data-v="all" aria-pressed="true">All</button>
-          <button data-v="wic" aria-pressed="false">Words in context</button>
-          <button data-v="wr" aria-pressed="false">Rules</button>
-          <button data-v="miss" aria-pressed="false" disabled>Missed</button>
-        </div>
-        <p class="lab">How many</p>
-        <div class="seg outline" id="q-count">
-          <button data-v="5" aria-pressed="false">5</button>
-          <button data-v="10" aria-pressed="false">10</button>
-          <button data-v="20" aria-pressed="false">20</button>
-          <button data-v="0" aria-pressed="true">All</button>
+        <p class="lab">Practice test</p>
+        <div class="seg outline tests" id="q-test"></div>
+        <p class="qtinfo" id="q-tinfo"></p>
+        <div class="qmix" id="q-mix" hidden>
+          <p class="lab">Section</p>
+          <div class="seg outline" id="q-filter">
+            <button data-v="all" aria-pressed="true">All</button>
+            <button data-v="wic" aria-pressed="false">Words in context</button>
+            <button data-v="wr" aria-pressed="false">Rules</button>
+            <button data-v="miss" aria-pressed="false" disabled>Missed</button>
+          </div>
+          <p class="lab">How many</p>
+          <div class="seg outline" id="q-count">
+            <button data-v="5" aria-pressed="false">5</button>
+            <button data-v="10" aria-pressed="false">10</button>
+            <button data-v="20" aria-pressed="true">20</button>
+            <button data-v="30" aria-pressed="false">30</button>
+          </div>
         </div>
       </div>
 
@@ -1117,6 +1151,10 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
       </div>
       <div class="qdone" id="q-done" hidden>
         <b id="q-score">0</b><span id="q-scoresub"></span>
+        <div class="qdone-acts" id="q-doneacts" hidden>
+          <button class="linkbtn" id="q-again">Take it again</button>
+          <button class="linkbtn" id="q-nexttest"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -1348,7 +1386,8 @@ var W_WORD = 0, W_EN = 1, W_SYN = 2, W_TR = 3, W_EX = 4, W_NOTE = 5, W_DIF = 6, 
 
 var $ = function (id) { return document.getElementById(id); };
 var LS = { srs: 'lexicon.srs.v2', srs1: 'lexicon.srs.v1', log: 'lexicon.log.v2', prof: 'lexicon.profile.v1',
-           notes: 'lexicon.notes.v1', mine: 'lexicon.mine.v1' };
+           notes: 'lexicon.notes.v1', mine: 'lexicon.mine.v1',
+           runs: 'lexicon.runs.v1' };        /* practice-test answers so far: this phone only, never synced */
 
 /* Anything a person typed goes through this before it reaches innerHTML. */
 function esc(s) {
@@ -1423,6 +1462,14 @@ function tidyProf(p) {
      on was the default and so said nothing — those people choose on first run. */
   if (!p.lang && p.tr === false) p.lang = 'en';
   if (p.lang && !LANGS.some(function (l) { return l.id === p.lang; })) p.lang = 'en';
+  /* best score per practice test, keyed by its number */
+  if (p.ptest != null) {
+    if (typeof p.ptest !== 'object' || Array.isArray(p.ptest)) delete p.ptest;
+    else Object.keys(p.ptest).forEach(function (k) {
+      var v = p.ptest[k];
+      if (!/^\d+$/.test(k) || typeof v !== 'number' || !(v >= 0) || v !== Math.floor(v)) delete p.ptest[k];
+    });
+  }
   return p;
 }
 var PROF = tidyProf(load(LS.prof, null));
@@ -2465,12 +2512,26 @@ $('sh-body').addEventListener('click', function (ev) {
 $('q-drillback').addEventListener('click', function () { var k = QDRILL; endDrill(); openDrill(k); });
 
 /* ------------------------------ practice --------------------------
-   A set rather than an endless list: pick a section and a length, then
-   work through it with the row of dots the real test gives you. */
-var QF = 'all', QN = 0, QI = 0;
+   Ten numbered tests of 30, in the order the real test uses (words first,
+   then rules), or a mixed set from all of them: pick a section and a
+   length. Either way you work through it with the row of dots the real
+   test gives you. A test keeps its answers on this phone until you take
+   it again; its best score goes into your profile. */
+var NTESTS = QUESTIONS.reduce(function (m, q) { return Math.max(m, q.t || 0); }, 0);
+var QT = -1;                   /* the test on screen: 1..NTESTS, 0 = mixed, -1 = not chosen yet */
+var QF = 'all', QN = 20, QI = 0;
 var QSET = [], QANS = [];
+function loadRuns() { var r = load(LS.runs, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; }
+var RUNS = loadRuns();
 var SECNAME = { wic: 'Words in context', wr: 'Rules & expression', drill: 'Drill' };
 
+function testQs(t) { return QUESTIONS.filter(function (q) { return q.t === t; }); }
+function bestOf(t) { var b = (PROF.ptest || {})[t]; return typeof b === 'number' ? b : null; }
+/* the first test not yet finished, so Practice opens where you are */
+function firstOpenTest() {
+  for (var t = 1; t <= NTESTS; t++) if (bestOf(t) === null) return t;
+  return 1;
+}
 function qPool() {
   if (QF === 'miss') return QUESTIONS.filter(function (q) { return (PROF.qmiss || []).indexOf(q.id) >= 0; });
   return QUESTIONS.filter(function (q) { return QF === 'all' || q.sec === QF; });
@@ -2485,12 +2546,50 @@ function renderQSections() {
   var n = qm.length, b = $('q-filter').querySelector('[data-v="miss"]');
   b.disabled = n === 0;
   b.innerHTML = 'Missed' + (n ? ' <small>' + n + '</small>' : '');
+  renderQTests();
   /* inside a drill the section and count chips make no sense; a way back does */
   $('q-filters').hidden = !!QDRILL;
   $('q-drillrow').hidden = !QDRILL;
   if (QDRILL) $('q-drilltitle').textContent = drillTitle(QDRILL) + ' · ' + QSET.length + ' questions';
 }
+/* one chip per test and Mixed; a finished test shows a tick, and the line
+   underneath says how far you are and your best. The chips are made once
+   and updated in place, so a tap never loses focus. */
+function renderQTests() {
+  var box = $('q-test');
+  if (box.children.length !== NTESTS + 1) {
+    var html = '';
+    for (var n = 1; n <= NTESTS; n++) html += '<button data-v="' + n + '"></button>';
+    box.innerHTML = html + '<button data-v="0">Mixed</button>';
+  }
+  [].forEach.call(box.children, function (b) {
+    var t = Number(b.dataset.v), best = t ? bestOf(t) : null;
+    b.setAttribute('aria-pressed', String(QT === t));
+    if (!t) return;
+    var inner = t + (best !== null ? '<small class="tick" aria-hidden="true">✓</small>' : '');
+    if (b.innerHTML !== inner) b.innerHTML = inner;
+    b.setAttribute('aria-label', 'Practice test ' + t + (best !== null ? ', best ' + best + ' of ' + testQs(t).length : ''));
+  });
+  $('q-mix').hidden = QT !== 0;
+  var info = '';
+  if (QT > 0) {
+    var total = testQs(QT).length, best = bestOf(QT);
+    var answered = QANS.filter(function (a) { return a !== -1; }).length;
+    info = (answered > 0 && answered < total ? answered + ' of ' + total + ' answered' : total + ' questions, words first, then rules')
+      + (best !== null ? ' · best ' + best + ' / ' + total : '');
+  }
+  $('q-tinfo').textContent = info;
+}
 function buildSet() {
+  if (QT < 0) QT = firstOpenTest();
+  if (QT > 0) {
+    /* a test: always the same 30, in order, with the answers you already gave */
+    var run = RUNS[QT] || {};
+    QSET = testQs(QT);
+    QANS = QSET.map(function (q) { var a = run[q.id]; return typeof a === 'number' && a >= -2 && a < q.o.length ? a : -1; });
+    QI = QANS.indexOf(-1); if (QI < 0) QI = 0;           /* pick up where you left off */
+    return;
+  }
   var pool = qPool().slice();
   if (!pool.length && QF === 'miss') {
     QF = 'all'; pool = qPool().slice();
@@ -2500,19 +2599,46 @@ function buildSet() {
   QANS = QSET.map(function () { return -1; });
   QI = 0;
 }
+/* After every answer in a test: keep it on this phone, and once all are
+   answered, keep the best score (a profile field, so it follows the account). */
+function keepRun() {
+  if (QDRILL || QT <= 0) return;
+  var run = {};
+  QSET.forEach(function (q, i) { if (QANS[i] !== -1) run[q.id] = QANS[i]; });
+  RUNS[QT] = run; save(LS.runs, RUNS);
+  if (QANS.indexOf(-1) >= 0) return;
+  var right = QANS.filter(function (a, i) { return a === QSET[i].a; }).length;
+  if (bestOf(QT) === null || right > bestOf(QT)) {
+    PROF.ptest = PROF.ptest || {}; PROF.ptest[QT] = right; save(LS.prof, PROF);
+  }
+}
+function openTest(t) {
+  QDRILL = null; QT = t; buildSet(); renderQuestion();
+  var v = $('v-practice'); if (v.scrollTo) v.scrollTo(0, 0); else v.scrollTop = 0;
+}
+$('q-test').addEventListener('click', function (ev) {
+  var b = ev.target.closest('button'); if (!b) return;
+  openTest(Number(b.dataset.v));
+});
+$('q-again').addEventListener('click', function () {
+  if (QT <= 0) return;
+  delete RUNS[QT]; save(LS.runs, RUNS);
+  openTest(QT);
+});
+$('q-nexttest').addEventListener('click', function () { if (QT > 0 && QT < NTESTS) openTest(QT + 1); });
 $('q-filter').addEventListener('click', function (ev) {
   var b = ev.target.closest('button'); if (!b) return;
   [].forEach.call(this.querySelectorAll('button'), function (o) {
     o.setAttribute('aria-pressed', String(o === b));
   });
-  QDRILL = null; QF = b.dataset.v; buildSet(); renderQuestion();
+  QDRILL = null; QT = 0; QF = b.dataset.v; buildSet(); renderQuestion();
 });
 $('q-count').addEventListener('click', function (ev) {
   var b = ev.target.closest('button'); if (!b) return;
   [].forEach.call(this.querySelectorAll('button'), function (o) {
     o.setAttribute('aria-pressed', String(o === b));
   });
-  QDRILL = null; QN = Number(b.dataset.v); buildSet(); renderQuestion();
+  QDRILL = null; QT = 0; QN = Number(b.dataset.v); buildSet(); renderQuestion();
 });
 
 function renderDots() {
@@ -2548,8 +2674,8 @@ function optionGloss(q, o) {
 }
 var ANIM = false;              /* true only while an answer is being revealed */
 function renderQuestion(keepChoices) {
-  renderQSections();
   if (!QSET.length) buildSet();
+  renderQSections();
   if (!QSET.length) return;
   if (QI >= QSET.length) QI = QSET.length - 1;
   var q = QSET[QI], picked = QANS[QI];
@@ -2614,6 +2740,10 @@ function renderQuestion(keepChoices) {
     $('q-score').textContent = right + ' / ' + QSET.length;
     $('q-scoresub').textContent = right === QSET.length ? 'Every one.'
       : Math.round(right / QSET.length * 100) + '% — the dots show which to look at again.';
+    var inTest = QT > 0 && !QDRILL;
+    $('q-doneacts').hidden = !inTest;
+    $('q-nexttest').hidden = !inTest || QT >= NTESTS;
+    if (inTest) $('q-nexttest').textContent = 'Practice ' + (QT + 1) + ' →';
   } else {
     done.hidden = true;
   }
@@ -2626,6 +2756,7 @@ $('q-choices').addEventListener('click', function (ev) {
      it is answered right */
   recordDay(ok ? 1 : 0, ok ? 0 : 1, [], [], true);
   noteMiss(q, ok);
+  keepRun();
   gradeChoices($('q-choices'), q.a, QANS[QI], true);
   ANIM = true; renderQuestion(true); ANIM = false;
 });
@@ -2651,6 +2782,7 @@ $('q-idk').addEventListener('click', function () {
   QANS[QI] = -2;
   recordDay(0, 1, [], [], true);
   noteMiss(q, false);
+  keepRun();
   var k = questionWord(q); if (k >= 0) idkAdd(k);
   gradeChoices($('q-choices'), q.a, -2, false);
   ANIM = true; renderQuestion(true); ANIM = false;
@@ -2821,8 +2953,9 @@ $('wipe').addEventListener('click', function () {
   /* progress only: words you added are yours and survive this. */
   SRS = {}; LOG = {}; NOTES = {};
   delete PROF.perfect; delete PROF.bestStreak; delete PROF.miles; delete PROF.qmiss; delete PROF.celebrated; delete PROF.idk;
+  delete PROF.ptest; RUNS = {}; if (QT > 0 && !QDRILL) QSET = [];
   PROF.clearedAt = Date.now();               /* so an older copy on another phone cannot bring it all back */
-  save(LS.srs, SRS); save(LS.log, LOG); save(LS.notes, NOTES); save(LS.prof, PROF);
+  save(LS.srs, SRS); save(LS.log, LOG); save(LS.notes, NOTES); save(LS.prof, PROF); save(LS.runs, RUNS);
   renderSettings();
   self.textContent = 'Progress cleared';
   setTimeout(function () { self.textContent = 'Clear my progress'; }, 1600);
@@ -2837,6 +2970,9 @@ function reloadState() {
   if (!$('v-session').hidden) MINE_NEXT = mine;    /* mid-session: the deck holds row numbers; the list waits */
   else { MINE = mine; rebuildWords(); }
   PROF = tidyProf(load(LS.prof, null));
+  /* another account arrived on this phone: the previous person's test answers went with their progress */
+  var runs = loadRuns();
+  if (JSON.stringify(runs) !== JSON.stringify(RUNS)) { RUNS = runs; if (QT > 0 && !QDRILL) QSET = []; }
   applyTheme(PROF.theme || 'ember', true); renderLangSeg();
   var cur = VIEWS.filter(function (v) { return !$('v-' + v).hidden; })[0];
   if (cur === 'welcome' && PROF.lang) { show('home'); greetStreak(); return; }   /* signed in on a new phone: skip the welcome */

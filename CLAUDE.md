@@ -17,16 +17,18 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
   Google App Passwords anywhere in the repo or in chat.
 - Vanilla JS, one `index.html`, no build step for the web app. Data lives in
   `data/*.js`. Keep it that way.
-- Run `npm test` before every commit (data checks + 52 headless-Chrome checks;
+- Run `npm test` before every commit (data checks + 64 headless-Chrome checks;
   needs Node 22+ and Google Chrome). Add a check for every behaviour you add.
 - Bump `CACHE` in `sw.js` when shipped files change.
 - **No College Board (or other publisher) material.** The practice bank in
-  `data/questions.js` was rewritten from scratch in October 2026; new questions must be
-  original too, with a `why` for every option (the data test enforces it).
+  `data/questions.js` was rewritten from scratch in October 2026: ten practice tests of
+  30 (15 words in context, then 15 rules), answers spread over A-D. New questions must be
+  original too, with a `why` for every option (the data test enforces it, plus no answer
+  word twice, no listed synonym as a distractor, no "a ___" that gives an option away).
 - Every input, select and textarea is at least 16px and outside the `--s` type scale:
   iOS zooms the page when a smaller field gets focus, and in the app the zoom sticks.
 - Bump `CURRENT_PROJECT_VERSION` in the Xcode project for every upload (build 1 is in
-  TestFlight; build 2 has the zoom fix).
+  TestFlight; build 2 has the zoom fix; build 3 the new bank; build 4 the ten practice tests).
 
 ## Commands
 
@@ -45,7 +47,9 @@ users in China and Türkiye already; a backend (Supabase) holds progress.
   bridge for Google/Apple (1.1); `config.js` deployment settings (`requireAccount`,
   `authProviders`, `contactEmail`, `appStoreId` for the review link, `nativeAuth`).
 - `data/words.js` rows `[word, english, synonyms, turkish, example, note, band, related]`;
-  `data/questions.js` (`g`/`g_tr` = meanings for options not in the list);
+  `data/questions.js` (`t` = practice test 1-10; `g`/`g_tr` = meanings for options not
+  in the list); a test's answers so far stay on the phone (`lexicon.runs.v1`, never synced),
+  its best score is `PROF.ptest` (synced, merged by the higher score);
   `data/sheets.js`; `data/tricky.js`; `data/<lang>.js` glosses keyed by headword.
 - `supabase/schema.sql` (tables, RLS, `delete_my_account`), `supabase/notify-signups.sql`.
 - `ios/` Capacitor 8 project (SPM, iPhone only, bundle id `com.yasette.lexicon`);
